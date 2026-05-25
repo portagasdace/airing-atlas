@@ -1,0 +1,24 @@
+---
+interface Props {
+  label?: string;
+}
+
+const { label = "Advertisement" } = Astro.props;
+const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
+---
+
+<aside class="ad-slot" aria-label={label}>
+  {
+    adsenseClientId ? (
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={adsenseClientId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    ) : (
+      <span>Reserved sponsor space</span>
+    )
+  }
+</aside>

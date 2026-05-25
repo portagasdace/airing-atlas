@@ -1,0 +1,34 @@
+---
+import type { CalendarEntry } from "@/types/anime";
+
+interface Props {
+  entry: CalendarEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<article class="airing-row">
+  <a href={`/anime/${entry.slug}/`} class="airing-cover" aria-label={`Open ${entry.title}`}>
+    <img src={entry.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+  </a>
+  <div>
+    <p class="eyebrow">Episode {entry.episode || "TBA"}</p>
+    <h3><a href={`/anime/${entry.slug}/`}>{entry.title}</a></h3>
+    <time data-airing-at={entry.airingAt}>{new Date(entry.airingAt * 1000).toUTCString()}</time>
+    <div class="tag-row">
+      {(entry.genres || []).slice(0, 3).map((genre) => <span>{genre}</span>)}
+    </div>
+  </div>
+  <button
+    class="button small"
+    type="button"
+    data-watchlist-toggle
+    data-anime-id={entry.animeId}
+    data-title={entry.title}
+    data-cover={entry.coverImage || ""}
+    data-next-airing={entry.airingAt}
+  >
+    Add
+  </button>
+</article>

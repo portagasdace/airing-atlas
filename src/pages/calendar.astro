@@ -1,0 +1,40 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AiringRow from "@/components/AiringRow.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { airingCalendar, canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Anime Airing Calendar"
+  description="Browse upcoming anime episodes by day and see release times in your local timezone."
+  canonical={canonicalPath("/calendar/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Calendar</p>
+        <h1>Anime Airing Calendar</h1>
+        <p>
+          Upcoming episodes are generated at build time, then localized in your browser
+          so the schedule reads naturally wherever you watch from.
+        </p>
+      </div>
+      <a class="button primary" href="/watchlist/">Open watchlist</a>
+    </div>
+  </section>
+
+  <section class="section">
+    {airingCalendar.days.map((day, index) => (
+      <>
+        <div class="calendar-day">
+          <h2 data-local-date={day.items[0]?.airingAt}>{day.date}</h2>
+          <div class="airing-list">
+            {day.items.map((entry) => <AiringRow entry={entry} />)}
+          </div>
+        </div>
+        {index === 1 && <AdSlot />}
+      </>
+    ))}
+  </section>
+</BaseLayout>

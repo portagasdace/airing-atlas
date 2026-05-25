@@ -1,0 +1,88 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AffiliatePanel from "@/components/AffiliatePanel.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, scoreLabel, seasonLabel } from "@/lib/anime";
+import type { AnimeSummary } from "@/types/anime";
+
+export function getStaticPaths() {
+  return allAnime.map((anime) => ({
+    params: { slug: anime.slug },
+    props: { anime }
+  }));
+}
+
+const { anime } = Astro.props as { anime: AnimeSummary };
+const title = displayTitle(anime);
+const cover = anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg";
+---
+
+<BaseLayout
+  title={title}
+  description={cleanText(anime.description, 155)}
+  canonical={canonicalPath(`/anime/${anime.slug}/`)}
+  image={cover}
+>
+  <section class="detail-hero">
+    <img class="detail-poster" src={cover} alt="" referrerpolicy="no-referrer" />
+    <div class="detail-copy">
+      <p class="eyebrow">{seasonLabel(anime)} · {anime.format || "Anime"}</p>
+      <h1>{title}</h1>
+      <p class="lede">{cleanText(anime.description, 260)}</p>
+      <div class="hero-actions">
+        <button
+          class="button primary"
+          type="button"
+          data-watchlist-toggle
+          data-anime-id={anime.id}
+          data-title={title}
+          data-cover={cover}
+          data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
+        >
+          Add
+        </button>
+        <label>
+          <span class="sr-only">Watch status</span>
+          <select
+            data-watchlist-status
+            data-anime-id={anime.id}
+            data-title={title}
+            data-cover={cover}
+            data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
+          >
+            <option value="watching">watching</option>
+            <option value="planned" selected>planned</option>
+            <option value="completed">completed</option>
+            <option value="dropped">dropped</option>
+          </select>
+        </label>
+      </div>
+      <div class="fact-strip">
+        <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
+        <div><span>Episodes</span><strong>{episodeLabel(anime)}</strong></div>
+        <div><span>Popularity</span><strong>{formatNumber(anime.popularity)}</strong></div>
+        <div><span>Next</span><strong>{dateTimeLabel(anime.nextAiringEpisode?.airingAt)}</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="tag-row">
+      {(anime.genres || []).map((genre) => <span>{genre}</span>)}
+    </div>
+  </section>
+
+  {anime.editorialNote && (
+    <section class="section">
+      <div class="editor-note">
+        <p class="eyebrow">Atlas editor note</p>
+        <p>{anime.editorialNote}</p>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <AdSlot />
+    <AffiliatePanel anime={anime} />
+  </section>
+</BaseLayout>

@@ -1,0 +1,181 @@
+{
+  "source": "fixture",
+  "season": "SPRING",
+  "seasonYear": 2026,
+  "anime": [
+    {
+      "id": 1,
+      "title": {
+        "romaji": "Starlit Courier",
+        "english": "Starlit Courier",
+        "native": "星明かりの配達人"
+      },
+      "description": "A courier guild crosses floating cities to deliver letters that can alter the course of a war.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 12,
+      "duration": 24,
+      "averageScore": 82,
+      "meanScore": 80,
+      "popularity": 145230,
+      "favourites": 18320,
+      "genres": ["Adventure", "Fantasy", "Drama"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg",
+        "color": "#f06642"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-Yw3y0sD4Fntk.jpg",
+      "siteUrl": "https://anilist.co/anime/21",
+      "studios": [{ "name": "Atlas Sample Works" }],
+      "nextEpisodeOffsetHours": 18
+    },
+    {
+      "id": 2,
+      "title": {
+        "romaji": "Signal Bloom",
+        "english": "Signal Bloom",
+        "native": "シグナルブルーム"
+      },
+      "description": "A radio club discovers that its nightly broadcasts are reaching a future city under siege.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 13,
+      "duration": 23,
+      "averageScore": 79,
+      "meanScore": 77,
+      "popularity": 102100,
+      "favourites": 10780,
+      "genres": ["Sci-Fi", "Mystery", "Slice of Life"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-GCsPm7waJ4kS.png",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-GCsPm7waJ4kS.png",
+        "color": "#4bb3d8"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/1-OquNCNB6srGe.jpg",
+      "siteUrl": "https://anilist.co/anime/1",
+      "studios": [{ "name": "North Pier Animation" }],
+      "nextEpisodeOffsetHours": 30
+    },
+    {
+      "id": 3,
+      "title": {
+        "romaji": "After School Exorcists",
+        "english": "After School Exorcists",
+        "native": "放課後祓い屋"
+      },
+      "description": "Three students keep their town safe by turning local rumors into field notes, charms, and awkward teamwork.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 12,
+      "duration": 24,
+      "averageScore": 76,
+      "meanScore": 74,
+      "popularity": 88890,
+      "favourites": 9320,
+      "genres": ["Action", "Supernatural", "Comedy"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg",
+        "color": "#e7c547"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/20-HHxhPj5JD13a.jpg",
+      "siteUrl": "https://anilist.co/anime/20",
+      "studios": [{ "name": "Lantern Door" }],
+      "nextEpisodeOffsetHours": 45
+    },
+    {
+      "id": 4,
+      "title": {
+        "romaji": "Blue Hour Apothecary",
+        "english": "Blue Hour Apothecary",
+        "native": "青の薬屋"
+      },
+      "description": "A quiet medicine maker in a port city solves illnesses, conspiracies, and family secrets before dawn.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 24,
+      "duration": 24,
+      "averageScore": 86,
+      "meanScore": 84,
+      "popularity": 161340,
+      "favourites": 21400,
+      "genres": ["Drama", "Mystery", "Historical"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-xt3LvUOyn9a3.jpg",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-xt3LvUOyn9a3.jpg",
+        "color": "#3fb2aa"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/30-DfJ3V8nR7wQj.jpg",
+      "siteUrl": "https://anilist.co/anime/30",
+      "studios": [{ "name": "Mercury Frame" }],
+      "nextEpisodeOffsetHours": 60
+    },
+    {
+      "id": 5,
+      "title": {
+        "romaji": "Mecha Cantabile",
+        "english": "Mecha Cantabile",
+        "native": "機械仕掛けのカンタービレ"
+      },
+      "description": "A conservatory for pilot-musicians turns battlefield rhythm into orchestral rebellion.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 12,
+      "duration": 24,
+      "averageScore": 74,
+      "meanScore": 72,
+      "popularity": 70290,
+      "favourites": 7100,
+      "genres": ["Mecha", "Music", "Action"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5-NozHwXWdNLCz.jpg",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5-NozHwXWdNLCz.jpg",
+        "color": "#d84f70"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/5-0fOJxsbkT5z7.jpg",
+      "siteUrl": "https://anilist.co/anime/5",
+      "studios": [{ "name": "Orbit Room" }],
+      "nextEpisodeOffsetHours": 75
+    },
+    {
+      "id": 6,
+      "title": {
+        "romaji": "Cafe at the End of Summer",
+        "english": "Cafe at the End of Summer",
+        "native": "夏の終わりの喫茶店"
+      },
+      "description": "A seaside cafe becomes the meeting place for students deciding what to keep, confess, and leave behind.",
+      "season": "SPRING",
+      "seasonYear": 2026,
+      "format": "TV",
+      "status": "RELEASING",
+      "episodes": 12,
+      "duration": 23,
+      "averageScore": 81,
+      "meanScore": 79,
+      "popularity": 97320,
+      "favourites": 12050,
+      "genres": ["Romance", "Slice of Life", "Drama"],
+      "coverImage": {
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6-Zzun7PHNNgPt.jpg",
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6-Zzun7PHNNgPt.jpg",
+        "color": "#ef8d4d"
+      },
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/6-Zzun7PHNNgPt.jpg",
+      "siteUrl": "https://anilist.co/anime/6",
+      "studios": [{ "name": "Harbor Line" }],
+      "nextEpisodeOffsetHours": 95
+    }
+  ]
+}

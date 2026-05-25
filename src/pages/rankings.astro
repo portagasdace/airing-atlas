@@ -1,0 +1,49 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeByRanking, animeCatalog, canonicalPath } from "@/lib/anime";
+
+const blocks = [
+  { key: "trending", label: "Trending", copy: "Fast-moving attention across the wider anime audience." },
+  { key: "popular", label: "Popular", copy: "Broadly watched catalog staples and current heavy hitters." },
+  { key: "topRated", label: "Top Rated", copy: "High-scoring titles sorted by audience score." },
+  { key: "current", label: `${animeCatalog.season} ${animeCatalog.seasonYear}`, copy: "Current-season shows worth checking against your weekly schedule." }
+] as const;
+---
+
+<BaseLayout
+  title="Anime Rankings"
+  description="Compare trending, popular, top rated, and current-season anime rankings."
+  canonical={canonicalPath("/rankings/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Rankings</p>
+        <h1>Anime Rankings</h1>
+        <p>
+          A crawlable ranking hub for quick comparison. Use it to jump into detail pages
+          or save titles to your browser watchlist.
+        </p>
+      </div>
+      <a class="button primary" href="/calendar/">See airing times</a>
+    </div>
+  </section>
+
+  <section class="section ranking-layout">
+    {blocks.map((block, blockIndex) => (
+      <div class="ranking-block">
+        <p class="eyebrow">{block.label}</p>
+        <h2>{block.label}</h2>
+        <p>{block.copy}</p>
+        <div class="airing-list">
+          {animeByRanking(block.key).slice(0, 8).map((anime, index) => (
+            <AnimeCard anime={anime} rank={index + 1} compact />
+          ))}
+        </div>
+        {blockIndex === 1 && <AdSlot />}
+      </div>
+    ))}
+  </section>
+</BaseLayout>

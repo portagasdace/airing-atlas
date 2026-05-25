@@ -1,0 +1,22 @@
+{
+  "name": "airing-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.31.0",
+  "type": "module",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
+    "favicon": "node scripts/generate-favicon.mjs",
+    "sync": "node scripts/sync-anime.mjs",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1",
+    "firebase:deploy": "firebase deploy --only hosting"
+  },
+  "dependencies": {
+    "astro": "^5.15.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,33 @@
+---
+import type { AnimeSummary } from "@/types/anime";
+import { displayTitle } from "@/lib/anime";
+
+interface Props {
+  anime: AnimeSummary;
+}
+
+const { anime } = Astro.props;
+const title = displayTitle(anime);
+const query = encodeURIComponent(`${title} anime`);
+const disclosureEnabled = import.meta.env.PUBLIC_AFFILIATE_DISCLOSURE_ENABLED !== "false";
+---
+
+<section class="affiliate-panel" aria-labelledby="legal-links">
+  <div>
+    <p class="eyebrow">Official and commerce links</p>
+    <h2 id="legal-links">Watch and research legally</h2>
+    {
+      disclosureEnabled && (
+        <p>
+          Some commerce links may become affiliate links. Airing Atlas does not host episodes,
+          downloads, or unauthorized streams.
+        </p>
+      )
+    }
+  </div>
+  <div class="link-list">
+    {anime.siteUrl && <a href={anime.siteUrl} rel="nofollow noopener" target="_blank">AniList profile</a>}
+    <a href={`https://www.crunchyroll.com/search?q=${query}`} rel="nofollow noopener" target="_blank">Search Crunchyroll</a>
+    <a href={`https://www.amazon.com/s?k=${query}`} rel="nofollow sponsored noopener" target="_blank">Search editions and merch</a>
+  </div>
+</section>

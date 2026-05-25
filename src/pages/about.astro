@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="About"
+  description="Learn how Airing Atlas builds anime calendar and ranking pages without hosting unauthorized content."
+  canonical={canonicalPath("/about/")}
+>
+  <article class="legal-page">
+    <p class="eyebrow">About</p>
+    <h1>Built for schedule-first anime discovery.</h1>
+    <section>
+      <p>
+        Airing Atlas is an English anime calendar and tracking tool for global fans.
+        It focuses on airing times, rankings, detail pages, and a private browser
+        watchlist.
+      </p>
+      <p>
+        The site does not host anime episodes, downloads, manga scans, or unauthorized
+        streams. Public pages are generated from AniList data and lightweight editorial
+        context so search engines and users can understand each title before saving it.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

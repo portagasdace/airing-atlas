@@ -1,0 +1,38 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="Privacy policy for Airing Atlas, including local watchlist storage and advertising disclosures."
+  canonical={canonicalPath("/privacy/")}
+>
+  <article class="legal-page">
+    <p class="eyebrow">Privacy</p>
+    <h1>Privacy Policy</h1>
+    <section>
+      <h2>Local watchlist</h2>
+      <p>
+        The watchlist is stored in your browser using localStorage under
+        <code>airing-atlas-watchlist-v1</code>. Airing Atlas does not receive this
+        watchlist unless a future synced-account feature is introduced.
+      </p>
+    </section>
+    <section>
+      <h2>Analytics and advertising</h2>
+      <p>
+        This site may use privacy-conscious analytics and Google advertising products
+        after approval. Advertising partners may use cookies or similar technologies
+        to serve and measure ads.
+      </p>
+    </section>
+    <section>
+      <h2>Third-party links</h2>
+      <p>
+        Detail pages may link to AniList, streaming search pages, retailers, or other
+        third-party services. Their privacy practices are governed by their own policies.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

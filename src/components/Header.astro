@@ -1,0 +1,18 @@
+---
+const nav = [
+  { href: "/calendar/", label: "Calendar" },
+  { href: "/rankings/", label: "Rankings" },
+  { href: "/watchlist/", label: "Watchlist" },
+  { href: "/about/", label: "About" }
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Airing Atlas home">
+    <span class="brand-mark">AA</span>
+    <span>Airing Atlas</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>

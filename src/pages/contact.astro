@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact Airing Atlas about corrections, business inquiries, and policy issues."
+  canonical={canonicalPath("/contact/")}
+>
+  <article class="legal-page">
+    <p class="eyebrow">Contact</p>
+    <h1>Corrections and inquiries</h1>
+    <section>
+      <p>
+        For corrections, business inquiries, privacy requests, or policy concerns, email
+        <a href="mailto:hello@airingatlas.example">hello@airingatlas.example</a>.
+      </p>
+      <p>
+        Replace this placeholder address before production launch. Include the page URL
+        and a short description of the issue so the request can be reviewed quickly.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

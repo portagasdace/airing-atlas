@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Affiliate Disclosure"
+  description="Affiliate disclosure for Airing Atlas commerce and official links."
+  canonical={canonicalPath("/affiliate-disclosure/")}
+>
+  <article class="legal-page">
+    <p class="eyebrow">Disclosure</p>
+    <h1>Affiliate Disclosure</h1>
+    <section>
+      <p>
+        Airing Atlas may earn a commission when users click commerce links and make a
+        purchase. This does not change the price paid by the user.
+      </p>
+      <p>
+        Rankings and calendar pages are organized from anime metadata and editorial
+        usefulness, not paid placement, unless a placement is clearly labeled as sponsored.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AiringRow from "@/components/AiringRow.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAiringEntries, animeByRanking, animeCatalog, canonicalPath, formatNumber } from "@/lib/anime";
+
+const upcoming = allAiringEntries.slice(0, 5);
+const trending = animeByRanking("trending").slice(0, 6);
+const topAiring = animeByRanking("current").slice(0, 3);
+---
+
+<BaseLayout
+  title="Airing Atlas"
+  description="Track anime airing times, browse seasonal rankings, and keep a private watchlist in your browser."
+  canonical={canonicalPath("/")}
+>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Global anime schedule</p>
+      <h1>Airing Atlas</h1>
+      <p class="lede">
+        A magazine-sharp anime calendar for fans who want release times, rankings, and a
+        no-login watchlist without touching unauthorized streams.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/calendar/">Open calendar</a>
+        <a class="button" href="/rankings/">Browse rankings</a>
+      </div>
+    </div>
+    <div class="ticker-panel">
+      <p class="eyebrow">Next episodes in your local time</p>
+      <div class="airing-list">
+        {upcoming.map((entry) => <AiringRow entry={entry} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="feature-band" aria-label="Catalog stats">
+    <div class="section">
+      <div class="stat-tile"><strong>{animeCatalog.season}</strong><span>current season</span></div>
+      <div class="stat-tile"><strong>{animeCatalog.seasonYear}</strong><span>season year</span></div>
+      <div class="stat-tile"><strong>{formatNumber(animeCatalog.anime.length)}</strong><span>indexed titles</span></div>
+      <div class="stat-tile"><strong>{formatNumber(allAiringEntries.length)}</strong><span>scheduled episodes</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Top airing now</p>
+        <h2>Current season picks</h2>
+        <p>
+          Built from AniList data and organized for quick decisions: score, format,
+          genres, and upcoming episode timing before you add a title to your list.
+        </p>
+      </div>
+      <a class="button" href="/calendar/">Full schedule</a>
+    </div>
+    <div class="anime-grid">
+      {topAiring.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Trending</p>
+        <h2>Audience heat map</h2>
+        <p>
+          These pages are static and crawlable, with local watchlist actions layered on top
+          in the browser.
+        </p>
+      </div>
+      <a class="button" href="/rankings/">All rankings</a>
+    </div>
+    <div class="anime-grid">
+      {trending.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+  </section>
+</BaseLayout>

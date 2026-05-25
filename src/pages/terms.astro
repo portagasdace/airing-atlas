@@ -1,0 +1,35 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Terms"
+  description="Terms for using Airing Atlas."
+  canonical={canonicalPath("/terms/")}
+>
+  <article class="legal-page">
+    <p class="eyebrow">Terms</p>
+    <h1>Terms of Use</h1>
+    <section>
+      <h2>Informational use</h2>
+      <p>
+        Airing Atlas provides schedule, ranking, and discovery information for anime fans.
+        Data may be delayed, incomplete, or changed by upstream providers.
+      </p>
+    </section>
+    <section>
+      <h2>No unauthorized media</h2>
+      <p>
+        The site does not provide episode playback, downloads, or links to unauthorized
+        copies. Use official services and rights-holder channels when watching or buying.
+      </p>
+    </section>
+    <section>
+      <h2>Changes</h2>
+      <p>
+        Features, data sources, advertising, and policies may change as the project grows.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,63 @@
+name: Daily Airing Atlas Update
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    # GitHub Actions cron uses UTC. This is 10:00 in Asia/Shanghai.
+    - cron: "0 2 * * *"
+
+concurrency:
+  group: daily-airing-atlas-update
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  update-and-deploy:
+    name: Sync anime data, build, and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      ANILIST_API_ENDPOINT: https://graphql.anilist.co
+      ASTRO_TELEMETRY_DISABLED: "1"
+      LIVE_ANILIST_REQUIRED: "true"
+      PUBLIC_AFFILIATE_DISCLOSURE_ENABLED: "true"
+      PUBLIC_GA_MEASUREMENT_ID: G-MBDVYCF406
+      PUBLIC_SITE_URL: https://airingatlas.com
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.31.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync anime data
+        run: pnpm run sync
+
+      - name: Build site
+        run: pnpm run build
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_AIRING_ATLAS }}
+          projectId: airing-atlas
+          channelId: live

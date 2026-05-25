@@ -1,0 +1,47 @@
+---
+import type { AnimeSummary } from "@/types/anime";
+import { cleanText, displayTitle, episodeLabel, scoreLabel, seasonLabel } from "@/lib/anime";
+
+interface Props {
+  anime: AnimeSummary;
+  rank?: number;
+  compact?: boolean;
+}
+
+const { anime, rank, compact = false } = Astro.props;
+const title = displayTitle(anime);
+const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg";
+---
+
+<article class:list={["anime-card", compact && "compact"]}>
+  <a class="poster-link" href={`/anime/${anime.slug}/`} aria-label={`Open ${title}`}>
+    <img src={cover} alt="" loading="lazy" referrerpolicy="no-referrer" />
+  </a>
+  <div class="anime-card-body">
+    <div class="card-topline">
+      {rank && <span class="rank">#{rank}</span>}
+      <span>{seasonLabel(anime)}</span>
+    </div>
+    <h3><a href={`/anime/${anime.slug}/`}>{title}</a></h3>
+    <p>{cleanText(anime.description, compact ? 110 : 150)}</p>
+    <div class="meta-grid" aria-label={`${title} facts`}>
+      <span>{scoreLabel(anime)}</span>
+      <span>{episodeLabel(anime)}</span>
+      <span>{anime.format || "Format TBA"}</span>
+    </div>
+    <div class="tag-row">
+      {(anime.genres || []).slice(0, 3).map((genre) => <span>{genre}</span>)}
+    </div>
+    <button
+      class="button small"
+      type="button"
+      data-watchlist-toggle
+      data-anime-id={anime.id}
+      data-title={title}
+      data-cover={cover}
+      data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
+    >
+      Add
+    </button>
+  </div>
+</article>

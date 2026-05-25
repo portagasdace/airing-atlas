@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+---
+
+<BaseLayout
+  title="Private Anime Watchlist"
+  description="Keep a private browser-only anime watchlist with watching, planned, completed, and dropped statuses."
+  canonical={canonicalPath("/watchlist/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">No account required</p>
+        <h1>Private Watchlist</h1>
+        <p>
+          Your queue stays in this browser under the key
+          <code>airing-atlas-watchlist-v1</code>. It is not synced to a server.
+        </p>
+        <p data-watchlist-summary>Loading saved titles...</p>
+      </div>
+      <a class="button primary" href="/rankings/">Find titles</a>
+    </div>
+    <div data-watchlist-app></div>
+  </section>
+</BaseLayout>
