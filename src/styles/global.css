@@ -197,7 +197,8 @@ h3 {
 
 .button,
 button,
-select {
+select,
+input {
   border: 2px solid var(--ink);
   border-radius: 0;
   background: var(--panel);
@@ -207,6 +208,10 @@ select {
   padding: 10px 14px;
   box-shadow: 3px 3px 0 var(--ink);
   cursor: pointer;
+}
+
+input {
+  cursor: text;
 }
 
 .button.primary {
@@ -483,7 +488,13 @@ button[aria-pressed="true"],
 .editor-note,
 .affiliate-panel,
 .empty-state,
-.watchlist-row {
+.watchlist-row,
+.tool-panel,
+.result-card,
+.recommendation-card,
+.selected-anime,
+.guide-card,
+.timeline-item {
   border: 2px solid var(--ink);
   background: var(--panel);
   padding: 18px;
@@ -533,6 +544,150 @@ button[aria-pressed="true"],
   font-size: 1.4rem;
 }
 
+.tool-panel {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.6fr) repeat(3, minmax(150px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+
+.tool-panel.compact-tool {
+  grid-template-columns: minmax(240px, 0.8fr) minmax(260px, 1.2fr);
+}
+
+.tool-panel label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tool-panel input,
+.tool-panel select {
+  width: 100%;
+  min-width: 0;
+  text-transform: none;
+}
+
+.tool-summary {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.result-grid,
+.recommendation-grid,
+.guide-grid,
+.split-feature {
+  display: grid;
+  gap: 18px;
+}
+
+.result-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.recommendation-grid,
+.guide-grid,
+.split-feature {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.result-card,
+.recommendation-card,
+.selected-anime,
+.timeline-item {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.result-poster img,
+.selected-anime img,
+.timeline-item img {
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+  background: #ddd;
+}
+
+.result-card h3,
+.recommendation-card h3 {
+  overflow-wrap: anywhere;
+}
+
+.result-card p,
+.recommendation-card p,
+.selected-anime p,
+.guide-card p,
+.timeline-item p {
+  color: var(--ink-soft);
+  margin: 8px 0;
+}
+
+.guide-card {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 14px;
+}
+
+.timeline-item {
+  grid-template-columns: 48px 96px minmax(0, 1fr);
+  align-items: center;
+}
+
+.timeline-rank {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 900;
+}
+
+.detail-meta,
+.chip-grid,
+.link-stack {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.detail-meta span,
+.chip-grid a,
+.link-stack a {
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 8px 10px;
+  font-weight: 800;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.chip-grid a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip-grid span {
+  color: var(--coral);
+}
+
+.official-links {
+  margin-bottom: 20px;
+}
+
 .legal-page {
   max-width: 820px;
 }
@@ -565,7 +720,13 @@ button[aria-pressed="true"],
   .detail-hero,
   .affiliate-panel,
   .calendar-day,
-  .ranking-layout {
+  .ranking-layout,
+  .tool-panel,
+  .tool-panel.compact-tool,
+  .result-grid,
+  .recommendation-grid,
+  .guide-grid,
+  .split-feature {
     grid-template-columns: 1fr;
   }
 
@@ -611,7 +772,11 @@ button[aria-pressed="true"],
   .anime-grid,
   .feature-band .section,
   .fact-strip,
-  .watchlist-row {
+  .watchlist-row,
+  .result-card,
+  .recommendation-card,
+  .selected-anime,
+  .timeline-item {
     grid-template-columns: 1fr;
   }
 

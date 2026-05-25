@@ -1,0 +1,68 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeByIds, canonicalPath, genreIndex } from "@/lib/anime";
+import type { GenreIndexItem } from "@/types/anime";
+
+export function getStaticPaths() {
+  return genreIndex.items.map((genre) => ({
+    params: { genre: genre.slug },
+    props: { genre }
+  }));
+}
+
+const { genre } = Astro.props as { genre: GenreIndexItem };
+const top = animeByIds(genre.topIds);
+const airing = animeByIds(genre.airingIds);
+---
+
+<BaseLayout
+  title={`${genre.genre} Anime`}
+  description={`Browse popular ${genre.genre.toLowerCase()} anime, current airing picks, scores, formats, and watchlist-ready detail pages.`}
+  canonical={canonicalPath(`/genres/${genre.slug}/`)}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Genre guide</p>
+        <h1>{genre.genre} Anime</h1>
+        <p>
+          A focused catalog slice for {genre.genre.toLowerCase()} fans, combining popular
+          long-term picks with titles that still have fresh airing signals.
+        </p>
+      </div>
+      <a class="button primary" href="/discover/">Filter more anime</a>
+    </div>
+  </section>
+
+  {airing.length > 0 && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Airing signal</p>
+          <h2>Airing {genre.genre} picks</h2>
+        </div>
+      </div>
+      <div class="anime-grid">
+        {airing.slice(0, 6).map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">{genre.count} indexed titles</p>
+        <h2>Popular {genre.genre} anime</h2>
+      </div>
+    </div>
+    <div class="anime-grid">
+      {top.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+  </section>
+</BaseLayout>

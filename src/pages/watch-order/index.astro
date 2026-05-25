@@ -1,0 +1,42 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { canonicalPath, watchOrderIndex } from "@/lib/anime";
+
+const guides = watchOrderIndex.items.slice(0, 48);
+---
+
+<BaseLayout
+  title="Anime Watch Order Guides"
+  description="Browse compact anime watch order guides for connected franchises, sequels, prequels, movies, OVAs, and specials."
+  canonical={canonicalPath("/watch-order/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Franchise map</p>
+        <h1>Anime Watch Order</h1>
+        <p>
+          Start with high-signal franchises and see their connected seasons, sequels,
+          prequels, side stories, movies, OVAs, and specials in one crawlable guide.
+        </p>
+      </div>
+      <a class="button primary" href="/discover/">Find a title</a>
+    </div>
+  </section>
+
+  <section class="section guide-grid">
+    {guides.map((guide) => (
+      <article class="guide-card">
+        <p class="eyebrow">{guide.entries.length} entries</p>
+        <h2><a href={`/watch-order/${guide.slug}/`}>{guide.title}</a></h2>
+        <p>{guide.description}</p>
+        <a class="button small" href={`/watch-order/${guide.slug}/`}>Open guide</a>
+      </article>
+    ))}
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>

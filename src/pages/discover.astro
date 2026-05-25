@@ -1,0 +1,78 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeCatalog, canonicalPath } from "@/lib/anime";
+
+const seasons = ["WINTER", "SPRING", "SUMMER", "FALL"];
+---
+
+<BaseLayout
+  title="Anime Discover"
+  description="Search and filter anime by genre, season, year, format, status, score, and popularity."
+  canonical={canonicalPath("/discover/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Discovery desk</p>
+        <h1>Anime Discover</h1>
+        <p>
+          Search the Airing Atlas catalog by title, genre, release season, format, status,
+          score, and audience heat without leaving the page.
+        </p>
+      </div>
+      <a class="button primary" href="/similar/">Find similar anime</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="tool-panel">
+      <label>
+        <span>Title or theme</span>
+        <input data-discover-search type="search" placeholder="Try frieren, romance, demons..." />
+      </label>
+      <label>
+        <span>Genre</span>
+        <select data-discover-genre><option value="">All genres</option></select>
+      </label>
+      <label>
+        <span>Season</span>
+        <select data-discover-season>
+          <option value="">All seasons</option>
+          {seasons.map((season) => <option value={season}>{season.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Year</span>
+        <select data-discover-year><option value="">All years</option></select>
+      </label>
+      <label>
+        <span>Format</span>
+        <select data-discover-format><option value="">All formats</option></select>
+      </label>
+      <label>
+        <span>Status</span>
+        <select data-discover-status><option value="">All statuses</option></select>
+      </label>
+      <label>
+        <span>Sort</span>
+        <select data-discover-sort>
+          <option value="popularity">Popularity</option>
+          <option value="score">Score</option>
+          <option value="airing">Airing soon</option>
+          <option value="title">Title</option>
+        </select>
+      </label>
+    </div>
+    <p class="tool-summary" data-discover-summary>Loading {animeCatalog.anime.length} indexed titles...</p>
+  </section>
+
+  <section class="section">
+    <div class="result-grid" data-discover-results></div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+  <script is:inline src="/scripts/discover.js" defer></script>
+</BaseLayout>

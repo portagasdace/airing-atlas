@@ -1,0 +1,50 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { canonicalPath, fuzzyDateLabel, titleCase, watchOrderIndex } from "@/lib/anime";
+import type { WatchOrderGuide } from "@/types/anime";
+
+export function getStaticPaths() {
+  return watchOrderIndex.items.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide }
+  }));
+}
+
+const { guide } = Astro.props as { guide: WatchOrderGuide };
+---
+
+<BaseLayout
+  title={guide.title}
+  description={guide.description}
+  canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Suggested viewing order</p>
+        <h1>{guide.title}</h1>
+        <p>{guide.description} Use the labels as a franchise map, not a replacement for official release information.</p>
+      </div>
+      <a class="button primary" href="/watch-order/">All guides</a>
+    </div>
+  </section>
+
+  <section class="section timeline-list">
+    {guide.entries.map((entry, index) => (
+      <article class="timeline-item">
+        <span class="timeline-rank">{index + 1}</span>
+        <img src={entry.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+        <div>
+          <p class="eyebrow">{titleCase(entry.relationType || "Related")}</p>
+          <h2><a href={`/anime/${entry.slug}/`}>{entry.title}</a></h2>
+          <p>{titleCase(entry.format || "Anime")} · {fuzzyDateLabel(entry.startDate)} · {entry.episodes ? `${entry.episodes} episodes` : "Episodes TBA"}</p>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>

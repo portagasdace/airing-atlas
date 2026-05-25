@@ -3,11 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAiringEntries, animeByRanking, animeCatalog, canonicalPath, formatNumber } from "@/lib/anime";
+import { allAiringEntries, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
 
 const upcoming = allAiringEntries.slice(0, 5);
 const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
+const topGenres = genreIndex.items.slice(0, 6);
+const watchGuides = watchOrderIndex.items.slice(0, 4);
 ---
 
 <BaseLayout
@@ -25,6 +27,8 @@ const topAiring = animeByRanking("current").slice(0, 3);
       </p>
       <div class="hero-actions">
         <a class="button primary" href="/calendar/">Open calendar</a>
+        <a class="button" href="/discover/">Search catalog</a>
+        <a class="button" href="/similar/">Find similar anime</a>
         <a class="button" href="/rankings/">Browse rankings</a>
       </div>
     </div>
@@ -64,6 +68,36 @@ const topAiring = animeByRanking("current").slice(0, 3);
 
   <section class="section">
     <AdSlot />
+  </section>
+
+  <section class="section split-feature">
+    <div>
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Discovery tools</p>
+          <h2>Search by mood, season, and format</h2>
+          <p>
+            The new discovery desk turns the catalog into a filterable tool for fans who
+            know a vibe, genre, or season but not the exact title yet.
+          </p>
+        </div>
+      </div>
+      <div class="chip-grid">
+        {topGenres.map((genre) => <a href={`/genres/${genre.slug}/`}>{genre.genre}<span>{genre.count}</span></a>)}
+      </div>
+    </div>
+    <div>
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Franchise maps</p>
+          <h2>Watch order guides</h2>
+          <p>Compact franchise paths for sequels, prequels, movies, OVAs, and specials.</p>
+        </div>
+      </div>
+      <div class="link-stack">
+        {watchGuides.map((guide) => <a href={`/watch-order/${guide.slug}/`}>{guide.title}</a>)}
+      </div>
+    </div>
   </section>
 
   <section class="section">

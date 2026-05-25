@@ -1,0 +1,69 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeByIds, canonicalPath, seasonIndex, titleCase } from "@/lib/anime";
+import type { SeasonIndexItem } from "@/types/anime";
+
+export function getStaticPaths() {
+  return seasonIndex.items.map((season) => ({
+    params: { year: String(season.seasonYear), season: season.season.toLowerCase() },
+    props: { season }
+  }));
+}
+
+const { season } = Astro.props as { season: SeasonIndexItem };
+const top = animeByIds(season.topIds);
+const airing = animeByIds(season.airingIds);
+const label = `${titleCase(season.season)} ${season.seasonYear}`;
+---
+
+<BaseLayout
+  title={`${label} Anime`}
+  description={`Browse ${label} anime with popular picks, airing titles, scores, formats, and watchlist-ready detail pages.`}
+  canonical={canonicalPath(`/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Season guide</p>
+        <h1>{label} Anime</h1>
+        <p>
+          A crawlable season hub for comparing what aired in {label}, including popular
+          picks, active airing signals, formats, and detail pages.
+        </p>
+      </div>
+      <a class="button primary" href="/calendar/">Open calendar</a>
+    </div>
+  </section>
+
+  {airing.length > 0 && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">This schedule</p>
+          <h2>Airing from {label}</h2>
+        </div>
+      </div>
+      <div class="anime-grid">
+        {airing.slice(0, 6).map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">{season.count} indexed titles</p>
+        <h2>Popular {label} anime</h2>
+      </div>
+    </div>
+    <div class="anime-grid">
+      {top.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,8 +1,11 @@
-import { allAnime, canonicalPath } from "@/lib/anime";
+import { allAnime, canonicalPath, genreIndex, seasonIndex, watchOrderIndex } from "@/lib/anime";
 
 const staticPages = [
   "/",
   "/calendar/",
+  "/discover/",
+  "/similar/",
+  "/watch-order/",
   "/rankings/",
   "/watchlist/",
   "/about/",
@@ -15,7 +18,10 @@ const staticPages = [
 export function GET() {
   const urls = [
     ...staticPages,
-    ...allAnime.map((anime) => `/anime/${anime.slug}/`)
+    ...allAnime.map((anime) => `/anime/${anime.slug}/`),
+    ...watchOrderIndex.items.map((guide) => `/watch-order/${guide.slug}/`),
+    ...genreIndex.items.map((genre) => `/genres/${genre.slug}/`),
+    ...seasonIndex.items.map((season) => `/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

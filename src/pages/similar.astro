@@ -1,0 +1,52 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeByRanking, canonicalPath } from "@/lib/anime";
+
+const startingTitles = animeByRanking("trending").slice(0, 6);
+---
+
+<BaseLayout
+  title="Similar Anime Finder"
+  description="Pick an anime and discover similar titles with clear match reasons from AniList and Airing Atlas signals."
+  canonical={canonicalPath("/similar/")}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Recommendation tool</p>
+        <h1>Similar Anime Finder</h1>
+        <p>
+          Choose a title and compare recommendations using AniList user signals plus shared
+          genres, tags, format, studio, score, and audience popularity.
+        </p>
+      </div>
+      <a class="button primary" href="/discover/">Open Discover</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="tool-panel compact-tool">
+      <label>
+        <span>Search catalog</span>
+        <input data-similar-search type="search" placeholder="Type an anime title..." />
+      </label>
+      <label>
+        <span>Selected anime</span>
+        <select data-similar-select>
+          {startingTitles.map((anime) => (
+            <option value={anime.id}>{anime.title.english || anime.title.romaji || anime.title.native}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+    <p class="tool-summary" data-similar-summary>Loading recommendations...</p>
+  </section>
+
+  <section class="section" data-similar-results></section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+  <script is:inline src="/scripts/similar.js" defer></script>
+</BaseLayout>
