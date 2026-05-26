@@ -1,7 +1,7 @@
 substitutions:
   _FIREBASE_PROJECT_ID: airing-atlas
   _PUBLIC_SITE_URL: "https://airingatlas.com"
-  _PUBLIC_GA_MEASUREMENT_ID: "G-MBDVYCF406"
+  _PUBLIC_GA_MEASUREMENT_ID: "G-7LC772Z7PH"
 
 steps:
   - name: node:22
