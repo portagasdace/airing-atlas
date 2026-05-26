@@ -22,6 +22,8 @@
     const catalog = await response.json();
     state.anime = catalog.anime || [];
     hydrateOptions();
+    const requestedQuery = new URLSearchParams(window.location.search).get("q");
+    if (requestedQuery && state.controls.query) state.controls.query.value = requestedQuery;
     render();
   };
 

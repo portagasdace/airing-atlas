@@ -8,17 +8,20 @@ interface Props {
   description: string;
   canonical?: string;
   image?: string;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const {
   title,
   description,
   canonical = Astro.url.toString(),
-  image = "/og-default.svg"
+  image = "/og-default.svg",
+  structuredData
 } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const pageTitle = title.includes("Airing Atlas") ? title : `${title} · Airing Atlas`;
+const structuredDataItems = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 ---
 
 <!doctype html>
@@ -43,15 +46,16 @@ const pageTitle = title.includes("Airing Atlas") ? title : `${title} · Airing A
           <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
           <script is:inline define:vars={{ gaMeasurementId }}>
             window.dataLayer = window.dataLayer || [];
-            function gtag() {
+            window.gtag = window.gtag || function gtag() {
               window.dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-            gtag("config", gaMeasurementId, { anonymize_ip: true });
+            };
+            window.gtag("js", new Date());
+            window.gtag("config", gaMeasurementId, { anonymize_ip: true });
           </script>
         </>
       )
     }
+    {structuredDataItems.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
     {
       adsenseClientId && (
         <script
@@ -70,6 +74,7 @@ const pageTitle = title.includes("Airing Atlas") ? title : `${title} · Airing A
     </main>
     <Footer />
     <script is:inline src="/scripts/time-localize.js" defer></script>
+    {gaMeasurementId && <script is:inline src="/scripts/analytics-events.js" defer></script>}
     <script is:inline src="/scripts/watchlist.js" defer></script>
   </body>
 </html>

@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { animeByRanking, canonicalPath } from "@/lib/anime";
+import { webAppJsonLd } from "@/lib/seo";
 
 const startingTitles = animeByRanking("trending").slice(0, 6);
 ---
@@ -10,6 +11,7 @@ const startingTitles = animeByRanking("trending").slice(0, 6);
   title="Similar Anime Finder"
   description="Pick an anime and discover similar titles with clear match reasons from AniList and Airing Atlas signals."
   canonical={canonicalPath("/similar/")}
+  structuredData={webAppJsonLd("Similar Anime Finder", "Pick an anime and discover similar titles with clear match reasons from AniList and Airing Atlas signals.", "/similar/")}
 >
   <section class="section">
     <div class="section-header">

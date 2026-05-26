@@ -2,7 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
+import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
+import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
 export function getStaticPaths() {
@@ -21,6 +22,18 @@ const guide = watchOrderFor(anime.id);
 const tags = (anime.tags || []).slice(0, 8);
 const officialLinks = (anime.externalLinks || []).filter((link) => link.url && link.site).slice(0, 5);
 const studio = anime.studios?.[0]?.name;
+const genreLinks = (anime.genres || []).map((genre) => ({
+  name: genre,
+  slug: genreIndex.items.find((item) => item.genre === genre)?.slug
+}));
+const structuredData = [
+  breadcrumbJsonLd([
+    { name: "Airing Atlas", path: "/" },
+    { name: "Anime", path: "/discover/" },
+    { name: title, path: `/anime/${anime.slug}/` }
+  ]),
+  animeJsonLd(anime, title, metaDescription, cover)
+];
 ---
 
 <BaseLayout
@@ -28,6 +41,7 @@ const studio = anime.studios?.[0]?.name;
   description={metaDescription}
   canonical={canonicalPath(`/anime/${anime.slug}/`)}
   image={cover}
+  structuredData={structuredData}
 >
   <section class="detail-hero">
     <img class="detail-poster" src={cover} alt="" referrerpolicy="no-referrer" />
@@ -62,6 +76,8 @@ const studio = anime.studios?.[0]?.name;
             <option value="dropped">dropped</option>
           </select>
         </label>
+        <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
+        {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
       </div>
       <div class="fact-strip">
         <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
@@ -79,7 +95,11 @@ const studio = anime.studios?.[0]?.name;
 
   <section class="section">
     <div class="tag-row">
-      {(anime.genres || []).map((genre) => <span>{genre}</span>)}
+      {genreLinks.map((genre) => (
+        genre.slug
+          ? <a href={`/genres/${genre.slug}/`} data-track-event="detail_genre_click" data-track-label={genre.name}>{genre.name}</a>
+          : <span>{genre.name}</span>
+      ))}
       {tags.map((tag) => <span>{tag.name}</span>)}
     </div>
   </section>
@@ -92,7 +112,7 @@ const studio = anime.studios?.[0]?.name;
           <h2>Watch next if you like {title}</h2>
           <p>Recommendations combine AniList user signals with shared genre, tag, format, studio, and score patterns.</p>
         </div>
-        <a class="button" href={`/similar/?anime=${anime.id}`}>Open finder</a>
+        <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar_section" data-track-label={title}>Open finder</a>
       </div>
       <div class="recommendation-grid">
         {recommendations.map((item) => (

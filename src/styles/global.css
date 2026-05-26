@@ -33,6 +33,7 @@ body {
   color: var(--ink);
   font-family: "Avenir Next", "Trebuchet MS", Verdana, sans-serif;
   line-height: 1.5;
+  font-size: 16px;
 }
 
 body::before {
@@ -169,16 +170,16 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(3rem, 8vw, 7.2rem);
-  max-width: 9ch;
+  font-size: clamp(2.9rem, 6.6vw, 5.8rem);
+  max-width: 11ch;
 }
 
 h2 {
-  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-size: clamp(1.7rem, 3vw, 2.8rem);
 }
 
 h3 {
-  font-size: 1.35rem;
+  font-size: 1.2rem;
 }
 
 .lede {
@@ -208,6 +209,8 @@ input {
   padding: 10px 14px;
   box-shadow: 3px 3px 0 var(--ink);
   cursor: pointer;
+  line-height: 1.15;
+  text-align: center;
 }
 
 input {
@@ -226,6 +229,7 @@ input {
 .button.small {
   padding: 7px 10px;
   min-width: 72px;
+  font-size: 0.9rem;
 }
 
 button[aria-pressed="true"],
@@ -280,7 +284,8 @@ button[aria-pressed="true"],
 }
 
 .airing-row h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
+  line-height: 1.1;
 }
 
 .airing-row time,
@@ -298,26 +303,37 @@ button[aria-pressed="true"],
   margin-bottom: 18px;
 }
 
+.section-header h1 {
+  font-size: clamp(2.45rem, 4.6vw, 4.15rem);
+  max-width: 13ch;
+}
+
 .section-header p {
   max-width: 58ch;
   margin: 8px 0 0;
   color: var(--muted);
 }
 
+.section-header .button {
+  flex-shrink: 0;
+}
+
 .anime-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .anime-card {
   display: grid;
-  grid-template-columns: 136px minmax(0, 1fr);
+  grid-template-columns: 124px minmax(0, 1fr);
   gap: 14px;
   background: var(--panel);
   border: 2px solid var(--ink);
   padding: 12px;
   box-shadow: 5px 5px 0 var(--ink);
+  height: 100%;
 }
 
 .anime-card.compact {
@@ -346,6 +362,19 @@ button[aria-pressed="true"],
 .anime-card p {
   margin: 0;
   font-size: 0.93rem;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.anime-card.compact p {
+  -webkit-line-clamp: 2;
+}
+
+.anime-card-body .button {
+  align-self: flex-start;
+  margin-top: auto;
 }
 
 .card-topline,
@@ -369,7 +398,8 @@ button[aria-pressed="true"],
 }
 
 .meta-grid span,
-.tag-row span {
+.tag-row span,
+.tag-row a {
   border: 1px solid rgba(17, 18, 22, 0.24);
   padding: 3px 7px;
   background: rgba(248, 244, 236, 0.78);
@@ -378,16 +408,57 @@ button[aria-pressed="true"],
   font-weight: 800;
 }
 
+.tag-row a:hover {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
 .feature-band {
   background: var(--ink);
   color: #fff;
   margin: 28px 0;
 }
 
+.quick-entry-grid {
+  display: grid;
+  grid-template-columns: 1.15fr repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding-top: 8px;
+}
+
+.quick-entry {
+  min-height: 156px;
+  display: grid;
+  align-content: space-between;
+  gap: 12px;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 16px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.quick-entry.primary-entry {
+  background: var(--gold);
+}
+
+.quick-entry strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  line-height: 1.04;
+}
+
+.quick-entry small {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
 .feature-band .section {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
+  padding-top: 22px;
+  padding-bottom: 22px;
 }
 
 .stat-tile {
@@ -398,7 +469,7 @@ button[aria-pressed="true"],
 .stat-tile strong {
   display: block;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 2rem;
+  font-size: 1.7rem;
 }
 
 .ad-slot {
@@ -600,9 +671,17 @@ button[aria-pressed="true"],
 .selected-anime,
 .timeline-item {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-columns: 104px minmax(0, 1fr);
   gap: 14px;
   align-items: start;
+  height: 100%;
+}
+
+.result-card > div,
+.recommendation-card > div,
+.selected-anime > div,
+.timeline-item > div {
+  min-width: 0;
 }
 
 .result-poster img,
@@ -618,6 +697,7 @@ button[aria-pressed="true"],
 .result-card h3,
 .recommendation-card h3 {
   overflow-wrap: anywhere;
+  line-height: 1.1;
 }
 
 .result-card p,
@@ -642,6 +722,10 @@ button[aria-pressed="true"],
 .timeline-item {
   grid-template-columns: 48px 96px minmax(0, 1fr);
   align-items: center;
+}
+
+.timeline-item h2 {
+  font-size: clamp(1.35rem, 2.4vw, 2.1rem);
 }
 
 .timeline-rank {
@@ -672,6 +756,12 @@ button[aria-pressed="true"],
   padding: 8px 10px;
   font-weight: 800;
   box-shadow: 3px 3px 0 var(--ink);
+}
+
+.chip-grid a,
+.link-stack a {
+  align-items: center;
+  min-height: 42px;
 }
 
 .chip-grid a {
@@ -721,6 +811,7 @@ button[aria-pressed="true"],
   .affiliate-panel,
   .calendar-day,
   .ranking-layout,
+  .quick-entry-grid,
   .tool-panel,
   .tool-panel.compact-tool,
   .result-grid,
@@ -766,7 +857,11 @@ button[aria-pressed="true"],
   }
 
   h1 {
-    font-size: clamp(2.8rem, 18vw, 4.6rem);
+    font-size: clamp(2.35rem, 13vw, 3.8rem);
+  }
+
+  .section-header h1 {
+    font-size: clamp(2.2rem, 12vw, 3.35rem);
   }
 
   .anime-grid,
@@ -783,6 +878,10 @@ button[aria-pressed="true"],
   .anime-card,
   .anime-card.compact {
     grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .quick-entry {
+    min-height: auto;
   }
 
   .airing-row {

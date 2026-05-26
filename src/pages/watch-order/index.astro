@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, watchOrderIndex } from "@/lib/anime";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
 const guides = watchOrderIndex.items.slice(0, 48);
 ---
@@ -10,6 +11,28 @@ const guides = watchOrderIndex.items.slice(0, 48);
   title="Anime Watch Order Guides"
   description="Browse compact anime watch order guides for connected franchises, sequels, prequels, movies, OVAs, and specials."
   canonical={canonicalPath("/watch-order/")}
+  structuredData={[
+    breadcrumbJsonLd([
+      { name: "Airing Atlas", path: "/" },
+      { name: "Watch Order", path: "/watch-order/" }
+    ]),
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Anime Watch Order Guides",
+      description: "Browse compact anime watch order guides for connected franchises, sequels, prequels, movies, OVAs, and specials.",
+      url: canonicalPath("/watch-order/"),
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: guides.slice(0, 24).map((guide, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: guide.title,
+          url: canonicalPath(`/watch-order/${guide.slug}/`)
+        }))
+      }
+    }
+  ]}
 >
   <section class="section">
     <div class="section-header">

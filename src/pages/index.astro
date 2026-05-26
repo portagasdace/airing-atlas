@@ -4,18 +4,21 @@ import AnimeCard from "@/components/AnimeCard.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAiringEntries, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { websiteJsonLd } from "@/lib/seo";
 
 const upcoming = allAiringEntries.slice(0, 5);
 const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
 const topGenres = genreIndex.items.slice(0, 6);
 const watchGuides = watchOrderIndex.items.slice(0, 4);
+const primaryGuide = watchGuides[0];
 ---
 
 <BaseLayout
   title="Airing Atlas"
   description="Track anime airing times, browse seasonal rankings, and keep a private watchlist in your browser."
   canonical={canonicalPath("/")}
+  structuredData={websiteJsonLd()}
 >
   <section class="hero">
     <div class="hero-copy">
@@ -26,10 +29,9 @@ const watchGuides = watchOrderIndex.items.slice(0, 4);
         no-login watchlist without touching unauthorized streams.
       </p>
       <div class="hero-actions">
-        <a class="button primary" href="/calendar/">Open calendar</a>
-        <a class="button" href="/discover/">Search catalog</a>
-        <a class="button" href="/similar/">Find similar anime</a>
-        <a class="button" href="/rankings/">Browse rankings</a>
+        <a class="button primary" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Open calendar</a>
+        <a class="button" href="/discover/" data-track-event="home_primary_discover" data-track-label="Search catalog">Search catalog</a>
+        <a class="button" href="/similar/" data-track-event="home_primary_similar" data-track-label="Find similar anime">Find similar anime</a>
       </div>
     </div>
     <div class="ticker-panel">
@@ -38,6 +40,31 @@ const watchGuides = watchOrderIndex.items.slice(0, 4);
         {upcoming.map((entry) => <AiringRow entry={entry} />)}
       </div>
     </div>
+  </section>
+
+  <section class="section quick-entry-grid" aria-label="Start with a tool">
+    <a class="quick-entry primary-entry" href="/calendar/" data-track-event="home_tool_calendar" data-track-label="Today schedule">
+      <span class="eyebrow">Today</span>
+      <strong>Airing calendar</strong>
+      <small>Local-time episode drops and this week&apos;s schedule.</small>
+    </a>
+    <a class="quick-entry" href="/discover/?q=fantasy" data-track-event="home_tool_discover" data-track-label="Discover fantasy">
+      <span class="eyebrow">Discover</span>
+      <strong>Search by mood</strong>
+      <small>Filter by genre, year, format, score, and status.</small>
+    </a>
+    <a class="quick-entry" href="/similar/" data-track-event="home_tool_similar" data-track-label="Similar finder">
+      <span class="eyebrow">Recommend</span>
+      <strong>Similar anime finder</strong>
+      <small>Pick one title and get clear match reasons.</small>
+    </a>
+    {primaryGuide && (
+      <a class="quick-entry" href={`/watch-order/${primaryGuide.slug}/`} data-track-event="home_tool_watch_order" data-track-label={primaryGuide.title}>
+        <span class="eyebrow">Franchise</span>
+        <strong>Watch order guides</strong>
+        <small>{primaryGuide.title}</small>
+      </a>
+    )}
   </section>
 
   <section class="feature-band" aria-label="Catalog stats">
