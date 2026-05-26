@@ -13,6 +13,14 @@ export function getStaticPaths() {
 }
 
 const { guide } = Astro.props as { guide: WatchOrderGuide };
+const releaseOrder = [...guide.entries].sort((a, b) => dateRank(a.startDate) - dateRank(b.startDate));
+const optionalEntries = guide.entries.filter((entry) => ["OVA", "ONA", "SPECIAL", "SPIN_OFF", "SIDE_STORY", "SUMMARY", "ALTERNATIVE"].includes(String(entry.relationType || "").toUpperCase()));
+const mainPath = guide.entries.filter((entry) => ["SOURCE", "MAIN", "PREQUEL", "SEQUEL"].includes(String(entry.relationType || "").toUpperCase()));
+
+function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
+  if (!date?.year) return Number.MAX_SAFE_INTEGER;
+  return Number(`${date.year}${String(date.month || 1).padStart(2, "0")}${String(date.day || 1).padStart(2, "0")}`);
+}
 ---
 
 <BaseLayout
@@ -32,6 +40,23 @@ const { guide } = Astro.props as { guide: WatchOrderGuide };
     </div>
   </section>
 
+  <section class="section">
+    <div class="editor-note">
+      <p class="eyebrow">Recommended order</p>
+      <h2>Start here</h2>
+      <p>
+        Follow the main path first, then add side stories, OVAs, specials, and recap movies
+        after the closest related season. This keeps the story readable without losing the
+        extra franchise material.
+      </p>
+      <div class="chip-grid">
+        {mainPath.slice(0, 8).map((entry, index) => (
+          <a href={`/anime/${entry.slug}/`}><span>{index + 1}</span>{entry.title}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="section timeline-list">
     {guide.entries.map((entry, index) => (
       <article class="timeline-item">
@@ -44,6 +69,58 @@ const { guide } = Astro.props as { guide: WatchOrderGuide };
         </div>
       </article>
     ))}
+  </section>
+
+  <section class="section split-feature">
+    <div class="editor-note">
+      <p class="eyebrow">Release order</p>
+      <h2>Original release path</h2>
+      <p>Use this if you prefer to watch the franchise as audiences encountered it over time.</p>
+      <div class="link-stack">
+        {releaseOrder.slice(0, 10).map((entry) => (
+          <a href={`/anime/${entry.slug}/`}>{fuzzyDateLabel(entry.startDate)} · {entry.title}</a>
+        ))}
+      </div>
+    </div>
+    <div class="editor-note">
+      <p class="eyebrow">Skip and OVA notes</p>
+      <h2>Optional material</h2>
+      <p>
+        Recap movies and alternative versions are usually optional if you already watched
+        the corresponding TV season. OVAs, specials, side stories, and spin-offs are best
+        treated as bonus material unless they are labeled prequel or sequel.
+      </p>
+      <div class="link-stack">
+        {(optionalEntries.length ? optionalEntries : guide.entries.slice(0, 4)).slice(0, 8).map((entry) => (
+          <a href={`/anime/${entry.slug}/`}>{titleCase(entry.relationType || "Related")} · {entry.title}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Watch order FAQ</p>
+      <h2>{guide.title} questions</h2>
+      <div class="faq-grid">
+        <article>
+          <h3>What is the best order?</h3>
+          <p>Use the recommended order above for story flow, then check the release order if you want the original broadcast context.</p>
+        </article>
+        <article>
+          <h3>Can I skip recap movies?</h3>
+          <p>Usually yes. Entries labeled alternative or summary are often safer to save for later unless you want a refresher.</p>
+        </article>
+        <article>
+          <h3>Are OVAs and specials required?</h3>
+          <p>Most are optional side material. Watch them after the season or movie they are closest to in the list.</p>
+        </article>
+        <article>
+          <h3>Does Airing Atlas stream anime?</h3>
+          <p>No. This page is a franchise map and links back to legal research pages where official links are available.</p>
+        </article>
+      </div>
+    </div>
   </section>
 
   <section class="section">

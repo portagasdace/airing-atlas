@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
+import { animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
@@ -26,6 +27,7 @@ const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
+const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
 const structuredData = [
   breadcrumbJsonLd([
     { name: "Airing Atlas", path: "/" },
@@ -77,6 +79,7 @@ const structuredData = [
           </select>
         </label>
         <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
+        <a class="button" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="detail_open_anime_like" data-track-label={title}>Anime like this</a>
         {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
       </div>
       <div class="fact-strip">
@@ -101,6 +104,22 @@ const structuredData = [
           : <span>{genre.name}</span>
       ))}
       {tags.map((tag) => <span>{tag.name}</span>)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Related search keywords</p>
+      <h2>Search phrases around {title}</h2>
+      <p>Useful long-tail routes for similar anime, release timing, genre discovery, and watch order research.</p>
+      <div class="keyword-list">
+        {searchIntents.map((item) => (
+          <a href={item.href} data-track-event="keyword_click" data-track-label={item.label}>
+            <span>{item.intent}</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 

@@ -49,6 +49,7 @@ export function animeJsonLd(anime: AnimeSummary, title: string, description: str
     image: absoluteUrl(image),
     description,
     genre: anime.genres,
+    keywords: animeKeywords(anime, title),
     numberOfEpisodes: anime.episodes || undefined,
     datePublished: fuzzyIsoDate(anime.startDate),
     sameAs: sameAs.length ? sameAs : undefined
@@ -176,6 +177,22 @@ function fuzzyIsoDate(date?: AnimeSummary["startDate"]): string | undefined {
 
 function absoluteUrl(value: string): string {
   return value.startsWith("http") ? value : canonicalPath(value);
+}
+
+function animeKeywords(anime: AnimeSummary, title: string): string {
+  return [
+    title,
+    `${title} anime`,
+    `anime like ${title}`,
+    `${title} recommendations`,
+    `${title} watch order`,
+    `${title} next episode`,
+    ...(anime.genres || []).map((genre) => `${genre} anime`),
+    ...(anime.tags || []).map((tag) => tag.name).filter(Boolean).slice(0, 6)
+  ]
+    .filter(Boolean)
+    .slice(0, 18)
+    .join(", ");
 }
 
 function compactJsonLd(value: JsonLd): JsonLd {

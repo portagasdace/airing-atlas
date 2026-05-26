@@ -61,7 +61,8 @@
   };
 
   const matchesFilters = (anime) => {
-    const query = (state.controls.query?.value || "").trim().toLowerCase();
+    const query = normalizeSearchQuery(state.controls.query?.value || "");
+    const terms = query.split(/\s+/).filter(Boolean);
     const genre = state.controls.genre?.value || "";
     const season = state.controls.season?.value || "";
     const year = state.controls.year?.value || "";
@@ -72,6 +73,12 @@
       anime.title?.english,
       anime.title?.romaji,
       anime.title?.native,
+      anime.format,
+      anime.status,
+      anime.source,
+      anime.season,
+      anime.seasonYear,
+      ...(anime.studios || []).map((studio) => studio.name),
       ...(anime.genres || []),
       ...(anime.tags || []).map((tag) => tag.name)
     ]
@@ -79,7 +86,7 @@
       .join(" ")
       .toLowerCase();
 
-    return (!query || haystack.includes(query))
+    return (!terms.length || terms.every((term) => haystack.includes(term)))
       && (!genre || (anime.genres || []).includes(genre))
       && (!season || anime.season === season)
       && (!year || String(anime.seasonYear) === year)
@@ -127,6 +134,13 @@
     const cleaned = String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     return cleaned.length > max ? `${cleaned.slice(0, max - 1).trim()}...` : cleaned;
   };
+  const normalizeSearchQuery = (value) =>
+    String(value)
+      .toLowerCase()
+      .replace(/\b(anime|manga|shows?|series|tv)\b/g, " ")
+      .replace(/\b(like|similar to|similar|recommendations?|recommended|watch order|release schedule|next episode|best|top)\b/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
   const unique = (items) => [...new Set(items)];
   const escapeHtml = (value = "") =>
     String(value)

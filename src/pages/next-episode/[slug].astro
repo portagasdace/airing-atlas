@@ -1,0 +1,142 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAnime, canonicalPath, cleanText, displayTitle, episodeLabel, genreIndex, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
+import { nextEpisodeSlug, relatedSearchIntents, weeklyAiringLabel } from "@/lib/search-intents";
+import { breadcrumbJsonLd } from "@/lib/seo";
+import type { AnimeSummary } from "@/types/anime";
+
+export function getStaticPaths() {
+  const seen = new Set<string>();
+  return allAnime
+    .filter((anime) => anime.nextAiringEpisode?.airingAt)
+    .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0))
+    .flatMap((anime) => {
+      const slug = nextEpisodeSlug(anime);
+      if (!slug || seen.has(slug)) return [];
+      seen.add(slug);
+      return [{ params: { slug }, props: { anime } }];
+    });
+}
+
+const { anime } = Astro.props as { anime: AnimeSummary };
+const title = displayTitle(anime);
+const next = anime.nextAiringEpisode;
+const guide = watchOrderFor(anime.id);
+const genreLinks = (anime.genres || []).map((genre) => ({
+  name: genre,
+  slug: genreIndex.items.find((item) => item.genre === genre)?.slug
+}));
+const searchIntents = relatedSearchIntents({ anime, guide, genreLinks });
+const canonical = `/next-episode/${nextEpisodeSlug(anime)}/`;
+const description = `${title} next episode time, local release schedule, episode number, weekly airing pattern, and legal discovery links on Airing Atlas.`;
+const structuredData = [
+  breadcrumbJsonLd([
+    { name: "Airing Atlas", path: "/" },
+    { name: "Next Episode", path: "/calendar/" },
+    { name: `${title} next episode`, path: canonical }
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `When is ${title} episode ${next?.episode || ""}?`.trim(),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: next ? `${title} episode ${next.episode} is listed by AniList for ${new Date(next.airingAt * 1000).toISOString()}. Airing Atlas converts the time in the browser for each visitor.` : "The next episode time is not currently listed."
+        }
+      },
+      {
+        "@type": "Question",
+        name: `Where can I watch ${title}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Airing Atlas does not host streams. Use the official and legal links on the anime detail page where available."
+        }
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout
+  title={`${title} next episode`}
+  description={description}
+  canonical={canonicalPath(canonical)}
+  image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
+  structuredData={structuredData}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Release schedule</p>
+        <h1>{title} next episode</h1>
+        <p>
+          Next episode timing for {title}, shown with a local-time browser conversion,
+          episode number, weekly airing pattern, and quick links into related discovery pages.
+        </p>
+      </div>
+      <a class="button primary" href={`/anime/${anime.slug}/`}>Anime details</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="release-panel">
+      <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <div>
+        <p class="eyebrow">{seasonLabel(anime)} · {anime.format ? titleCase(anime.format) : "Anime"}</p>
+        <h2>Episode {next?.episode || "TBA"}</h2>
+        {next ? (
+          <p class="release-time"><time data-airing-at={next.airingAt}>{new Date(next.airingAt * 1000).toUTCString()}</time></p>
+        ) : (
+          <p class="release-time">Next episode time TBA</p>
+        )}
+        <div class="fact-strip compact-facts">
+          <div><span>Local time</span><strong>{next ? <time data-airing-at={next.airingAt}>{new Date(next.airingAt * 1000).toUTCString()}</time> : "TBA"}</strong></div>
+          <div><span>Weekly pattern</span><strong>{weeklyAiringLabel(next?.airingAt)}</strong></div>
+          <div><span>Episodes</span><strong>{episodeLabel(anime)}</strong></div>
+          <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section split-feature">
+    <div class="editor-note">
+      <p class="eyebrow">Release notes</p>
+      <h2>{title} release schedule</h2>
+      <p>{cleanText(anime.description || "", 220)}</p>
+      <p>
+        The next episode time is sourced at build time from AniList and refreshed daily by
+        the Airing Atlas deployment workflow.
+      </p>
+    </div>
+    <div class="editor-note">
+      <p class="eyebrow">FAQ</p>
+      <h2>Quick answers</h2>
+      <p><strong>Is this a streaming page?</strong> No. Airing Atlas tracks timing and links to legal information sources.</p>
+      <p><strong>Why can the local day differ?</strong> Anime releases cross time zones, so the browser converts the listed timestamp to each visitor's local time.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Related search keywords</p>
+      <h2>Search phrases around this release</h2>
+      <div class="keyword-list">
+        {searchIntents.map((item) => (
+          <a href={item.href} data-track-event="keyword_click" data-track-label={item.label}>
+            <span>{item.intent}</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>

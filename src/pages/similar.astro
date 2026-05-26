@@ -1,10 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { animeByRanking, canonicalPath } from "@/lib/anime";
+import { animeByRanking, canonicalPath, displayTitle } from "@/lib/anime";
+import { animeLikeSlug } from "@/lib/search-intents";
 import { webAppJsonLd } from "@/lib/seo";
 
 const startingTitles = animeByRanking("trending").slice(0, 6);
+const similarKeywordPaths = startingTitles.slice(0, 6).map((anime) => ({
+  label: `anime like ${displayTitle(anime)}`,
+  href: `/anime-like/${animeLikeSlug(anime)}/`
+}));
 ---
 
 <BaseLayout
@@ -46,6 +51,21 @@ const startingTitles = animeByRanking("trending").slice(0, 6);
   </section>
 
   <section class="section" data-similar-results></section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Search shortcuts</p>
+      <h2>Popular similar anime keywords</h2>
+      <div class="keyword-list">
+        {similarKeywordPaths.map((item) => (
+          <a href={item.href} data-track-event="similar_keyword_click" data-track-label={item.label}>
+            <span>Anime like</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <section class="section">
     <AdSlot />

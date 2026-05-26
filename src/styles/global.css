@@ -561,6 +561,8 @@ button[aria-pressed="true"],
 .empty-state,
 .watchlist-row,
 .tool-panel,
+.keyword-panel,
+.release-panel,
 .result-card,
 .recommendation-card,
 .selected-anime,
@@ -574,6 +576,84 @@ button[aria-pressed="true"],
 
 .editor-note {
   border-left: 8px solid var(--gold);
+}
+
+.keyword-panel {
+  display: grid;
+  gap: 12px;
+  border-left: 8px solid var(--cyan);
+}
+
+.keyword-panel h2,
+.keyword-panel p {
+  margin: 0;
+}
+
+.keyword-panel p {
+  color: var(--ink-soft);
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.keyword-list a {
+  display: inline-grid;
+  gap: 3px;
+  min-height: 54px;
+  align-content: center;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 9px 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 800;
+}
+
+.keyword-list a span {
+  color: var(--coral);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.release-panel {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.release-panel img {
+  width: 180px;
+  aspect-ratio: 3 / 4.2;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+}
+
+.release-time {
+  margin: 8px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.compact-facts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.faq-grid article {
+  border-top: 2px solid var(--ink);
+  padding-top: 12px;
 }
 
 .affiliate-panel {
@@ -814,6 +894,7 @@ button[aria-pressed="true"],
   .quick-entry-grid,
   .tool-panel,
   .tool-panel.compact-tool,
+  .release-panel,
   .result-grid,
   .recommendation-grid,
   .guide-grid,
@@ -826,7 +907,9 @@ button[aria-pressed="true"],
   }
 
   .feature-band .section,
-  .fact-strip {
+  .fact-strip,
+  .compact-facts,
+  .faq-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -867,6 +950,8 @@ button[aria-pressed="true"],
   .anime-grid,
   .feature-band .section,
   .fact-strip,
+  .compact-facts,
+  .faq-grid,
   .watchlist-row,
   .result-card,
   .recommendation-card,
@@ -882,6 +967,10 @@ button[aria-pressed="true"],
 
   .quick-entry {
     min-height: auto;
+  }
+
+  .release-panel img {
+    width: 120px;
   }
 
   .airing-row {

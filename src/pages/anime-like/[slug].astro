@@ -1,0 +1,187 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
+import { animeLikeSlug, animeLikeSlugCandidates, relatedSearchIntents } from "@/lib/search-intents";
+import { breadcrumbJsonLd } from "@/lib/seo";
+import type { AnimeRecommendation, AnimeSummary } from "@/types/anime";
+
+type RecommendationCard = AnimeRecommendation & { format?: string | null; status?: string | null; seasonText?: string };
+
+export function getStaticPaths() {
+  const seen = new Set<string>();
+  const targets = allAnime
+    .filter((anime) => recommendationsFor(anime.id).length >= 3)
+    .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
+    .slice(0, 140);
+
+  return targets.flatMap((anime) => {
+    const candidates = animeLikeSlugCandidates(anime).slice(0, 2);
+    return candidates.flatMap((slug) => {
+      if (!slug || seen.has(slug)) return [];
+      seen.add(slug);
+      return [{
+        params: { slug },
+        props: { anime, currentSlug: slug }
+      }];
+    });
+  });
+}
+
+const { anime } = Astro.props as { anime: AnimeSummary; currentSlug: string };
+const title = displayTitle(anime);
+const guide = watchOrderFor(anime.id);
+const direct = recommendationsFor(anime.id);
+const fallback = allAnime
+  .filter((candidate) => candidate.id !== anime.id)
+  .map((candidate) => ({
+    candidate,
+    sharedGenres: (anime.genres || []).filter((genre) => (candidate.genres || []).includes(genre)),
+    sharedTags: (anime.tags || []).filter((tag) => tag.name && (candidate.tags || []).some((candidateTag) => candidateTag.name === tag.name))
+  }))
+  .filter((item) => item.sharedGenres.length || item.sharedTags.length >= 2)
+  .sort((a, b) => {
+    const signalDiff = (b.sharedGenres.length * 3 + b.sharedTags.length) - (a.sharedGenres.length * 3 + a.sharedTags.length);
+    return signalDiff || (b.candidate.popularity || 0) - (a.candidate.popularity || 0);
+  })
+  .slice(0, 10)
+  .map(({ candidate, sharedGenres, sharedTags }) => ({
+    animeId: candidate.id,
+    title: displayTitle(candidate),
+    slug: candidate.slug,
+    reason: sharedGenres.length
+      ? `Shared genres: ${sharedGenres.slice(0, 3).join(", ")}`
+      : `Shared tags: ${sharedTags.map((tag) => tag.name).filter(Boolean).slice(0, 3).join(", ")}`,
+    signals: [...sharedGenres.slice(0, 2), ...sharedTags.map((tag) => tag.name).filter(Boolean).slice(0, 2)],
+    source: "similarity" as const,
+    coverImage: candidate.coverImage?.large || candidate.coverImage?.extraLarge || "",
+    genres: candidate.genres,
+    format: candidate.format,
+    status: candidate.status,
+    seasonText: seasonLabel(candidate)
+  }));
+
+const recommendations = [...direct, ...fallback]
+  .filter((item, index, items) => items.findIndex((candidate) => candidate.animeId === item.animeId) === index)
+  .slice(0, 10) as RecommendationCard[];
+
+const genreLinks = (anime.genres || []).map((genre) => ({
+  name: genre,
+  slug: genreIndex.items.find((item) => item.genre === genre)?.slug
+}));
+const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
+const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
+const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
+const description = `Find anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
+const structuredData = [
+  breadcrumbJsonLd([
+    { name: "Airing Atlas", path: "/" },
+    { name: "Anime Like", path: "/similar/" },
+    { name: `Anime like ${title}`, path: canonical }
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `Anime like ${title}`,
+    description,
+    url: canonicalPath(canonical),
+    keywords: searchIntents.map((item) => item.label).join(", "),
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: recommendations.slice(0, 8).map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.title,
+        url: canonicalPath(`/anime/${item.slug}/`)
+      }))
+    }
+  }
+];
+---
+
+<BaseLayout
+  title={`Anime like ${title}`}
+  description={description}
+  canonical={canonicalPath(canonical)}
+  image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
+  structuredData={structuredData}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Similarity guide</p>
+        <h1>Anime like {title}</h1>
+        <p>
+          A crawlable recommendation page for fans searching for shows similar to {title}.
+          Matches are based on AniList recommendation signals, shared genres, tags, format,
+          score, and audience popularity.
+        </p>
+      </div>
+      <a class="button primary" href={`/similar/?anime=${anime.id}`} data-track-event="anime_like_open_tool" data-track-label={title}>Open finder</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="selected-anime">
+      <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <div>
+        <p class="eyebrow">Reference title</p>
+        <h2><a href={`/anime/${anime.slug}/`}>{title}</a></h2>
+        <p>{cleanText(anime.description || "", 240)}</p>
+        <div class="tag-row">
+          {(anime.genres || []).slice(0, 5).map((genre) => <span>{genre}</span>)}
+          <span>{scoreLabel(anime)}</span>
+          {anime.format && <span>{titleCase(anime.format)}</span>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Recommended matches</p>
+        <h2>Shows similar to {title}</h2>
+        <p>Each card includes the strongest match reason, so the page reads like a useful guide rather than a loose keyword list.</p>
+      </div>
+    </div>
+    <div class="recommendation-grid">
+      {recommendations.slice(0, 8).map((item) => (
+        <article class="recommendation-card">
+          <a class="result-poster" href={`/anime/${item.slug}/`} data-track-event="anime_like_result_click" data-track-label={item.title}>
+            <img src={item.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+          </a>
+          <div>
+            <p class="eyebrow">{item.source === "anilist" ? "AniList signal" : "Atlas match"}</p>
+            <h3><a href={`/anime/${item.slug}/`}>{item.title}</a></h3>
+            <p>{item.reason}</p>
+            <div class="tag-row">
+              {(item.signals || []).slice(0, 3).map((signal) => <span>{signal}</span>)}
+              {item.format && <span>{titleCase(item.format)}</span>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Related search keywords</p>
+      <h2>Search phrases this page answers</h2>
+      <p>These are real search-style paths around {title}, similar anime, genre discovery, release timing, and franchise order.</p>
+      <div class="keyword-list">
+        {searchIntents.map((item) => (
+          <a href={item.href} data-track-event="keyword_click" data-track-label={item.label}>
+            <span>{item.intent}</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>
