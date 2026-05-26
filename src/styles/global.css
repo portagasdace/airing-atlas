@@ -170,12 +170,12 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.9rem, 6.6vw, 5.8rem);
-  max-width: 11ch;
+  font-size: clamp(2.6rem, 5.4vw, 4.8rem);
+  max-width: 13ch;
 }
 
 h2 {
-  font-size: clamp(1.7rem, 3vw, 2.8rem);
+  font-size: clamp(1.55rem, 2.5vw, 2.35rem);
 }
 
 h3 {
@@ -304,8 +304,8 @@ button[aria-pressed="true"],
 }
 
 .section-header h1 {
-  font-size: clamp(2.45rem, 4.6vw, 4.15rem);
-  max-width: 13ch;
+  font-size: clamp(2.2rem, 4vw, 3.55rem);
+  max-width: 15ch;
 }
 
 .section-header p {
@@ -483,6 +483,10 @@ button[aria-pressed="true"],
   margin: 26px 0;
 }
 
+.section:has(> [data-ad-slot-disabled]:only-child) {
+  display: none;
+}
+
 .ranking-layout {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -532,7 +536,7 @@ button[aria-pressed="true"],
 }
 
 .detail-copy h1 {
-  max-width: 12ch;
+  max-width: 16ch;
 }
 
 .fact-strip {
@@ -554,6 +558,10 @@ button[aria-pressed="true"],
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.fact-strip strong {
+  overflow-wrap: anywhere;
 }
 
 .editor-note,

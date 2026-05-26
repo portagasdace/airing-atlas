@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderFor } from "@/lib/anime";
-import { animeLikeSlug, animeLikeSlugCandidates, relatedSearchIntents } from "@/lib/search-intents";
+import { allAnime, animeById, animeByIds, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { manualFeaturedAnimeIds, manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeRecommendation, AnimeSummary } from "@/types/anime";
 
@@ -10,30 +11,34 @@ type RecommendationCard = AnimeRecommendation & { format?: string | null; status
 
 export function getStaticPaths() {
   const seen = new Set<string>();
-  const targets = allAnime
-    .filter((anime) => recommendationsFor(anime.id).length >= 3)
+  const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
+  const curatedTargets = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
+  const automaticTargets = allAnime
+    .filter((anime) => recommendationsFor(anime.id).length >= 3 && !blockedFormats.has(String(anime.format || "").toUpperCase()))
     .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
     .slice(0, 140);
+  const targets = [...curatedTargets, ...automaticTargets].filter((anime, index, items) => items.findIndex((item) => item.id === anime.id) === index);
 
   return targets.flatMap((anime) => {
-    const candidates = animeLikeSlugCandidates(anime).slice(0, 2);
-    return candidates.flatMap((slug) => {
-      if (!slug || seen.has(slug)) return [];
-      seen.add(slug);
-      return [{
-        params: { slug },
-        props: { anime, currentSlug: slug }
-      }];
-    });
+    const slug = animeLikeSlug(anime);
+    if (!slug || seen.has(slug)) return [];
+    seen.add(slug);
+    return [{
+      params: { slug },
+      props: { anime }
+    }];
   });
 }
 
-const { anime } = Astro.props as { anime: AnimeSummary; currentSlug: string };
+const { anime } = Astro.props as { anime: AnimeSummary };
 const title = displayTitle(anime);
-const guide = watchOrderFor(anime.id);
-const direct = recommendationsFor(anime.id);
+const manualGuide = manualSimilarGuideFor(anime.id);
+const guide = qualityWatchOrderFor(anime.id);
+const blockedRecommendationFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
+const isAnimeMedia = (item?: AnimeSummary) => item ? !blockedRecommendationFormats.has(String(item.format || "").toUpperCase()) : true;
+const direct = recommendationsFor(anime.id).filter((item) => isAnimeMedia(animeById(item.animeId)));
 const fallback = allAnime
-  .filter((candidate) => candidate.id !== anime.id)
+  .filter((candidate) => candidate.id !== anime.id && isAnimeMedia(candidate))
   .map((candidate) => ({
     candidate,
     sharedGenres: (anime.genres || []).filter((genre) => (candidate.genres || []).includes(genre)),
@@ -61,22 +66,55 @@ const fallback = allAnime
     seasonText: seasonLabel(candidate)
   }));
 
-const recommendations = [...direct, ...fallback]
+const rawRecommendations = [...direct, ...fallback]
   .filter((item, index, items) => items.findIndex((candidate) => candidate.animeId === item.animeId) === index)
-  .slice(0, 10) as RecommendationCard[];
+  .map((item) => {
+    const full = animeById(item.animeId);
+    return {
+      ...item,
+      title: full ? displayTitle(full) : item.title,
+      slug: full?.slug || item.slug,
+      coverImage: full?.coverImage?.large || full?.coverImage?.extraLarge || item.coverImage,
+      genres: full?.genres || item.genres,
+      format: full?.format || (item as RecommendationCard).format,
+      status: full?.status || (item as RecommendationCard).status,
+      seasonText: full ? seasonLabel(full) : (item as RecommendationCard).seasonText,
+      reason: manualGuide?.recommendationNotes[item.animeId] || item.reason
+    };
+  }) as RecommendationCard[];
+
+const recommendations = rawRecommendations
+  .sort((a, b) => {
+    if (manualGuide?.bestOverallPick === a.animeId) return -1;
+    if (manualGuide?.bestOverallPick === b.animeId) return 1;
+    return 0;
+  })
+  .slice(0, 10);
 
 const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
 const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
+const relatedGuides = manualGuide
+  ? animeByIds(manualGuide.relatedGuideIds).map((item) => ({
+    label: `Anime like ${displayTitle(item)}`,
+    href: `/anime-like/${animeLikeSlug(item)}/`,
+    intent: "Similar guide"
+  }))
+  : [];
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
 const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
-const description = `Find anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
-const structuredData = [
+const description = manualGuide?.intro.slice(0, 155) || `Find anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
+const bestOverall = recommendations.find((item) => item.animeId === manualGuide?.bestOverallPick) || recommendations[0];
+const matchAngles = (manualGuide?.matchAngles || []).map((angle) => ({
+  ...angle,
+  anime: animeByIds(angle.animeIds)
+}));
+const structuredData: Record<string, unknown>[] = [
   breadcrumbJsonLd([
     { name: "Airing Atlas", path: "/" },
-    { name: "Anime Like", path: "/similar/" },
+    { name: "Anime Like", path: "/anime-like/" },
     { name: `Anime like ${title}`, path: canonical }
   ]),
   {
@@ -97,6 +135,20 @@ const structuredData = [
     }
   }
 ];
+if (manualGuide?.faq.length) {
+  structuredData.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: manualGuide.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  });
+}
 ---
 
 <BaseLayout
@@ -111,11 +163,7 @@ const structuredData = [
       <div>
         <p class="eyebrow">Similarity guide</p>
         <h1>Anime like {title}</h1>
-        <p>
-          A crawlable recommendation page for fans searching for shows similar to {title}.
-          Matches are based on AniList recommendation signals, shared genres, tags, format,
-          score, and audience popularity.
-        </p>
+        <p>{manualGuide?.intro || `A crawlable recommendation page for fans searching for shows similar to ${title}. Matches are based on AniList recommendation signals, shared genres, tags, format, score, and audience popularity.`}</p>
       </div>
       <a class="button primary" href={`/similar/?anime=${anime.id}`} data-track-event="anime_like_open_tool" data-track-label={title}>Open finder</a>
     </div>
@@ -123,7 +171,7 @@ const structuredData = [
 
   <section class="section">
     <div class="selected-anime">
-      <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
       <div>
         <p class="eyebrow">Reference title</p>
         <h2><a href={`/anime/${anime.slug}/`}>{title}</a></h2>
@@ -137,6 +185,41 @@ const structuredData = [
     </div>
   </section>
 
+  {manualGuide && (
+    <section class="section split-feature">
+      <div class="editor-note">
+        <p class="eyebrow">Why fans search this</p>
+        <h2>Why fans look for anime like {title}</h2>
+        <p>{manualGuide.whySimilar}</p>
+      </div>
+      {bestOverall && (
+        <div class="editor-note">
+          <p class="eyebrow">Closest overall pick</p>
+          <h2>{bestOverall.title}</h2>
+          <p>{bestOverall.reason}</p>
+          <a class="button small" href={`/anime/${bestOverall.slug}/`} data-track-event="anime_like_result_click" data-track-label={bestOverall.title}>Open anime</a>
+        </div>
+      )}
+    </section>
+  )}
+
+  {matchAngles.length > 0 && (
+    <section class="section guide-grid">
+      {matchAngles.map((angle) => (
+        <article class="guide-card">
+          <p class="eyebrow">Best for</p>
+          <h2>{angle.label}</h2>
+          <p>{angle.description}</p>
+          <div class="link-stack">
+            {angle.anime.map((item) => (
+              <a href={`/anime/${item.slug}/`} data-track-event="anime_like_result_click" data-track-label={displayTitle(item)}>{displayTitle(item)}</a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </section>
+  )}
+
   <section class="section">
     <div class="section-header">
       <div>
@@ -149,11 +232,11 @@ const structuredData = [
       {recommendations.slice(0, 8).map((item) => (
         <article class="recommendation-card">
           <a class="result-poster" href={`/anime/${item.slug}/`} data-track-event="anime_like_result_click" data-track-label={item.title}>
-            <img src={item.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+            <img src={item.coverImage || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
           </a>
           <div>
             <p class="eyebrow">{item.source === "anilist" ? "AniList signal" : "Atlas match"}</p>
-            <h3><a href={`/anime/${item.slug}/`}>{item.title}</a></h3>
+            <h3><a href={`/anime/${item.slug}/`} data-track-event="anime_like_result_click" data-track-label={item.title}>{item.title}</a></h3>
             <p>{item.reason}</p>
             <div class="tag-row">
               {(item.signals || []).slice(0, 3).map((signal) => <span>{signal}</span>)}
@@ -167,12 +250,12 @@ const structuredData = [
 
   <section class="section">
     <div class="keyword-panel">
-      <p class="eyebrow">Related search keywords</p>
-      <h2>Search phrases this page answers</h2>
-      <p>These are real search-style paths around {title}, similar anime, genre discovery, release timing, and franchise order.</p>
+      <p class="eyebrow">Related guides</p>
+      <h2>More useful routes from {title}</h2>
+      <p>These are readable guide paths around similar anime, release timing, genre discovery, and franchise order.</p>
       <div class="keyword-list">
-        {searchIntents.map((item) => (
-          <a href={item.href} data-track-event="keyword_click" data-track-label={item.label}>
+        {[...relatedGuides, ...searchIntents].slice(0, 10).map((item) => (
+          <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label}>
             <span>{item.intent}</span>
             {item.label}
           </a>
@@ -180,6 +263,23 @@ const structuredData = [
       </div>
     </div>
   </section>
+
+  {manualGuide?.faq.length && (
+    <section class="section">
+      <div class="keyword-panel">
+        <p class="eyebrow">FAQ</p>
+        <h2>{title} recommendation questions</h2>
+        <div class="faq-grid">
+          {manualGuide.faq.map((item) => (
+            <article>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="section">
     <AdSlot />

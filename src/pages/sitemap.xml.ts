@@ -1,11 +1,14 @@
 import { allAnime, canonicalPath, genreIndex, recommendationsFor, seasonIndex, watchOrderIndex } from "@/lib/anime";
-import { animeLikeSlugCandidates, nextEpisodeSlug } from "@/lib/search-intents";
+import { manualFeaturedAnimeIds, qualityWatchOrderGuides } from "@/lib/manual-content";
+import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 
 const staticPages = [
   "/",
   "/calendar/",
   "/discover/",
   "/similar/",
+  "/anime-like/",
+  "/next-episode/",
   "/watch-order/",
   "/rankings/",
   "/watchlist/",
@@ -15,16 +18,22 @@ const staticPages = [
   "/terms/",
   "/affiliate-disclosure/"
 ];
+const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
 
 export function GET() {
   const today = new Date().toISOString().slice(0, 10);
   const seenAnimeLike = new Set<string>();
-  const animeLikeUrls = allAnime
-    .filter((anime) => recommendationsFor(anime.id).length >= 3)
+  const curatedAnimeLike = manualFeaturedAnimeIds
+    .map((id) => allAnime.find((anime) => anime.id === id))
+    .filter(Boolean) as typeof allAnime;
+  const popularAnimeLike = allAnime
+    .filter((anime) => recommendationsFor(anime.id).length >= 3 && !blockedAnimeLikeFormats.has(String(anime.format || "").toUpperCase()))
     .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
-    .slice(0, 140)
-    .flatMap((anime) => animeLikeSlugCandidates(anime).slice(0, 2))
-    .filter((slug) => {
+    .slice(0, 140);
+  const animeLikeUrls = [...curatedAnimeLike, ...popularAnimeLike]
+    .filter((anime, index, items) => items.findIndex((item) => item.id === anime.id) === index)
+    .map((anime) => animeLikeSlug(anime))
+    .filter((slug): slug is string => {
       if (!slug || seenAnimeLike.has(slug)) return false;
       seenAnimeLike.add(slug);
       return true;
@@ -45,7 +54,7 @@ export function GET() {
     ...allAnime.map((anime) => `/anime/${anime.slug}/`),
     ...animeLikeUrls,
     ...nextEpisodeUrls,
-    ...watchOrderIndex.items.map((guide) => `/watch-order/${guide.slug}/`),
+    ...qualityWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`),
     ...genreIndex.items.map((genre) => `/genres/${genre.slug}/`),
     ...seasonIndex.items.map((season) => `/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)
   ];

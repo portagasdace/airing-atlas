@@ -10,7 +10,7 @@ const { entry } = Astro.props;
 
 <article class="airing-row">
   <a href={`/anime/${entry.slug}/`} class="airing-cover" aria-label={`Open ${entry.title}`}>
-    <img src={entry.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+    <img src={entry.coverImage || "/og-default.svg"} alt="" width="68" height="91" loading="lazy" referrerpolicy="no-referrer" />
   </a>
   <div>
     <p class="eyebrow">Episode {entry.episode || "TBA"}</p>

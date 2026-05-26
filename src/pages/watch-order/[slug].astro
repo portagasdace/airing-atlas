@@ -2,24 +2,66 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, fuzzyDateLabel, titleCase, watchOrderIndex } from "@/lib/anime";
+import { entriesForManualOrder, manualWatchOrderFor, qualityWatchOrderGuides, watchOrderQualityEntries } from "@/lib/manual-content";
 import { watchOrderJsonLd } from "@/lib/seo";
 import type { WatchOrderGuide } from "@/types/anime";
 
 export function getStaticPaths() {
-  return watchOrderIndex.items.map((guide) => ({
+  return qualityWatchOrderGuides(watchOrderIndex.items).map((guide) => ({
     params: { slug: guide.slug },
     props: { guide }
   }));
 }
 
 const { guide } = Astro.props as { guide: WatchOrderGuide };
-const releaseOrder = [...guide.entries].sort((a, b) => dateRank(a.startDate) - dateRank(b.startDate));
-const optionalEntries = guide.entries.filter((entry) => ["OVA", "ONA", "SPECIAL", "SPIN_OFF", "SIDE_STORY", "SUMMARY", "ALTERNATIVE"].includes(String(entry.relationType || "").toUpperCase()));
-const mainPath = guide.entries.filter((entry) => ["SOURCE", "MAIN", "PREQUEL", "SEQUEL"].includes(String(entry.relationType || "").toUpperCase()));
+const manual = manualWatchOrderFor(guide.rootAnimeId);
+const qualityEntries = watchOrderQualityEntries(guide);
+const mainRelations = new Set(["MAIN", "PREQUEL", "SEQUEL"]);
+const optionalRelations = new Set(["OVA", "ONA", "SPECIAL", "SPIN_OFF", "SIDE_STORY", "SUMMARY", "ALTERNATIVE"]);
+const manualRecommendedOrder = manual ? entriesForManualOrder(manual.recommendedOrder, guide, "MAIN") : [];
+const manualReleaseOrder = manual ? entriesForManualOrder(manual.releaseOrder, guide, "RELATED") : [];
+const manualOptionalEntries = manual ? entriesForManualOrder(manual.optionalEntries, guide, "SIDE_STORY") : [];
+const recommendedOrder = manualRecommendedOrder.length
+  ? manualRecommendedOrder
+  : qualityEntries.filter((entry) => mainRelations.has(String(entry.relationType || "").toUpperCase()));
+const releaseOrder = manualReleaseOrder.length
+  ? manualReleaseOrder
+  : [...qualityEntries].sort((a, b) => dateRank(a.startDate) - dateRank(b.startDate));
+const optionalEntries = (manualOptionalEntries.length ? manualOptionalEntries : qualityEntries.filter((entry) => optionalRelations.has(String(entry.relationType || "").toUpperCase())))
+  .filter((entry) => !recommendedOrder.some((mainEntry) => mainEntry.animeId === entry.animeId));
+const schemaEntries = uniqueEntries([...recommendedOrder, ...releaseOrder, ...optionalEntries]).slice(0, 14);
+const schemaGuide = { ...guide, entries: schemaEntries.length >= 3 ? schemaEntries : qualityEntries };
+const faqItems = manual?.faq || [
+  {
+    question: "What is the best order?",
+    answer: "Use the recommended order for story flow, then check release order if you want the original broadcast context."
+  },
+  {
+    question: "Can I skip recap movies?",
+    answer: "Usually yes. Entries labeled alternative or summary are often best saved as refreshers."
+  },
+  {
+    question: "Are OVAs and specials required?",
+    answer: "Most are optional side material unless the guide labels them as direct prequel or sequel content."
+  },
+  {
+    question: "Does Airing Atlas stream anime?",
+    answer: "No. Airing Atlas is a franchise map, release schedule, and discovery tool; it does not host episodes."
+  }
+];
 
 function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
   if (!date?.year) return Number.MAX_SAFE_INTEGER;
   return Number(`${date.year}${String(date.month || 1).padStart(2, "0")}${String(date.day || 1).padStart(2, "0")}`);
+}
+
+function uniqueEntries(entries: WatchOrderGuide["entries"]) {
+  const seen = new Set<number>();
+  return entries.filter((entry) => {
+    if (seen.has(entry.animeId)) return false;
+    seen.add(entry.animeId);
+    return true;
+  });
 }
 ---
 
@@ -27,14 +69,14 @@ function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
   title={guide.title}
   description={guide.description}
   canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
-  structuredData={watchOrderJsonLd(guide)}
+  structuredData={watchOrderJsonLd(schemaGuide, faqItems)}
 >
   <section class="section">
     <div class="section-header">
       <div>
         <p class="eyebrow">Suggested viewing order</p>
         <h1>{guide.title}</h1>
-        <p>{guide.description} Use the labels as a franchise map, not a replacement for official release information.</p>
+        <p>{manual?.intro || guide.description} Use this as a franchise map, not a replacement for official release information.</p>
       </div>
       <a class="button primary" href="/watch-order/">All guides</a>
     </div>
@@ -45,26 +87,24 @@ function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
       <p class="eyebrow">Recommended order</p>
       <h2>Start here</h2>
       <p>
-        Follow the main path first, then add side stories, OVAs, specials, and recap movies
-        after the closest related season. This keeps the story readable without losing the
-        extra franchise material.
+        {manual?.intro || "Follow the main path first, then add side stories, OVAs, specials, and recap movies after the closest related season."}
       </p>
       <div class="chip-grid">
-        {mainPath.slice(0, 8).map((entry, index) => (
-          <a href={`/anime/${entry.slug}/`}><span>{index + 1}</span>{entry.title}</a>
+        {recommendedOrder.slice(0, 10).map((entry, index) => (
+          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}><span>{index + 1}</span>{entry.title}</a>
         ))}
       </div>
     </div>
   </section>
 
   <section class="section timeline-list">
-    {guide.entries.map((entry, index) => (
+    {recommendedOrder.map((entry, index) => (
       <article class="timeline-item">
         <span class="timeline-rank">{index + 1}</span>
-        <img src={entry.coverImage || "/og-default.svg"} alt="" loading="lazy" referrerpolicy="no-referrer" />
+        <img src={entry.coverImage || "/og-default.svg"} alt="" width="96" height="134" loading="lazy" referrerpolicy="no-referrer" />
         <div>
           <p class="eyebrow">{titleCase(entry.relationType || "Related")}</p>
-          <h2><a href={`/anime/${entry.slug}/`}>{entry.title}</a></h2>
+          <h2><a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{entry.title}</a></h2>
           <p>{titleCase(entry.format || "Anime")} · {fuzzyDateLabel(entry.startDate)} · {entry.episodes ? `${entry.episodes} episodes` : "Episodes TBA"}</p>
         </div>
       </article>
@@ -77,24 +117,27 @@ function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
       <h2>Original release path</h2>
       <p>Use this if you prefer to watch the franchise as audiences encountered it over time.</p>
       <div class="link-stack">
-        {releaseOrder.slice(0, 10).map((entry) => (
-          <a href={`/anime/${entry.slug}/`}>{fuzzyDateLabel(entry.startDate)} · {entry.title}</a>
+        {releaseOrder.slice(0, 12).map((entry) => (
+          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{fuzzyDateLabel(entry.startDate)} · {entry.title}</a>
         ))}
       </div>
     </div>
     <div class="editor-note">
       <p class="eyebrow">Skip and OVA notes</p>
       <h2>Optional material</h2>
-      <p>
-        Recap movies and alternative versions are usually optional if you already watched
-        the corresponding TV season. OVAs, specials, side stories, and spin-offs are best
-        treated as bonus material unless they are labeled prequel or sequel.
-      </p>
+      <p>{manual?.skipNotes || "Recap movies and alternative versions are usually optional if you already watched the corresponding TV season. OVAs, specials, side stories, and spin-offs are best treated as bonus material unless they are labeled prequel or sequel."}</p>
       <div class="link-stack">
-        {(optionalEntries.length ? optionalEntries : guide.entries.slice(0, 4)).slice(0, 8).map((entry) => (
-          <a href={`/anime/${entry.slug}/`}>{titleCase(entry.relationType || "Related")} · {entry.title}</a>
+        {optionalEntries.slice(0, 10).map((entry) => (
+          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{titleCase(entry.relationType || "Related")} · {entry.title}</a>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="editor-note">
+      <p class="eyebrow">Legal watching note</p>
+      <p>{manual?.legalWatchingNote || "Airing Atlas does not host episodes, downloads, or unofficial streams. Use official services and regional rights holders when you are ready to watch."}</p>
     </div>
   </section>
 
@@ -103,22 +146,12 @@ function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
       <p class="eyebrow">Watch order FAQ</p>
       <h2>{guide.title} questions</h2>
       <div class="faq-grid">
-        <article>
-          <h3>What is the best order?</h3>
-          <p>Use the recommended order above for story flow, then check the release order if you want the original broadcast context.</p>
-        </article>
-        <article>
-          <h3>Can I skip recap movies?</h3>
-          <p>Usually yes. Entries labeled alternative or summary are often safer to save for later unless you want a refresher.</p>
-        </article>
-        <article>
-          <h3>Are OVAs and specials required?</h3>
-          <p>Most are optional side material. Watch them after the season or movie they are closest to in the list.</p>
-        </article>
-        <article>
-          <h3>Does Airing Atlas stream anime?</h3>
-          <p>No. This page is a franchise map and links back to legal research pages where official links are available.</p>
-        </article>
+        {faqItems.map((item) => (
+          <article>
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </article>
+        ))}
       </div>
     </div>
   </section>

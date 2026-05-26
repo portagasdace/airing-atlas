@@ -3,7 +3,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAiringEntries, animeByRanking, animeCatalog, canonicalPath, displayTitle, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { allAiringEntries, animeById, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { qualityWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
 import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 import { websiteJsonLd } from "@/lib/seo";
 
@@ -11,37 +12,30 @@ const upcoming = allAiringEntries.slice(0, 5);
 const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
 const topGenres = genreIndex.items.slice(0, 6);
-const watchGuides = watchOrderIndex.items.slice(0, 4);
-const primaryGuide = watchGuides[0];
-const upcomingAnime = upcoming
-  .map((entry) => animeCatalog.anime.find((anime) => anime.id === entry.animeId))
-  .filter((anime): anime is (typeof animeCatalog.anime)[number] => Boolean(anime));
+const watchGuides = qualityWatchOrderGuides(watchOrderIndex.items).slice(0, 4);
+const jujutsuGuide = qualityWatchOrderFor(113415) || watchGuides[0];
+const attackOnTitan = animeById(16498);
+const demonSlayer = animeById(101922);
+const onePiece = animeById(21);
 const keywordPaths = [
   { label: "anime airing schedule", href: "/calendar/", intent: "Calendar" },
-  { label: "anime release calendar", href: "/calendar/", intent: "Calendar" },
-  { label: "anime recommendations", href: "/similar/", intent: "Recommendations" },
+  { label: "anime next episode schedule", href: "/next-episode/", intent: "Next episode" },
   { label: "anime watch order", href: "/watch-order/", intent: "Watch order" },
-  ...trending.slice(0, 3).map((anime) => ({
-    label: `anime like ${displayTitle(anime)}`,
-    href: `/anime-like/${animeLikeSlug(anime)}/`,
-    intent: "Similar anime"
-  })),
-  ...upcomingAnime.slice(0, 2).map((anime) => ({
-    label: `${displayTitle(anime)} next episode`,
-    href: `/next-episode/${nextEpisodeSlug(anime)}/`,
-    intent: "Next episode"
-  })),
+  attackOnTitan && { label: "anime like Attack on Titan", href: `/anime-like/${animeLikeSlug(attackOnTitan)}/`, intent: "Similar guide" },
+  demonSlayer && { label: "anime like Demon Slayer", href: `/anime-like/${animeLikeSlug(demonSlayer)}/`, intent: "Similar guide" },
+  jujutsuGuide && { label: "Jujutsu Kaisen watch order", href: `/watch-order/${jujutsuGuide.slug}/`, intent: "Watch order" },
+  onePiece?.nextAiringEpisode && { label: "One Piece next episode", href: `/next-episode/${nextEpisodeSlug(onePiece)}/`, intent: "Next episode" },
   ...topGenres.slice(0, 3).map((genre) => ({
     label: `best ${genre.genre.toLowerCase()} anime`,
     href: `/genres/${genre.slug}/`,
     intent: "Genre"
   }))
-].slice(0, 12);
+].filter((item): item is { label: string; href: string; intent: string } => Boolean(item)).slice(0, 12);
 ---
 
 <BaseLayout
-  title="Airing Atlas"
-  description="Track anime airing times, browse seasonal rankings, and keep a private watchlist in your browser."
+  title="Anime Airing Schedule, Watch Orders & Similar Anime Finder"
+  description="Track anime airing times, next episodes, watch orders, similar anime guides, seasonal rankings, and a private browser watchlist."
   canonical={canonicalPath("/")}
   structuredData={websiteJsonLd()}
 >
@@ -50,13 +44,13 @@ const keywordPaths = [
       <p class="eyebrow">Global anime schedule</p>
       <h1>Airing Atlas</h1>
       <p class="lede">
-        A magazine-sharp anime calendar for fans who want release times, rankings, and a
-        no-login watchlist without touching unauthorized streams.
+        Anime airing schedule, next episode tracker, watch order maps, and similar anime
+        guides for fans who want useful discovery without unauthorized streams.
       </p>
       <div class="hero-actions">
         <a class="button primary" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Open calendar</a>
         <a class="button" href="/discover/" data-track-event="home_primary_discover" data-track-label="Search catalog">Search catalog</a>
-        <a class="button" href="/similar/" data-track-event="home_primary_similar" data-track-label="Find similar anime">Find similar anime</a>
+        <a class="button" href="/anime-like/" data-track-event="home_primary_anime_like" data-track-label="Anime like guides">Anime like guides</a>
       </div>
     </div>
     <div class="ticker-panel">
@@ -78,18 +72,16 @@ const keywordPaths = [
       <strong>Search by mood</strong>
       <small>Filter by genre, year, format, score, and status.</small>
     </a>
-    <a class="quick-entry" href="/similar/" data-track-event="home_tool_similar" data-track-label="Similar finder">
-      <span class="eyebrow">Recommend</span>
-      <strong>Similar anime finder</strong>
-      <small>Pick one title and get clear match reasons.</small>
+    <a class="quick-entry" href="/anime-like/" data-track-event="home_tool_anime_like" data-track-label="Anime like guides">
+      <span class="eyebrow">Guides</span>
+      <strong>Anime like X</strong>
+      <small>Curated pages for Attack on Titan, Demon Slayer, Jujutsu Kaisen, and more.</small>
     </a>
-    {primaryGuide && (
-      <a class="quick-entry" href={`/watch-order/${primaryGuide.slug}/`} data-track-event="home_tool_watch_order" data-track-label={primaryGuide.title}>
-        <span class="eyebrow">Franchise</span>
-        <strong>Watch order guides</strong>
-        <small>{primaryGuide.title}</small>
-      </a>
-    )}
+    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
+      <span class="eyebrow">Release</span>
+      <strong>Next episode</strong>
+      <small>Upcoming episodes with local time and weekly airing day.</small>
+    </a>
   </section>
 
   <section class="feature-band" aria-label="Catalog stats">
@@ -104,11 +96,11 @@ const keywordPaths = [
   <section class="section">
     <div class="keyword-panel">
       <p class="eyebrow">Search paths</p>
-      <h2>Popular anime search keywords</h2>
+      <h2>Popular anime guides</h2>
       <p>Fast routes for long-tail searches around similar anime, release schedules, watch orders, and genre discovery.</p>
       <div class="keyword-list">
         {keywordPaths.map((item) => (
-          <a href={item.href} data-track-event="home_keyword_click" data-track-label={item.label}>
+          <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label}>
             <span>{item.intent}</span>
             {item.label}
           </a>
@@ -159,11 +151,11 @@ const keywordPaths = [
         <div>
           <p class="eyebrow">Franchise maps</p>
           <h2>Watch order guides</h2>
-          <p>Compact franchise paths for sequels, prequels, movies, OVAs, and specials.</p>
+          <p>Curated franchise paths that keep anime entries separate from manga sources and recap-only pages.</p>
         </div>
       </div>
       <div class="link-stack">
-        {watchGuides.map((guide) => <a href={`/watch-order/${guide.slug}/`}>{guide.title}</a>)}
+        {watchGuides.map((guide) => <a href={`/watch-order/${guide.slug}/`} data-track-event="related_guide_click" data-track-label={guide.title}>{guide.title}</a>)}
       </div>
     </div>
   </section>

@@ -1,0 +1,80 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import { allAnime, animeById, canonicalPath, displayTitle, recommendationsFor } from "@/lib/anime";
+import { manualFeaturedAnimeIds, manualSimilarGuideFor } from "@/lib/manual-content";
+import { animeLikeSlug } from "@/lib/search-intents";
+import { collectionPageJsonLd } from "@/lib/seo";
+import type { AnimeSummary } from "@/types/anime";
+
+const curated = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
+const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
+const automatic = allAnime
+  .filter((anime) => recommendationsFor(anime.id).length >= 3 && !blockedFormats.has(String(anime.format || "").toUpperCase()))
+  .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
+  .filter((anime) => !curated.some((item) => item.id === anime.id))
+  .slice(0, 18);
+const title = "Anime Like Guides";
+const description = "Find anime like Attack on Titan, Demon Slayer, Jujutsu Kaisen, One Piece, Naruto, Death Note, and other popular series.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/anime-like/")}
+  structuredData={collectionPageJsonLd({
+    name: title,
+    description,
+    path: "/anime-like/",
+    items: curated
+  })}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Similarity guides</p>
+        <h1>Anime Like Guides</h1>
+        <p>
+          Start with curated recommendation pages for high-search anime, then branch into
+          the finder when you want a broader match by genre, tags, score, format, or studio.
+        </p>
+      </div>
+      <a class="button primary" href="/similar/">Open finder</a>
+    </div>
+  </section>
+
+  <section class="section guide-grid">
+    {curated.map((anime) => {
+      const guide = manualSimilarGuideFor(anime.id);
+      const label = `Anime like ${displayTitle(anime)}`;
+      return (
+        <article class="guide-card">
+          <p class="eyebrow">Curated guide</p>
+          <h2><a href={`/anime-like/${animeLikeSlug(anime)}/`}>{label}</a></h2>
+          <p>{guide?.intro || `Recommendations for fans searching for shows similar to ${displayTitle(anime)}.`}</p>
+          <a class="button small" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={label}>Open guide</a>
+        </article>
+      );
+    })}
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Popular matches</p>
+        <h2>More anime recommendation pages</h2>
+        <p>These lighter pages use AniList signals plus local similarity matching.</p>
+      </div>
+    </div>
+    <div class="anime-grid">
+      {automatic.slice(0, 6).map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+    <div class="link-stack">
+      {automatic.slice(6, 18).map((anime) => (
+        <a href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>
+          Anime like {displayTitle(anime)}
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -7,9 +7,9 @@ const { label = "Advertisement" } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 ---
 
-<aside class="ad-slot" aria-label={label}>
-  {
-    adsenseClientId ? (
+{
+  adsenseClientId ? (
+    <aside class="ad-slot" aria-label={label}>
       <ins
         class="adsbygoogle"
         style="display:block"
@@ -17,8 +17,8 @@ const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
         data-ad-format="auto"
         data-full-width-responsive="true"
       />
-    ) : (
-      <span>Reserved sponsor space</span>
-    )
-  }
-</aside>
+    </aside>
+  ) : (
+    <template data-ad-slot-disabled></template>
+  )
+}

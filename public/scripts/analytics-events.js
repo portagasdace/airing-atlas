@@ -35,11 +35,18 @@
 
     const toggle = target.closest("[data-watchlist-toggle]");
     if (toggle) {
+      const action = toggle.getAttribute("aria-pressed") === "true" ? "remove" : "add";
       track("watchlist_toggle", {
         anime_id: toggle.dataset.animeId || "",
         anime_title: clean(toggle.dataset.title || ""),
-        action: toggle.getAttribute("aria-pressed") === "true" ? "remove" : "add"
+        action
       });
+      if (action === "add") {
+        track("watchlist_add", {
+          anime_id: toggle.dataset.animeId || "",
+          anime_title: clean(toggle.dataset.title || "")
+        });
+      }
     }
 
     const remove = target.closest("[data-watchlist-remove]");

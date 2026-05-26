@@ -1,0 +1,62 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { allAnime, canonicalPath, displayTitle, episodeLabel, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { nextEpisodeSlug, weeklyAiringLabel } from "@/lib/search-intents";
+import { collectionPageJsonLd } from "@/lib/seo";
+
+const upcoming = allAnime
+  .filter((anime) => anime.nextAiringEpisode?.airingAt)
+  .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0));
+const title = "Anime Next Episode Schedule";
+const description = "Track next episode times, local release schedules, weekly airing days, and episode numbers for currently airing anime.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/next-episode/")}
+  structuredData={collectionPageJsonLd({
+    name: title,
+    description,
+    path: "/next-episode/",
+    items: upcoming.slice(0, 24)
+  })}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Release tracker</p>
+        <h1>Anime Next Episode Schedule</h1>
+        <p>
+          Browse currently airing anime with next episode time, local browser conversion,
+          episode number, and weekly airing pattern in one crawlable schedule.
+        </p>
+      </div>
+      <a class="button primary" href="/calendar/">Open calendar</a>
+    </div>
+  </section>
+
+  <section class="section result-grid">
+    {upcoming.map((anime) => {
+      const next = anime.nextAiringEpisode;
+      const label = `${displayTitle(anime)} next episode`;
+      return (
+        <article class="result-card">
+          <a class="result-poster" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label}>
+            <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
+          </a>
+          <div>
+            <p class="eyebrow">{seasonLabel(anime)} · {anime.format ? titleCase(anime.format) : "Anime"}</p>
+            <h2><a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label}>{displayTitle(anime)}</a></h2>
+            <p>Episode {next?.episode || "TBA"} airs <time data-airing-at={next?.airingAt}>{next ? new Date(next.airingAt * 1000).toUTCString() : "TBA"}</time>.</p>
+            <div class="meta-grid">
+              <span>{weeklyAiringLabel(next?.airingAt)}</span>
+              <span>{episodeLabel(anime)}</span>
+              <span>{scoreLabel(anime)}</span>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </section>
+</BaseLayout>

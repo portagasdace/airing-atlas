@@ -97,17 +97,29 @@ export function relatedSearchIntents(options: {
       href: `/discover/?q=${encodeURIComponent(studio)}`,
       intent: "Studio search"
     },
-    anime.source && {
-      label: `${titleCase(anime.source)} anime like ${title}`,
-      href: `/discover/?q=${encodeURIComponent(`${anime.source} ${title}`)}`,
-      intent: "Source"
-    },
+    anime.source && sourceIntentLabel(anime.source, title),
     topRecommendation && {
       label: `${title} vs ${topRecommendation}`,
       href: `/anime-like/${animeLikeSlug(anime)}/`,
       intent: "Comparison"
     }
   ]).slice(0, 10);
+}
+
+function sourceIntentLabel(source: string, title: string): SearchIntentLink {
+  const sourceLabel = titleCase(source);
+  if (source.toUpperCase() === "MANGA") {
+    return {
+      label: `${title} manga adaptation`,
+      href: `/discover/?q=${encodeURIComponent(`${title} adaptation`)}`,
+      intent: "Source"
+    };
+  }
+  return {
+    label: `${sourceLabel} anime like ${title}`,
+    href: `/discover/?q=${encodeURIComponent(`${source} ${title}`)}`,
+    intent: "Source"
+  };
 }
 
 export function weeklyAiringLabel(timestamp?: number): string {

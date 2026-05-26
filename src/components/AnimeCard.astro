@@ -15,7 +15,7 @@ const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-de
 
 <article class:list={["anime-card", compact && "compact"]}>
   <a class="poster-link" href={`/anime/${anime.slug}/`} aria-label={`Open ${title}`}>
-    <img src={cover} alt="" loading="lazy" referrerpolicy="no-referrer" />
+    <img src={cover} alt="" width="180" height="252" loading="lazy" referrerpolicy="no-referrer" />
   </a>
   <div class="anime-card-body">
     <div class="card-topline">

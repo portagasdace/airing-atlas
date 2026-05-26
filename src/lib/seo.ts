@@ -56,7 +56,10 @@ export function animeJsonLd(anime: AnimeSummary, title: string, description: str
   });
 }
 
-export function watchOrderJsonLd(guide: WatchOrderGuide): JsonLd[] {
+export function watchOrderJsonLd(
+  guide: WatchOrderGuide,
+  faqItems: Array<{ question: string; answer: string }> = defaultWatchOrderFaq(guide)
+): JsonLd[] {
   return [
     breadcrumbJsonLd([
       { name: "Airing Atlas", path: "/" },
@@ -79,24 +82,14 @@ export function watchOrderJsonLd(guide: WatchOrderGuide): JsonLd[] {
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [
-        {
+      mainEntity: faqItems.map((item) => ({
           "@type": "Question",
-          name: `How should I watch ${guide.title.replace(/ watch order$/i, "")}?`,
+          name: item.question,
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Start with the main series, then use the listed sequel, prequel, movie, OVA, and special labels as a compact franchise map."
+            text: item.answer
           }
-        },
-        {
-          "@type": "Question",
-          name: "Does Airing Atlas provide anime streaming?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "No. Airing Atlas is a schedule, discovery, and watchlist tool. It links to official or legal information sources where available."
-          }
-        }
-      ]
+        }))
     }
   ];
 }
@@ -197,4 +190,17 @@ function animeKeywords(anime: AnimeSummary, title: string): string {
 
 function compactJsonLd(value: JsonLd): JsonLd {
   return Object.fromEntries(Object.entries(value).filter(([, entry]) => entry !== undefined && entry !== null && entry !== ""));
+}
+
+function defaultWatchOrderFaq(guide: WatchOrderGuide): Array<{ question: string; answer: string }> {
+  return [
+    {
+      question: `How should I watch ${guide.title.replace(/ watch order$/i, "")}?`,
+      answer: "Start with the main series, then use the listed sequel, prequel, movie, OVA, and special labels as a compact franchise map."
+    },
+    {
+      question: "Does Airing Atlas provide anime streaming?",
+      answer: "No. Airing Atlas is a schedule, discovery, and watchlist tool. It links to official or legal information sources where available."
+    }
+  ];
 }

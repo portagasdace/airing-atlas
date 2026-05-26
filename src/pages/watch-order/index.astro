@@ -2,9 +2,10 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, watchOrderIndex } from "@/lib/anime";
+import { manualWatchOrderByAnimeId, qualityWatchOrderGuides, watchOrderQualityEntries } from "@/lib/manual-content";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-const guides = watchOrderIndex.items.slice(0, 48);
+const guides = qualityWatchOrderGuides(watchOrderIndex.items).slice(0, 48);
 ---
 
 <BaseLayout
@@ -51,10 +52,10 @@ const guides = watchOrderIndex.items.slice(0, 48);
   <section class="section guide-grid">
     {guides.map((guide) => (
       <article class="guide-card">
-        <p class="eyebrow">{guide.entries.length} entries</p>
+        <p class="eyebrow">{watchOrderQualityEntries(guide).length} anime entries</p>
         <h2><a href={`/watch-order/${guide.slug}/`}>{guide.title}</a></h2>
-        <p>{guide.description}</p>
-        <a class="button small" href={`/watch-order/${guide.slug}/`}>Open guide</a>
+        <p>{manualWatchOrderByAnimeId[guide.rootAnimeId]?.intro || guide.description}</p>
+        <a class="button small" href={`/watch-order/${guide.slug}/`} data-track-event="watch_order_entry_click" data-track-label={guide.title}>Open guide</a>
       </article>
     ))}
   </section>
