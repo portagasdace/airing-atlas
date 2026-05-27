@@ -167,15 +167,16 @@ h3 {
   line-height: 1.02;
   letter-spacing: 0;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 h1 {
-  font-size: clamp(2.6rem, 5.4vw, 4.8rem);
+  font-size: clamp(2.45rem, 4.8vw, 4.35rem);
   max-width: 13ch;
 }
 
 h2 {
-  font-size: clamp(1.55rem, 2.5vw, 2.35rem);
+  font-size: clamp(1.45rem, 2.15vw, 2.1rem);
 }
 
 h3 {
@@ -211,6 +212,8 @@ input {
   cursor: pointer;
   line-height: 1.15;
   text-align: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 input {
@@ -304,7 +307,7 @@ button[aria-pressed="true"],
 }
 
 .section-header h1 {
-  font-size: clamp(2.2rem, 4vw, 3.55rem);
+  font-size: clamp(2rem, 3.4vw, 3.15rem);
   max-width: 15ch;
 }
 
@@ -426,6 +429,64 @@ button[aria-pressed="true"],
   padding-top: 8px;
 }
 
+.daily-desk {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.25fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.daily-desk > div:first-child {
+  border-top: 4px solid var(--ink);
+  padding-top: 14px;
+}
+
+.daily-desk p {
+  color: var(--ink-soft);
+  margin: 10px 0 0;
+  max-width: 58ch;
+}
+
+.mini-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mini-list a {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: center;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 12px;
+  box-shadow: 4px 4px 0 var(--ink);
+  min-height: 94px;
+}
+
+.mini-list a > span {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  font-weight: 900;
+}
+
+.mini-list strong,
+.mini-list small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mini-list small {
+  color: var(--muted);
+  font-weight: 800;
+}
+
 .quick-entry {
   min-height: 156px;
   display: grid;
@@ -444,7 +505,7 @@ button[aria-pressed="true"],
 .quick-entry strong {
   display: block;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
   line-height: 1.04;
 }
 
@@ -969,6 +1030,7 @@ button[aria-pressed="true"],
 
 @media (max-width: 960px) {
   .hero,
+  .daily-desk,
   .detail-hero,
   .affiliate-panel,
   .calendar-day,
@@ -1023,11 +1085,11 @@ button[aria-pressed="true"],
   }
 
   h1 {
-    font-size: clamp(2.35rem, 13vw, 3.8rem);
+    font-size: clamp(2.15rem, 10vw, 3.15rem);
   }
 
   .section-header h1 {
-    font-size: clamp(2.2rem, 12vw, 3.35rem);
+    font-size: clamp(2rem, 9vw, 2.85rem);
   }
 
   .anime-grid,
@@ -1036,6 +1098,7 @@ button[aria-pressed="true"],
   .compact-facts,
   .faq-grid,
   .watchlist-dashboard,
+  .mini-list,
   .watchlist-row,
   .result-card,
   .recommendation-card,

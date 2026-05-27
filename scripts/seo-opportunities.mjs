@@ -10,7 +10,9 @@ const paths = {
   pages: resolve(root, args.pages || "reports/search-console/pages.csv"),
   indexing: resolve(root, args.indexing || "reports/search-console/indexing.csv"),
   out: resolve(root, args.out || "reports/seo-opportunities.md"),
-  json: resolve(root, args.json || "reports/seo-opportunities.json")
+  json: resolve(root, args.json || "reports/seo-opportunities.json"),
+  backlog: resolve(root, args.backlog || "reports/seo-backlog.md"),
+  backlogJson: resolve(root, args["backlog-json"] || "reports/seo-backlog.json")
 };
 
 const catalog = await readJson("src/data/generated/anime-catalog.json");
@@ -41,9 +43,16 @@ const opportunities = [
   .sort((a, b) => priorityWeight(b.priority) - priorityWeight(a.priority) || (b.impressions || 0) - (a.impressions || 0));
 
 await mkdir(dirname(paths.out), { recursive: true });
+await mkdir(dirname(paths.json), { recursive: true });
+await mkdir(dirname(paths.backlog), { recursive: true });
+await mkdir(dirname(paths.backlogJson), { recursive: true });
+const backlogItems = opportunitiesToBacklog(opportunities);
 await writeFile(paths.json, `${JSON.stringify({ generatedAt: new Date().toISOString(), opportunities }, null, 2)}\n`);
 await writeFile(paths.out, markdownReport(opportunities));
+await writeFile(paths.backlogJson, `${JSON.stringify({ generatedAt: new Date().toISOString(), items: backlogItems }, null, 2)}\n`);
+await writeFile(paths.backlog, backlogReport(backlogItems));
 console.log(`[seo] Wrote ${opportunities.length} opportunities to ${relative(paths.out)} and ${relative(paths.json)}`);
+console.log(`[seo] Wrote ${backlogItems.length} backlog items to ${relative(paths.backlog)} and ${relative(paths.backlogJson)}`);
 
 function queryOpportunities(items) {
   return items.flatMap((row) => {
@@ -186,6 +195,96 @@ function markdownReport(items) {
   return `${lines.join("\n")}\n`;
 }
 
+function opportunitiesToBacklog(items) {
+  return items.slice(0, 120).map((item, index) => {
+    const mapped = backlogActionFor(item);
+    return {
+      id: `seo-${String(index + 1).padStart(3, "0")}`,
+      priority: item.priority,
+      action: mapped.action,
+      pageType: pageTypeFor(item.target || ""),
+      target: item.target || targetForQuery(item.query || "", intentFor(item.query || "")),
+      trigger: item.type,
+      query: item.query || "",
+      impressions: item.impressions || 0,
+      clicks: item.clicks || 0,
+      ctr: item.ctr || 0,
+      recommendation: item.recommendation,
+      acceptanceCriteria: mapped.acceptanceCriteria
+    };
+  });
+}
+
+function backlogActionFor(item) {
+  if (item.type === "low_ctr_query" || item.type === "low_ctr_page") {
+    return {
+      action: "rewrite_metadata",
+      acceptanceCriteria: "Title and meta description include the live query intent, the H1 matches the promise, and the page still has a unique title/description after build."
+    };
+  }
+  if (item.type === "indexing_gap") {
+    return item.inSitemap
+      ? {
+        action: "strengthen_or_remove_from_sitemap",
+        acceptanceCriteria: "Either add unique guide content and internal links, or remove the URL from the sitemap quality gate."
+      }
+      : {
+        action: "keep_out_until_quality_improves",
+        acceptanceCriteria: "URL remains accessible only through internal browsing until it has enough content, demand, and links."
+      };
+  }
+  if (item.type === "new_search_intent") {
+    return {
+      action: "map_query_to_guide",
+      acceptanceCriteria: "Query is mapped to an existing guide or a new curated Discover/Anime Like/Watch Order candidate with manual intro and related links."
+    };
+  }
+  if (item.type === "clicked_page_expansion") {
+    return {
+      action: "add_internal_links",
+      acceptanceCriteria: "Page gets at least two contextual links to next-step tools and keeps its current sitemap eligibility."
+    };
+  }
+  if (item.type === "thin_anime_like_candidate") {
+    return {
+      action: "manualize_before_sitemap",
+      acceptanceCriteria: "Page has at least five recommendations, specific reasons, FAQ, and related guide links before promotion."
+    };
+  }
+  if (item.type === "weak_watch_order") {
+    return {
+      action: "keep_out_of_sitemap",
+      acceptanceCriteria: "Guide has at least three valid anime entries before it can be reintroduced to sitemap."
+    };
+  }
+  return {
+    action: "review_manually",
+    acceptanceCriteria: "Decision is recorded as metadata rewrite, content expansion, internal-link improvement, or sitemap exclusion."
+  };
+}
+
+function backlogReport(items) {
+  const lines = [
+    "# SEO Backlog",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    "",
+    "Use this as the weekly Search Console development queue. Work from HIGH to MEDIUM, and avoid adding new sitemap pages unless a query or page already shows demand.",
+    "",
+    items.length ? "## Items" : "No backlog items found from the supplied CSV files.",
+    ""
+  ];
+
+  for (const item of items) {
+    lines.push(`- [ ] **${item.priority.toUpperCase()}** ${item.id} · ${item.action} · ${item.target}`);
+    if (item.query) lines.push(`  Query: ${item.query}`);
+    if (item.impressions) lines.push(`  Data: ${item.impressions} impressions, ${item.clicks} clicks, ${percent(item.ctr)} CTR`);
+    lines.push(`  Acceptance: ${item.acceptanceCriteria}`);
+  }
+  lines.push("");
+  return `${lines.join("\n")}\n`;
+}
+
 async function readCsvIfExists(path) {
   if (!existsSync(path)) return [];
   const text = await readFile(path, "utf8");
@@ -274,6 +373,17 @@ function targetForQuery(query, intent) {
   if (intent === "anime like") return `/anime-like/${normalized.replace(/^anime-like-/, "")}/`;
   if (intent === "discover") return `/discover/${normalized}/`;
   return "/discover/";
+}
+
+function pageTypeFor(target) {
+  if (target.includes("/anime-like/")) return "anime_like";
+  if (target.includes("/watch-order/")) return "watch_order";
+  if (target.includes("/next-episode/")) return "next_episode";
+  if (target.includes("/discover/")) return "discover";
+  if (target.includes("/anime/")) return "anime_detail";
+  if (target.includes("/genres/")) return "genre";
+  if (target.includes("/seasons/")) return "season";
+  return "site";
 }
 
 function slugFromAnime(anime) {

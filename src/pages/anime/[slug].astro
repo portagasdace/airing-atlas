@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
 import { isQualityNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
@@ -18,9 +18,10 @@ export function getStaticPaths() {
 
 const { anime } = Astro.props as { anime: AnimeSummary };
 const title = displayTitle(anime);
+const seoTitle = animeSeoTitle(anime);
 const cover = anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg";
 const manualEditorial = manualEditorialFor(anime.id);
-const metaDescription = manualEditorial?.intro.slice(0, 155) || cleanText(anime.description, 155) || `Compare ${title} airing details, score, genres, recommendations, watch order links, and legal research links on Airing Atlas.`;
+const metaDescription = animeSeoDescription(anime, manualEditorial?.intro);
 const recommendations = recommendationsFor(anime.id).slice(0, 4);
 const guide = qualityWatchOrderFor(anime.id);
 const tags = (anime.tags || []).slice(0, 8);
@@ -42,13 +43,13 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title={title}
+  title={seoTitle}
   description={metaDescription}
   canonical={canonicalPath(`/anime/${anime.slug}/`)}
   image={cover}
   structuredData={structuredData}
 >
-  <section class="detail-hero">
+  <section class="detail-hero" data-track-section="anime_detail_hero">
     <img class="detail-poster" src={cover} alt="" width="300" height="420" referrerpolicy="no-referrer" />
     <div class="detail-copy">
       <p class="eyebrow">{seasonLabel(anime)} · {anime.format || "Anime"}</p>
@@ -84,8 +85,8 @@ const structuredData = [
           </select>
         </label>
         <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
-        <a class="button" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="detail_open_anime_like" data-track-label={title}>Anime like this</a>
-        {isQualityNextEpisodeAnime(anime) && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`}>Next episode</a>}
+        <a class="button" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="detail_open_anime_like" data-track-label={title} data-anime-id={anime.id}>Anime like this</a>
+        {isQualityNextEpisodeAnime(anime) && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`} data-anime-id={anime.id}>Next episode</a>}
         {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
       </div>
       <div class="fact-strip">
@@ -114,13 +115,13 @@ const structuredData = [
   </section>
 
   <section class="section">
-    <div class="keyword-panel">
+    <div class="keyword-panel" data-track-section="related_guides">
       <p class="eyebrow">Related search keywords</p>
       <h2>Search phrases around {title}</h2>
       <p>Useful long-tail routes for similar anime, release timing, genre discovery, and watch order research.</p>
       <div class="keyword-list">
         {searchIntents.map((item) => (
-          <a href={item.href} data-track-event="keyword_click" data-track-label={item.label}>
+          <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label} data-anime-id={anime.id}>
             <span>{item.intent}</span>
             {item.label}
           </a>
@@ -137,17 +138,17 @@ const structuredData = [
           <h2>Watch next if you like {title}</h2>
           <p>Recommendations combine AniList user signals with shared genre, tag, format, studio, and score patterns.</p>
         </div>
-        <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar_section" data-track-label={title}>Open finder</a>
+        <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar_section" data-track-label={title} data-anime-id={anime.id}>Open finder</a>
       </div>
       <div class="recommendation-grid">
         {recommendations.map((item) => (
           <article class="recommendation-card">
-            <a class="result-poster" href={`/anime/${item.slug}/`}>
+            <a class="result-poster" href={`/anime/${item.slug}/`} data-track-event="detail_similar_click" data-track-label={item.title} data-anime-id={item.animeId}>
               <img src={item.coverImage || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
             </a>
             <div>
               <p class="eyebrow">{item.source === "anilist" ? "AniList signal" : "Atlas match"}</p>
-              <h3><a href={`/anime/${item.slug}/`}>{item.title}</a></h3>
+              <h3><a href={`/anime/${item.slug}/`} data-track-event="detail_similar_click" data-track-label={item.title} data-anime-id={item.animeId}>{item.title}</a></h3>
               <p>{item.reason}</p>
               <div class="tag-row">
                 {(item.signals || []).slice(0, 2).map((signal) => <span>{signal}</span>)}

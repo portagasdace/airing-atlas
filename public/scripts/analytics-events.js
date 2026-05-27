@@ -5,6 +5,8 @@
   const track = (eventName, params = {}) => {
     const payload = {
       page_path: path(),
+      content_type: contentType(),
+      guide_type: guideType(),
       ...params
     };
 
@@ -34,8 +36,30 @@
     return "standard";
   };
 
+  const guideType = () => {
+    const current = path();
+    if (current.startsWith("/anime-like/") && current !== "/anime-like/") return "anime_like";
+    if (current.startsWith("/watch-order/") && current !== "/watch-order/") return "watch_order";
+    if (current.startsWith("/next-episode/") && current !== "/next-episode/") return "next_episode";
+    if (current.startsWith("/discover/") && current !== "/discover/") return "discover_cluster";
+    return "";
+  };
+
+  const sourceSection = (element) => {
+    const section = element?.closest?.("[data-track-section]");
+    if (section?.dataset.trackSection) return clean(section.dataset.trackSection, 60);
+    if (element?.closest?.(".site-header")) return "header";
+    if (element?.closest?.(".site-footer")) return "footer";
+    if (element?.closest?.(".hero")) return "hero";
+    if (element?.closest?.(".keyword-panel")) return "related_guides";
+    if (element?.closest?.(".recommendation-grid")) return "recommendations";
+    if (element?.closest?.(".anime-grid")) return "anime_grid";
+    return "";
+  };
+
   track("page_content_view", {
-    content_type: contentType()
+    content_type: contentType(),
+    guide_type: guideType()
   });
 
   const scrollMarks = new Set();
@@ -66,7 +90,10 @@
     if (explicit) {
       track(explicit.dataset.trackEvent, {
         track_label: clean(explicit.dataset.trackLabel || explicit.textContent || ""),
-        target_path: explicit.getAttribute("href") || ""
+        target_path: explicit.getAttribute("href") || "",
+        anime_id: explicit.dataset.animeId || "",
+        result_position: Number(explicit.dataset.resultPosition || 0),
+        source_section: sourceSection(explicit)
       });
     }
 
@@ -76,12 +103,14 @@
       track("watchlist_toggle", {
         anime_id: toggle.dataset.animeId || "",
         anime_title: clean(toggle.dataset.title || ""),
-        action
+        action,
+        source_section: sourceSection(toggle)
       });
       if (action === "add") {
         track("watchlist_add", {
           anime_id: toggle.dataset.animeId || "",
-          anime_title: clean(toggle.dataset.title || "")
+          anime_title: clean(toggle.dataset.title || ""),
+          source_section: sourceSection(toggle)
         });
       }
     }
@@ -101,7 +130,8 @@
       track("outbound_link_click", {
         link_domain: url.hostname,
         link_url: url.href,
-        link_label: linkTitle(link)
+        link_label: linkTitle(link),
+        source_section: sourceSection(link)
       });
       return;
     }
@@ -110,29 +140,34 @@
       track("discover_result_click", {
         anime_title: linkTitle(link),
         target_path: url.pathname,
-        result_position: Number(link.dataset.resultPosition || link.closest("[data-result-position]")?.dataset.resultPosition || 0)
+        result_position: Number(link.dataset.resultPosition || link.closest("[data-result-position]")?.dataset.resultPosition || 0),
+        source_section: sourceSection(link)
       });
     } else if (path().startsWith("/discover/") && link.closest(".guide-card, .anime-grid, .link-stack")) {
       track("discover_result_click", {
         anime_title: linkTitle(link),
         target_path: url.pathname,
         result_position: Number(link.dataset.resultPosition || 0),
-        content_type: contentType()
+        source_section: sourceSection(link)
       });
     } else if (link.closest(".recommendation-card")) {
       track(path() === "/similar/" ? "similar_result_click" : "detail_similar_click", {
         anime_title: linkTitle(link),
-        target_path: url.pathname
+        target_path: url.pathname,
+        anime_id: link.dataset.animeId || "",
+        source_section: sourceSection(link)
       });
     } else if (url.pathname.startsWith("/watch-order/") && url.pathname !== "/watch-order/") {
       track("watch_order_click", {
         guide_title: linkTitle(link),
-        target_path: url.pathname
+        target_path: url.pathname,
+        source_section: sourceSection(link)
       });
     } else if (url.pathname.startsWith("/genres/")) {
       track("genre_click", {
         genre: linkTitle(link),
-        target_path: url.pathname
+        target_path: url.pathname,
+        source_section: sourceSection(link)
       });
     }
 
@@ -140,7 +175,9 @@
       track("next_episode_detail_click", {
         target_path: url.pathname,
         result_position: Number(link.dataset.resultPosition || 0),
-        link_label: linkTitle(link)
+        link_label: linkTitle(link),
+        anime_id: link.dataset.animeId || "",
+        source_section: sourceSection(link)
       });
     }
   }, true);

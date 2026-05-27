@@ -3,14 +3,15 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAiringEntries, animeById, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { allAiringEntries, allAnime, animeById, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
 import { discoveryClusters } from "@/lib/discovery-clusters";
 import { qualityWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
-import { futureAiringEntries, isQualityNextEpisodeAnime } from "@/lib/quality";
+import { futureAiringEntries, isQualityNextEpisodeAnime, publicNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 import { websiteJsonLd } from "@/lib/seo";
 
 const upcoming = futureAiringEntries(allAiringEntries).slice(0, 5);
+const publicNextEpisodes = publicNextEpisodeAnime(allAnime).slice(0, 4);
 const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
 const topGenres = genreIndex.items.slice(0, 6);
@@ -47,7 +48,7 @@ const keywordPaths = [
   canonical={canonicalPath("/")}
   structuredData={websiteJsonLd()}
 >
-  <section class="hero">
+  <section class="hero" data-track-section="home_hero">
     <div class="hero-copy">
       <p class="eyebrow">Global anime schedule</p>
       <h1>Airing Atlas</h1>
@@ -70,19 +71,39 @@ const keywordPaths = [
     </div>
   </section>
 
-  <section class="section quick-entry-grid" aria-label="Start with a tool">
+  <section class="section daily-desk" aria-label="Daily anime dashboard" data-track-section="home_daily_dashboard">
+    <div>
+      <p class="eyebrow">Daily tool desk</p>
+      <h2>Start with what changed today</h2>
+      <p>
+        Use the schedule first, then jump into the guides that tend to earn
+        repeat visits: next episodes, watch orders, and anime-like paths.
+      </p>
+    </div>
+    <div class="mini-list">
+      {publicNextEpisodes.map((anime, index) => (
+        <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${anime.title.english || anime.title.romaji} next episode`} data-anime-id={anime.id} data-result-position={index + 1}>
+          <span>{index + 1}</span>
+          <strong>{anime.title.english || anime.title.romaji}</strong>
+          <small>Next episode in local time</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section quick-entry-grid" aria-label="Start with a tool" data-track-section="home_tool_grid">
     <a class="quick-entry primary-entry" href="/calendar/" data-track-event="home_tool_calendar" data-track-label="Today schedule">
       <span class="eyebrow">Today</span>
       <strong>Airing calendar</strong>
       <small>Local-time episode drops and this week&apos;s schedule.</small>
     </a>
-    <a class="quick-entry" href="/discover/?q=fantasy" data-track-event="home_tool_discover" data-track-label="Discover fantasy">
-      <span class="eyebrow">Discover</span>
-      <strong>Search by mood</strong>
-      <small>Filter by genre, year, format, score, and status.</small>
+    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
+      <span class="eyebrow">Updated</span>
+      <strong>Next episode hub</strong>
+      <small>Fresh future releases from the latest four-hour build.</small>
     </a>
     <a class="quick-entry" href="/discover/dark-fantasy-anime/" data-track-event="home_tool_discover_cluster" data-track-label="Dark fantasy anime">
-      <span class="eyebrow">SEO guides</span>
+      <span class="eyebrow">Popular guides</span>
       <strong>Curated discovery</strong>
       <small>Dark fantasy, battle shounen, mind games, romance drama, and more.</small>
     </a>
@@ -91,10 +112,10 @@ const keywordPaths = [
       <strong>Anime like X</strong>
       <small>Curated pages for Attack on Titan, Demon Slayer, Jujutsu Kaisen, and more.</small>
     </a>
-    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
-      <span class="eyebrow">Release</span>
-      <strong>Next episode</strong>
-      <small>Upcoming episodes with local time and weekly airing day.</small>
+    <a class="quick-entry" href="/watchlist/" data-track-event="home_tool_watchlist" data-track-label="Watchlist">
+      <span class="eyebrow">Retention</span>
+      <strong>Your watchlist</strong>
+      <small>Browser-only next-up sorting, airing today, export, and import.</small>
     </a>
   </section>
 
@@ -108,7 +129,7 @@ const keywordPaths = [
   </section>
 
   <section class="section">
-    <div class="keyword-panel">
+    <div class="keyword-panel" data-track-section="home_popular_guides">
       <p class="eyebrow">Search paths</p>
       <h2>Popular anime guides</h2>
       <p>Fast routes for long-tail searches around similar anime, release schedules, watch orders, and genre discovery.</p>

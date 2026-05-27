@@ -112,3 +112,42 @@ export function canonicalPath(path = ""): string {
   const base = import.meta.env.PUBLIC_SITE_URL || "https://airingatlas.com";
   return new URL(path, base).toString();
 }
+
+export function animeSeoTitle(anime: AnimeSummary, items: AnimeSummary[] = allAnime): string {
+  const title = displayTitle(anime);
+  const duplicateCount = items.filter((item) => displayTitle(item).toLowerCase() === title.toLowerCase()).length;
+  if (duplicateCount <= 1) return title;
+
+  const year = anime.seasonYear || anime.startDate?.year;
+  const parts = [
+    anime.format ? titleCase(anime.format) : "Anime",
+    year ? String(year) : "",
+    anime.episodes ? `${anime.episodes} eps` : ""
+  ].filter(Boolean);
+  const candidate = parts.length ? `${title} (${parts.join(", ")})` : `${title} Anime Guide`;
+  const candidateCount = items.filter((item) => {
+    const itemYear = item.seasonYear || item.startDate?.year;
+    const itemParts = [
+      item.format ? titleCase(item.format) : "Anime",
+      itemYear ? String(itemYear) : "",
+      item.episodes ? `${item.episodes} eps` : ""
+    ].filter(Boolean);
+    return `${displayTitle(item)} (${itemParts.join(", ")})` === candidate;
+  }).length;
+
+  return candidateCount <= 1 ? candidate : `${candidate} AniList ${anime.id}`;
+}
+
+export function animeSeoDescription(anime: AnimeSummary, editorialIntro?: string): string {
+  const title = animeSeoTitle(anime);
+  const facts = [
+    anime.format ? titleCase(anime.format) : "anime",
+    anime.seasonYear || anime.startDate?.year ? seasonLabel(anime) : "",
+    anime.status ? titleCase(anime.status) : "",
+    anime.source ? `${titleCase(anime.source)} source` : ""
+  ].filter(Boolean);
+  const intro = editorialIntro || cleanText(anime.description, 112);
+  const factText = facts.length ? ` ${facts.join(", ")}.` : "";
+  const utility = ` Track ${title} with score, genres, recommendations, watch order links, next episode data, and legal research links.`;
+  return cleanText(`${intro}${factText}${utility}`, 175);
+}
