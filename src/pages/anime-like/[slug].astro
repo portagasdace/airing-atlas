@@ -3,7 +3,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, animeById, animeByIds, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
 import { manualFeaturedAnimeIds, manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
+import { qualifiedAnimeLikePages } from "@/lib/quality";
+import { animeLikeGuideHref, animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeRecommendation, AnimeSummary } from "@/types/anime";
 
@@ -32,6 +33,8 @@ export function getStaticPaths() {
 
 const { anime } = Astro.props as { anime: AnimeSummary };
 const title = displayTitle(anime);
+const indexableAnimeLikeIds = new Set(qualifiedAnimeLikePages(allAnime).map((item) => item.id));
+const isIndexable = indexableAnimeLikeIds.has(anime.id);
 const manualGuide = manualSimilarGuideFor(anime.id);
 const guide = qualityWatchOrderFor(anime.id);
 const blockedRecommendationFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
@@ -99,8 +102,8 @@ const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genr
 const relatedGuides = manualGuide
   ? animeByIds(manualGuide.relatedGuideIds).map((item) => ({
     label: `Anime like ${displayTitle(item)}`,
-    href: `/anime-like/${animeLikeSlug(item)}/`,
-    intent: "Similar guide"
+    href: animeLikeGuideHref(item),
+    intent: indexableAnimeLikeIds.has(item.id) ? "Similar guide" : "Similarity tool"
   }))
   : [];
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
@@ -156,6 +159,7 @@ if (manualGuide?.faq.length) {
   description={description}
   canonical={canonicalPath(canonical)}
   image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
+  robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={structuredData}
 >
   <section class="section">

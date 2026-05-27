@@ -4,8 +4,8 @@ import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { isQualityNextEpisodeAnime } from "@/lib/quality";
-import { animeLikeSlug, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
+import { isPublicAnimeDetail, isQualityNextEpisodeAnime } from "@/lib/quality";
+import { animeLikeGuideHref, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
@@ -32,6 +32,7 @@ const genreLinks = (anime.genres || []).map((genre) => ({
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
 const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
+const isIndexable = isPublicAnimeDetail(anime);
 const structuredData = [
   breadcrumbJsonLd([
     { name: "Airing Atlas", path: "/" },
@@ -47,6 +48,7 @@ const structuredData = [
   description={metaDescription}
   canonical={canonicalPath(`/anime/${anime.slug}/`)}
   image={cover}
+  robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={structuredData}
 >
   <section class="detail-hero" data-track-section="anime_detail_hero">
@@ -85,7 +87,7 @@ const structuredData = [
           </select>
         </label>
         <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
-        <a class="button" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="detail_open_anime_like" data-track-label={title} data-anime-id={anime.id}>Anime like this</a>
+        <a class="button" href={animeLikeGuideHref(anime)} data-track-event="detail_open_anime_like" data-track-label={title} data-anime-id={anime.id}>Anime like this</a>
         {isQualityNextEpisodeAnime(anime) && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`} data-anime-id={anime.id}>Next episode</a>}
         {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
       </div>

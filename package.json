@@ -9,6 +9,7 @@
     "favicon": "node scripts/generate-favicon.mjs",
     "sync": "node scripts/sync-anime.mjs",
     "seo:opportunities": "node scripts/seo-opportunities.mjs",
+    "seo:test": "node scripts/seo-opportunities.mjs --queries scripts/fixtures/search-console/queries.csv --pages scripts/fixtures/search-console/pages.csv --indexing scripts/fixtures/search-console/indexing.csv --out reports/seo-test-opportunities.md --json reports/seo-test-opportunities.json --backlog reports/seo-test-backlog.md --backlog-json reports/seo-test-backlog.json",
     "quality:audit": "node scripts/quality-audit.mjs",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1",

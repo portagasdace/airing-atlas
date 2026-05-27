@@ -2,11 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, animeByIds, canonicalPath, displayTitle, recommendationsFor } from "@/lib/anime";
+import { allAnime, animeByIds, canonicalPath, displayTitle } from "@/lib/anime";
 import { clusterReason, discoveryClusters, rankedClusterAnime, type DiscoveryCluster } from "@/lib/discovery-clusters";
-import { manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { qualityWatchOrderFor } from "@/lib/manual-content";
 import { isQualityNextEpisodeAnime } from "@/lib/quality";
-import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
+import { animeLikeGuideHref, hasPublicAnimeLikeGuide, nextEpisodeSlug } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
@@ -66,10 +66,10 @@ const structuredData = collectionPageJsonLd({
       <div class="link-stack">
         {relatedGuides.map((anime) => {
           const guide = qualityWatchOrderFor(anime.id);
-          const hasSimilarGuide = Boolean(manualSimilarGuideFor(anime.id) || recommendationsFor(anime.id).length >= 3);
+          const hasSimilarGuide = hasPublicAnimeLikeGuide(anime);
           return (
             <>
-              {hasSimilarGuide && <a href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like {displayTitle(anime)}</a>}
+              {hasSimilarGuide && <a href={animeLikeGuideHref(anime)} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like {displayTitle(anime)}</a>}
               {guide && <a href={`/watch-order/${guide.slug}/`} data-track-event="related_guide_click" data-track-label={guide.title}>{guide.title}</a>}
               {isQualityNextEpisodeAnime(anime) && <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`${displayTitle(anime)} next episode`}>{displayTitle(anime)} next episode</a>}
             </>
@@ -98,7 +98,9 @@ const structuredData = collectionPageJsonLd({
           </div>
           <div class="button-row">
             <a class="button small" href={`/anime/${anime.slug}/`} data-track-event="discover_result_click" data-track-label={displayTitle(anime)} data-result-position={index + 1}>Details</a>
-            {recommendationsFor(anime.id).length >= 3 && <a class="button small" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like this</a>}
+            <a class="button small" href={animeLikeGuideHref(anime)} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>
+              {hasPublicAnimeLikeGuide(anime) ? "Anime like this" : "Find similar"}
+            </a>
           </div>
         </article>
       ))}

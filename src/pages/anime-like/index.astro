@@ -1,17 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import { allAnime, animeById, canonicalPath, displayTitle, recommendationsFor } from "@/lib/anime";
+import { allAnime, animeById, canonicalPath, displayTitle } from "@/lib/anime";
 import { manualFeaturedAnimeIds, manualSimilarGuideFor } from "@/lib/manual-content";
+import { qualifiedAnimeLikePages } from "@/lib/quality";
 import { animeLikeSlug } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
 const curated = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
-const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
-const automatic = allAnime
-  .filter((anime) => recommendationsFor(anime.id).length >= 3 && !blockedFormats.has(String(anime.format || "").toUpperCase()))
-  .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
+const automatic = qualifiedAnimeLikePages(allAnime)
   .filter((anime) => !curated.some((item) => item.id === anime.id))
   .slice(0, 18);
 const title = "Anime Like Guides";

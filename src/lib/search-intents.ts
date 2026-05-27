@@ -1,5 +1,5 @@
-import { displayTitle, titleCase } from "@/lib/anime";
-import { isQualityNextEpisodeAnime } from "@/lib/quality";
+import { allAnime, displayTitle, titleCase } from "@/lib/anime";
+import { isQualityNextEpisodeAnime, qualifiedAnimeLikePages } from "@/lib/quality";
 import type { AnimeRecommendation, AnimeSummary, WatchOrderGuide } from "@/types/anime";
 
 export interface SearchIntentLink {
@@ -37,6 +37,16 @@ export function nextEpisodeSlug(anime: AnimeSummary): string {
   return animeLikeSlug(anime);
 }
 
+export function hasPublicAnimeLikeGuide(anime: AnimeSummary): boolean {
+  return publicAnimeLikeGuideIds().has(anime.id);
+}
+
+export function animeLikeGuideHref(anime: AnimeSummary): string {
+  return hasPublicAnimeLikeGuide(anime)
+    ? `/anime-like/${animeLikeSlug(anime)}/`
+    : `/similar/?anime=${anime.id}`;
+}
+
 export function relatedSearchIntents(options: {
   anime: AnimeSummary;
   recommendations?: AnimeRecommendation[];
@@ -50,12 +60,14 @@ export function relatedSearchIntents(options: {
   const studio = anime.studios?.[0]?.name;
   const topRecommendation = recommendations[0]?.title;
   const hasPublicNextEpisode = isQualityNextEpisodeAnime(anime);
+  const animeLikeHref = animeLikeGuideHref(anime);
+  const hasAnimeLikeGuide = hasPublicAnimeLikeGuide(anime);
 
   return uniqueByLabel([
     {
       label: `anime like ${title}`,
-      href: `/anime-like/${animeLikeSlug(anime)}/`,
-      intent: "Similar anime"
+      href: animeLikeHref,
+      intent: hasAnimeLikeGuide ? "Similar guide" : "Similarity tool"
     },
     {
       label: `shows similar to ${title}`,
@@ -102,10 +114,17 @@ export function relatedSearchIntents(options: {
     anime.source && sourceIntentLabel(anime.source, title),
     topRecommendation && {
       label: `${title} vs ${topRecommendation}`,
-      href: `/anime-like/${animeLikeSlug(anime)}/`,
+      href: animeLikeHref,
       intent: "Comparison"
     }
   ]).slice(0, 10);
+}
+
+let cachedPublicAnimeLikeGuideIds: Set<number> | undefined;
+
+function publicAnimeLikeGuideIds(): Set<number> {
+  cachedPublicAnimeLikeGuideIds ??= new Set(qualifiedAnimeLikePages(allAnime).map((anime) => anime.id));
+  return cachedPublicAnimeLikeGuideIds;
 }
 
 function sourceIntentLabel(source: string, title: string): SearchIntentLink {

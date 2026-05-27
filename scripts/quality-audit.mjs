@@ -22,6 +22,7 @@ const animeById = new Map((catalog.anime || []).map((anime) => [anime.id, anime]
 const animeBySlug = new Map((catalog.anime || []).map((anime) => [anime.slug, anime]));
 const recommendationMap = new Map((recommendations.items || []).map((item) => [item.animeId, item.recommendations || []]));
 const qualityWatchOrderRoots = new Set((watchOrders.items || []).filter(isQualityWatchOrderGuide).map((guide) => guide.rootAnimeId));
+const publicAnimeLikeGuideIds = new Set(publicAnimeLikeGuides().map((anime) => anime.id));
 
 auditDataFreshness();
 auditRecommendationDepth();
@@ -74,11 +75,14 @@ async function auditBuiltHtml() {
   const descriptions = new Map();
   let missingImageDimensions = 0;
   let missingStructuredData = 0;
+  let missingNoindex = 0;
 
   for (const file of files) {
     const html = await readFile(file, "utf8");
+    const route = `/${file.replace(`${dist}/`, "").replace(/index\.html$/, "")}`;
     const title = match(html, /<title>(.*?)<\/title>/is);
     const description = html.match(/<meta\s+name=["']description["']\s+content=(["'])(.*?)\1/is)?.[2]?.trim() || "";
+    const hasNoindex = /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
     if (title) addToMap(titles, title, file);
     if (description) addToMap(descriptions, description, file);
     missingImageDimensions += [...html.matchAll(/<img\s+[^>]*>/g)].filter((item) => !/\swidth=/.test(item[0]) || !/\sheight=/.test(item[0])).length;
@@ -86,6 +90,16 @@ async function auditBuiltHtml() {
     const isWatchOrder = file.includes("/watch-order/") && !file.endsWith("/watch-order/index.html");
     const isAnimeLike = file.includes("/anime-like/") && !file.endsWith("/anime-like/index.html");
     if ((isWatchOrder || isAnimeLike) && !html.includes("ItemList")) missingStructuredData += 1;
+
+    const animeLikeSlug = route.match(/^\/anime-like\/([^/]+)\//)?.[1];
+    const animeSlug = route.match(/^\/anime\/([^/]+)\//)?.[1];
+    if (animeLikeSlug) {
+      const anime = (catalog.anime || []).find((item) => slugFromAnime(item) === animeLikeSlug);
+      if (anime && !publicAnimeLikeGuideIds.has(anime.id) && !hasNoindex) missingNoindex += 1;
+    } else if (animeSlug) {
+      const anime = animeBySlug.get(animeSlug);
+      if (anime && !isPublicAnimeDetail(anime) && !hasNoindex) missingNoindex += 1;
+    }
   }
 
   const duplicateTitles = duplicates(titles);
@@ -94,6 +108,7 @@ async function auditBuiltHtml() {
   if (duplicateDescriptions.length) warnings.push(`${duplicateDescriptions.length} duplicate meta descriptions found.`);
   if (missingImageDimensions) warnings.push(`${missingImageDimensions} built image tags are missing width or height.`);
   if (missingStructuredData) warnings.push(`${missingStructuredData} key guide pages are missing ItemList structured data.`);
+  if (missingNoindex) warnings.push(`${missingNoindex} low-value generated pages are missing noindex,follow.`);
   info.push(`${files.length} built HTML files scanned.`);
 }
 
@@ -115,7 +130,7 @@ async function auditSitemap() {
   const weakAnimeLikeUrls = animeLikeUrls.filter((url) => {
     const slug = url.split("/anime-like/")[1]?.replace(/\/$/, "");
     const anime = (catalog.anime || []).find((item) => slugFromAnime(item) === slug);
-    return anime && !isQualifiedAnimeLike(anime);
+    return anime && !publicAnimeLikeGuideIds.has(anime.id);
   });
   const expiredNextEpisodeUrls = urls.filter((url) => {
     if (!url.includes("/next-episode/") || url.endsWith("/next-episode/")) return false;
@@ -164,6 +179,24 @@ function isQualifiedAnimeLike(anime) {
       (anime.popularity || 0) >= ANIME_LIKE_POPULARITY_FLOOR
     )
   );
+}
+
+function publicAnimeLikeGuides() {
+  const seen = new Set();
+  const curated = [...manualFeaturedAnimeIds]
+    .map((id) => animeById.get(id))
+    .filter(Boolean);
+  const automatic = (catalog.anime || [])
+    .filter(isQualifiedAnimeLike)
+    .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+  return [...curated, ...automatic]
+    .filter((anime) => {
+      if (seen.has(anime.id)) return false;
+      seen.add(anime.id);
+      return true;
+    })
+    .slice(0, 80);
 }
 
 function isQualityWatchOrderGuide(guide) {

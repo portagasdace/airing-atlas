@@ -3,7 +3,10 @@ dist/
 .astro/
 .firebase/
 *.log
-reports/
+reports/*
+!reports/search-console/
+reports/search-console/*
+!reports/search-console/README.md
 .env
 .env.*
 !.env.example

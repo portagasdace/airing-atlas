@@ -2,13 +2,13 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { animeByRanking, canonicalPath, displayTitle } from "@/lib/anime";
-import { animeLikeSlug } from "@/lib/search-intents";
+import { animeLikeGuideHref } from "@/lib/search-intents";
 import { webAppJsonLd } from "@/lib/seo";
 
 const startingTitles = animeByRanking("trending").slice(0, 6);
 const similarKeywordPaths = startingTitles.slice(0, 6).map((anime) => ({
   label: `anime like ${displayTitle(anime)}`,
-  href: `/anime-like/${animeLikeSlug(anime)}/`
+  href: animeLikeGuideHref(anime)
 }));
 ---
 

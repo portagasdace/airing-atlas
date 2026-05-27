@@ -8,6 +8,7 @@ interface Props {
   description: string;
   canonical?: string;
   image?: string;
+  robots?: string;
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
@@ -16,6 +17,7 @@ const {
   description,
   canonical = Astro.url.toString(),
   image = "/og-default.svg",
+  robots,
   structuredData
 } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
@@ -31,6 +33,7 @@ const structuredDataItems = Array.isArray(structuredData) ? structuredData : str
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="canonical" href={canonical} />
     <link rel="preconnect" href="https://s4.anilist.co" crossorigin />
