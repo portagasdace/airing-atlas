@@ -8,6 +8,8 @@
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
     "favicon": "node scripts/generate-favicon.mjs",
     "sync": "node scripts/sync-anime.mjs",
+    "seo:opportunities": "node scripts/seo-opportunities.mjs",
+    "quality:audit": "node scripts/quality-audit.mjs",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1",
     "firebase:deploy": "firebase deploy --only hosting"

@@ -6,8 +6,8 @@ on:
     branches:
       - main
   schedule:
-    # GitHub Actions cron uses UTC. This is 10:00 in Asia/Shanghai.
-    - cron: "0 2 * * *"
+    # GitHub Actions cron uses UTC. Run every 4 hours to keep next-episode pages fresh.
+    - cron: "0 */4 * * *"
 
 concurrency:
   group: daily-airing-atlas-update
@@ -53,6 +53,9 @@ jobs:
 
       - name: Build site
         run: pnpm run build
+
+      - name: Run quality audit
+        run: pnpm run quality:audit
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

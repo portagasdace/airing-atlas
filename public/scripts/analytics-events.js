@@ -19,6 +19,43 @@
 
   window.airingAtlasTrack = track;
 
+  const contentType = () => {
+    const current = path();
+    if (current === "/") return "home";
+    if (current.startsWith("/anime-like/")) return current === "/anime-like/" ? "anime_like_hub" : "anime_like";
+    if (current.startsWith("/watch-order/")) return current === "/watch-order/" ? "watch_order_hub" : "watch_order";
+    if (current.startsWith("/next-episode/")) return current === "/next-episode/" ? "next_episode_hub" : "next_episode";
+    if (current.startsWith("/discover/") && current !== "/discover/") return "discover_cluster";
+    if (current === "/discover/") return "discover";
+    if (current.startsWith("/anime/")) return "anime_detail";
+    if (current === "/watchlist/") return "watchlist";
+    if (current === "/calendar/") return "calendar";
+    if (current === "/rankings/") return "rankings";
+    return "standard";
+  };
+
+  track("page_content_view", {
+    content_type: contentType()
+  });
+
+  const scrollMarks = new Set();
+  const trackScrollDepth = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+    const depth = Math.round((window.scrollY / scrollable) * 100);
+    for (const mark of [50, 90]) {
+      if (depth >= mark && !scrollMarks.has(mark)) {
+        scrollMarks.add(mark);
+        track(`scroll_depth_${mark}`, {
+          content_type: contentType(),
+          scroll_depth: mark
+        });
+      }
+    }
+  };
+
+  window.addEventListener("scroll", trackScrollDepth, { passive: true });
+
   const linkTitle = (link) => clean(link.textContent || link.getAttribute("aria-label") || link.href);
 
   document.addEventListener("click", (event) => {
@@ -72,7 +109,15 @@
     if (path() === "/discover/" && link.closest(".result-card")) {
       track("discover_result_click", {
         anime_title: linkTitle(link),
-        target_path: url.pathname
+        target_path: url.pathname,
+        result_position: Number(link.dataset.resultPosition || link.closest("[data-result-position]")?.dataset.resultPosition || 0)
+      });
+    } else if (path().startsWith("/discover/") && link.closest(".guide-card, .anime-grid, .link-stack")) {
+      track("discover_result_click", {
+        anime_title: linkTitle(link),
+        target_path: url.pathname,
+        result_position: Number(link.dataset.resultPosition || 0),
+        content_type: contentType()
       });
     } else if (link.closest(".recommendation-card")) {
       track(path() === "/similar/" ? "similar_result_click" : "detail_similar_click", {
@@ -88,6 +133,14 @@
       track("genre_click", {
         genre: linkTitle(link),
         target_path: url.pathname
+      });
+    }
+
+    if (link.dataset.resultPosition && url.pathname.startsWith("/next-episode/")) {
+      track("next_episode_detail_click", {
+        target_path: url.pathname,
+        result_position: Number(link.dataset.resultPosition || 0),
+        link_label: linkTitle(link)
       });
     }
   }, true);

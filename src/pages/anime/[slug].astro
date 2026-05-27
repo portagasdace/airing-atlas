@@ -4,6 +4,7 @@ import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { isQualityNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -61,6 +62,7 @@ const structuredData = [
           data-anime-id={anime.id}
           data-title={title}
           data-cover={cover}
+          data-slug={anime.slug}
           data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
         >
           Add
@@ -72,6 +74,7 @@ const structuredData = [
             data-anime-id={anime.id}
             data-title={title}
             data-cover={cover}
+            data-slug={anime.slug}
             data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
           >
             <option value="watching">watching</option>
@@ -82,7 +85,7 @@ const structuredData = [
         </label>
         <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
         <a class="button" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="detail_open_anime_like" data-track-label={title}>Anime like this</a>
-        {anime.nextAiringEpisode && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`}>Next episode</a>}
+        {isQualityNextEpisodeAnime(anime) && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`}>Next episode</a>}
         {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
       </div>
       <div class="fact-strip">

@@ -19,8 +19,17 @@ import { canonicalPath } from "@/lib/anime";
         </p>
         <p data-watchlist-summary>Loading saved titles...</p>
       </div>
-      <a class="button primary" href="/rankings/">Find titles</a>
+      <div class="button-row compact-actions">
+        <a class="button primary" href="/rankings/">Find titles</a>
+        <button class="button" type="button" data-watchlist-export>Export</button>
+        <label class="button">
+          Import
+          <input class="sr-only" type="file" accept="application/json,.json" data-watchlist-import />
+        </label>
+      </div>
     </div>
+    <p class="freshness-note" data-watchlist-message aria-live="polite"></p>
+    <div data-watchlist-dashboard></div>
     <div data-watchlist-app></div>
   </section>
 </BaseLayout>

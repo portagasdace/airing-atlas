@@ -3,6 +3,7 @@ dist/
 .astro/
 .firebase/
 *.log
+reports/
 .env
 .env.*
 !.env.example

@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { animeCatalog, canonicalPath } from "@/lib/anime";
+import { discoveryClusters } from "@/lib/discovery-clusters";
 import { webAppJsonLd } from "@/lib/seo";
 
 const seasons = ["WINTER", "SPRING", "SUMMER", "FALL"];
@@ -67,6 +68,22 @@ const seasons = ["WINTER", "SPRING", "SUMMER", "FALL"];
       </label>
     </div>
     <p class="tool-summary" data-discover-summary>Loading {animeCatalog.anime.length} indexed titles...</p>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Curated discovery pages</p>
+      <h2>Crawlable guides for common anime searches</h2>
+      <p>These pages are hand-scoped discovery routes, separate from the live filters below.</p>
+      <div class="keyword-list">
+        {discoveryClusters.map((cluster) => (
+          <a href={`/discover/${cluster.slug}/`} data-track-event="related_guide_click" data-track-label={cluster.title}>
+            <span>Discovery</span>
+            {cluster.title}
+          </a>
+        ))}
+      </div>
+    </div>
   </section>
 
   <section class="section">

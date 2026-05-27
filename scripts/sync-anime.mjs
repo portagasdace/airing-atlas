@@ -160,7 +160,7 @@ async function main() {
 }
 
 async function fetchAniList() {
-  const airingFrom = Math.floor(Date.now() / 1000) - 60 * 60 * 12;
+  const airingFrom = Math.floor(Date.now() / 1000) - 60 * 30;
   const airingTo = airingFrom + 60 * 60 * 24 * 14;
   const json = await postGraphql(query, {
     season: CURRENT_SEASON,
@@ -272,6 +272,7 @@ async function fixtureData() {
 }
 
 function normalizeCatalog(data, source) {
+  const buildUnix = Math.floor(Date.now() / 1000);
   const rankingKeys = ["current", "next", "trending", "popular", "topRated"];
   const map = new Map();
 
@@ -321,7 +322,7 @@ function normalizeCatalog(data, source) {
   };
 
   const entries = (data.schedule?.airingSchedules || [])
-    .filter((entry) => entry.media?.id && entry.airingAt && isSafeAnime(entry.media))
+    .filter((entry) => entry.media?.id && entry.airingAt && entry.airingAt > buildUnix && isSafeAnime(entry.media))
     .map((entry) => ({
       animeId: entry.media.id,
       title: titleFor(entry.media.title),

@@ -1,4 +1,5 @@
 import { displayTitle, titleCase } from "@/lib/anime";
+import { isQualityNextEpisodeAnime } from "@/lib/quality";
 import type { AnimeRecommendation, AnimeSummary, WatchOrderGuide } from "@/types/anime";
 
 export interface SearchIntentLink {
@@ -48,6 +49,7 @@ export function relatedSearchIntents(options: {
   const secondGenre = anime.genres?.[1];
   const studio = anime.studios?.[0]?.name;
   const topRecommendation = recommendations[0]?.title;
+  const hasPublicNextEpisode = isQualityNextEpisodeAnime(anime);
 
   return uniqueByLabel([
     {
@@ -65,12 +67,12 @@ export function relatedSearchIntents(options: {
       href: `/similar/?anime=${anime.id}`,
       intent: "Recommendations"
     },
-    anime.nextAiringEpisode && {
+    hasPublicNextEpisode && {
       label: `${title} next episode`,
       href: `/next-episode/${nextEpisodeSlug(anime)}/`,
       intent: "Release schedule"
     },
-    anime.nextAiringEpisode && {
+    hasPublicNextEpisode && {
       label: `${title} release schedule`,
       href: `/next-episode/${nextEpisodeSlug(anime)}/`,
       intent: "Release schedule"

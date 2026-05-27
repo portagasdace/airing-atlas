@@ -1,5 +1,7 @@
 import { allAnime, canonicalPath, genreIndex, recommendationsFor, seasonIndex, watchOrderIndex } from "@/lib/anime";
+import { discoveryClusters } from "@/lib/discovery-clusters";
 import { manualFeaturedAnimeIds, qualityWatchOrderGuides } from "@/lib/manual-content";
+import { publicNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 
 const staticPages = [
@@ -40,9 +42,7 @@ export function GET() {
     })
     .map((slug) => `/anime-like/${slug}/`);
   const seenNextEpisode = new Set<string>();
-  const nextEpisodeUrls = allAnime
-    .filter((anime) => anime.nextAiringEpisode?.airingAt)
-    .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0))
+  const nextEpisodeUrls = publicNextEpisodeAnime(allAnime)
     .flatMap((anime) => {
       const slug = nextEpisodeSlug(anime);
       if (!slug || seenNextEpisode.has(slug)) return [];
@@ -51,6 +51,7 @@ export function GET() {
     });
   const urls = [
     ...staticPages,
+    ...discoveryClusters.map((cluster) => `/discover/${cluster.slug}/`),
     ...allAnime.map((anime) => `/anime/${anime.slug}/`),
     ...animeLikeUrls,
     ...nextEpisodeUrls,

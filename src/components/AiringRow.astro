@@ -8,7 +8,7 @@ interface Props {
 const { entry } = Astro.props;
 ---
 
-<article class="airing-row">
+<article class="airing-row" data-airing-card data-airing-at-card={entry.airingAt}>
   <a href={`/anime/${entry.slug}/`} class="airing-cover" aria-label={`Open ${entry.title}`}>
     <img src={entry.coverImage || "/og-default.svg"} alt="" width="68" height="91" loading="lazy" referrerpolicy="no-referrer" />
   </a>
@@ -27,6 +27,7 @@ const { entry } = Astro.props;
     data-anime-id={entry.animeId}
     data-title={entry.title}
     data-cover={entry.coverImage || ""}
+    data-slug={entry.slug}
     data-next-airing={entry.airingAt}
   >
     Add

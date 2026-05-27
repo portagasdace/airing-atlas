@@ -75,8 +75,8 @@ const structuredDataItems = Array.isArray(structuredData) ? structuredData : str
       <slot />
     </main>
     <Footer />
-    <script is:inline src="/scripts/time-localize.js" defer></script>
     {gaMeasurementId && <script is:inline src="/scripts/analytics-events.js" defer></script>}
+    <script is:inline src="/scripts/time-localize.js" defer></script>
     <script is:inline src="/scripts/watchlist.js" defer></script>
   </body>
 </html>

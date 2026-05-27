@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T08:39:59.649Z",
+  "generatedAt": "2026-05-27T03:57:52.789Z",
   "source": "anilist",
   "items": [
     {
@@ -19,7 +19,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 222240,
+          "popularity": 222331,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -39,7 +39,7 @@
           "seasonYear": 2013,
           "episodes": 25,
           "averageScore": 85,
-          "popularity": 1000051,
+          "popularity": 1001196,
           "startDate": {
             "year": 2013,
             "month": 4,
@@ -59,7 +59,7 @@
           "seasonYear": 2013,
           "episodes": 9,
           "averageScore": 63,
-          "popularity": 14948,
+          "popularity": 14962,
           "startDate": {
             "year": 2013,
             "month": 7,
@@ -79,7 +79,7 @@
           "seasonYear": 2013,
           "episodes": 3,
           "averageScore": 77,
-          "popularity": 126697,
+          "popularity": 126805,
           "startDate": {
             "year": 2013,
             "month": 12,
@@ -99,7 +99,7 @@
           "seasonYear": 2014,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 28880,
+          "popularity": 28925,
           "startDate": {
             "year": 2014,
             "month": 11,
@@ -119,7 +119,7 @@
           "seasonYear": 2015,
           "episodes": 2,
           "averageScore": 83,
-          "popularity": 147308,
+          "popularity": 147451,
           "startDate": {
             "year": 2014,
             "month": 12,
@@ -139,7 +139,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 76,
-          "popularity": 30074,
+          "popularity": 30124,
           "startDate": {
             "year": 2015,
             "month": 6,
@@ -159,7 +159,7 @@
           "seasonYear": 2015,
           "episodes": 12,
           "averageScore": 70,
-          "popularity": 68361,
+          "popularity": 68416,
           "startDate": {
             "year": 2015,
             "month": 10,
@@ -179,7 +179,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 85,
-          "popularity": 700446,
+          "popularity": 701163,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -199,7 +199,7 @@
           "seasonYear": 2017,
           "episodes": 3,
           "averageScore": 77,
-          "popularity": 92090,
+          "popularity": 92177,
           "startDate": {
             "year": 2017,
             "month": 12,
@@ -219,7 +219,7 @@
           "seasonYear": 2020,
           "episodes": 9,
           "averageScore": 47,
-          "popularity": 1056,
+          "popularity": 1059,
           "startDate": {
             "year": 2020,
             "month": 3,
@@ -239,7 +239,7 @@
           "seasonYear": 2020,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 33277,
+          "popularity": 33320,
           "startDate": {
             "year": 2020,
             "month": 7,
@@ -267,7 +267,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 204267,
+          "popularity": 204377,
           "startDate": {
             "year": 2016,
             "month": 2,
@@ -287,7 +287,7 @@
           "seasonYear": 2019,
           "episodes": 26,
           "averageScore": 83,
-          "popularity": 946267,
+          "popularity": 947255,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -307,7 +307,7 @@
           "seasonYear": 2020,
           "episodes": 3,
           "averageScore": 67,
-          "popularity": 4303,
+          "popularity": 4307,
           "startDate": {
             "year": 2020,
             "month": 8,
@@ -327,7 +327,7 @@
           "seasonYear": 2020,
           "episodes": 1,
           "averageScore": 84,
-          "popularity": 485105,
+          "popularity": 485618,
           "startDate": {
             "year": 2020,
             "month": 10,
@@ -347,7 +347,7 @@
           "seasonYear": 2021,
           "episodes": 4,
           "averageScore": 68,
-          "popularity": 18030,
+          "popularity": 18041,
           "startDate": {
             "year": 2021,
             "month": 2,
@@ -367,7 +367,7 @@
           "seasonYear": 2021,
           "episodes": 7,
           "averageScore": 82,
-          "popularity": 339917,
+          "popularity": 340408,
           "startDate": {
             "year": 2021,
             "month": 10,
@@ -387,7 +387,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 59,
-          "popularity": 983,
+          "popularity": 987,
           "startDate": {
             "year": 2025,
             "month": 3,
@@ -415,7 +415,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 80,
-          "popularity": 243454,
+          "popularity": 243641,
           "startDate": {
             "year": 2018,
             "month": 3,
@@ -435,7 +435,7 @@
           "seasonYear": null,
           "episodes": 3,
           "averageScore": 67,
-          "popularity": 7192,
+          "popularity": 7201,
           "startDate": {
             "year": 2018,
             "month": 12,
@@ -455,7 +455,7 @@
           "seasonYear": 2020,
           "episodes": 24,
           "averageScore": 84,
-          "popularity": 915193,
+          "popularity": 916423,
           "startDate": {
             "year": 2020,
             "month": 10,
@@ -475,7 +475,7 @@
           "seasonYear": 2021,
           "episodes": 1,
           "averageScore": 83,
-          "popularity": 406573,
+          "popularity": 407238,
           "startDate": {
             "year": 2021,
             "month": 12,
@@ -495,7 +495,7 @@
           "seasonYear": 2023,
           "episodes": 23,
           "averageScore": 86,
-          "popularity": 453096,
+          "popularity": 453954,
           "startDate": {
             "year": 2023,
             "month": 7,
@@ -523,7 +523,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 96255,
+          "popularity": 96326,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -543,7 +543,7 @@
           "seasonYear": 2006,
           "episodes": 37,
           "averageScore": 84,
-          "popularity": 911296,
+          "popularity": 912316,
           "startDate": {
             "year": 2006,
             "month": 10,
@@ -563,7 +563,7 @@
           "seasonYear": 2007,
           "episodes": 2,
           "averageScore": 74,
-          "popularity": 42234,
+          "popularity": 42285,
           "startDate": {
             "year": 2007,
             "month": 8,
@@ -583,7 +583,7 @@
           "seasonYear": 2015,
           "episodes": 12,
           "averageScore": 80,
-          "popularity": 450639,
+          "popularity": 451015,
           "startDate": {
             "year": 2015,
             "month": 1,
@@ -611,7 +611,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 78,
-          "popularity": 174441,
+          "popularity": 174505,
           "startDate": {
             "year": 2014,
             "month": 7,
@@ -631,7 +631,7 @@
           "seasonYear": 2016,
           "episodes": 13,
           "averageScore": 77,
-          "popularity": 834900,
+          "popularity": 835781,
           "startDate": {
             "year": 2016,
             "month": 4,
@@ -651,7 +651,7 @@
           "seasonYear": 2017,
           "episodes": 25,
           "averageScore": 80,
-          "popularity": 630108,
+          "popularity": 630717,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -671,7 +671,7 @@
           "seasonYear": 2017,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 65290,
+          "popularity": 65340,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -691,7 +691,7 @@
           "seasonYear": 2025,
           "episodes": 13,
           "averageScore": 76,
-          "popularity": 67588,
+          "popularity": 67719,
           "startDate": {
             "year": 2025,
             "month": 4,
@@ -719,7 +719,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 88,
-          "popularity": 104232,
+          "popularity": 104324,
           "startDate": {
             "year": 1998,
             "month": 3,
@@ -739,7 +739,7 @@
           "seasonYear": 1999,
           "episodes": 62,
           "averageScore": 83,
-          "popularity": 128157,
+          "popularity": 128303,
           "startDate": {
             "year": 1999,
             "month": 10,
@@ -759,7 +759,7 @@
           "seasonYear": 2002,
           "episodes": 8,
           "averageScore": 82,
-          "popularity": 29314,
+          "popularity": 29339,
           "startDate": {
             "year": 2002,
             "month": 1,
@@ -779,7 +779,7 @@
           "seasonYear": 2003,
           "episodes": 8,
           "averageScore": 79,
-          "popularity": 32640,
+          "popularity": 32664,
           "startDate": {
             "year": 2003,
             "month": 2,
@@ -799,7 +799,7 @@
           "seasonYear": 2004,
           "episodes": 14,
           "averageScore": 79,
-          "popularity": 27136,
+          "popularity": 27160,
           "startDate": {
             "year": 2004,
             "month": 3,
@@ -819,7 +819,7 @@
           "seasonYear": 2011,
           "episodes": 13,
           "averageScore": 71,
-          "popularity": 20448,
+          "popularity": 20461,
           "startDate": {
             "year": 2011,
             "month": 1,
@@ -839,7 +839,7 @@
           "seasonYear": 2011,
           "episodes": 148,
           "averageScore": 89,
-          "popularity": 800313,
+          "popularity": 801184,
           "startDate": {
             "year": 2011,
             "month": 10,
@@ -859,7 +859,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 62,
-          "popularity": 1485,
+          "popularity": 1486,
           "startDate": {
             "year": 2012,
             "month": 5,
@@ -879,7 +879,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 72,
-          "popularity": 62571,
+          "popularity": 62631,
           "startDate": {
             "year": 2013,
             "month": 1,
@@ -899,7 +899,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 51122,
+          "popularity": 51175,
           "startDate": {
             "year": 2013,
             "month": 12,
@@ -927,7 +927,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 168464,
+          "popularity": 168553,
           "startDate": {
             "year": 2012,
             "month": 6,
@@ -947,7 +947,7 @@
           "seasonYear": 2015,
           "episodes": 12,
           "averageScore": 83,
-          "popularity": 736705,
+          "popularity": 737379,
           "startDate": {
             "year": 2015,
             "month": 10,
@@ -967,7 +967,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 89632,
+          "popularity": 89706,
           "startDate": {
             "year": 2015,
             "month": 12,
@@ -987,7 +987,7 @@
           "seasonYear": 2016,
           "episodes": 6,
           "averageScore": 75,
-          "popularity": 76687,
+          "popularity": 76756,
           "startDate": {
             "year": 2015,
             "month": 12,
@@ -1007,7 +1007,7 @@
           "seasonYear": 2019,
           "episodes": 12,
           "averageScore": 74,
-          "popularity": 448788,
+          "popularity": 449239,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -1035,7 +1035,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 188509,
+          "popularity": 188650,
           "startDate": {
             "year": 2011,
             "month": 9,
@@ -1055,7 +1055,7 @@
           "seasonYear": 2014,
           "episodes": 12,
           "averageScore": 76,
-          "popularity": 706177,
+          "popularity": 706841,
           "startDate": {
             "year": 2014,
             "month": 7,
@@ -1075,7 +1075,7 @@
           "seasonYear": 2015,
           "episodes": 12,
           "averageScore": 67,
-          "popularity": 390685,
+          "popularity": 391001,
           "startDate": {
             "year": 2015,
             "month": 1,
@@ -1095,7 +1095,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 58250,
+          "popularity": 58299,
           "startDate": {
             "year": 2015,
             "month": 9,
@@ -1115,7 +1115,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 54079,
+          "popularity": 54125,
           "startDate": {
             "year": 2015,
             "month": 12,
@@ -1135,7 +1135,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 79,
-          "popularity": 1578,
+          "popularity": 1588,
           "startDate": {
             "year": 2025,
             "month": 7,
@@ -1163,7 +1163,7 @@
           "seasonYear": 1998,
           "episodes": 1,
           "averageScore": 64,
-          "popularity": 12946,
+          "popularity": 12959,
           "startDate": {
             "year": 1998,
             "month": 7,
@@ -1183,7 +1183,7 @@
           "seasonYear": 1999,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 704583,
+          "popularity": 705759,
           "startDate": {
             "year": 1999,
             "month": 10,
@@ -1203,7 +1203,7 @@
           "seasonYear": 2000,
           "episodes": 1,
           "averageScore": 67,
-          "popularity": 9856,
+          "popularity": 9866,
           "startDate": {
             "year": 2000,
             "month": 12,
@@ -1223,7 +1223,7 @@
           "seasonYear": 2002,
           "episodes": 1,
           "averageScore": 66,
-          "popularity": 12059,
+          "popularity": 12067,
           "startDate": {
             "year": 2002,
             "month": 3,
@@ -1243,7 +1243,7 @@
           "seasonYear": 2003,
           "episodes": 1,
           "averageScore": 67,
-          "popularity": 7613,
+          "popularity": 7620,
           "startDate": {
             "year": 2003,
             "month": 4,
@@ -1263,7 +1263,7 @@
           "seasonYear": 2003,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 8169,
+          "popularity": 8177,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -1283,7 +1283,7 @@
           "seasonYear": 2004,
           "episodes": 1,
           "averageScore": 64,
-          "popularity": 8543,
+          "popularity": 8549,
           "startDate": {
             "year": 2004,
             "month": 3,
@@ -1303,7 +1303,7 @@
           "seasonYear": 2005,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 7374,
+          "popularity": 7378,
           "startDate": {
             "year": 2005,
             "month": 12,
@@ -1323,7 +1323,7 @@
           "seasonYear": 2011,
           "episodes": 1,
           "averageScore": 61,
-          "popularity": 6151,
+          "popularity": 6159,
           "startDate": {
             "year": 2011,
             "month": 12,
@@ -1343,7 +1343,7 @@
           "seasonYear": 2012,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 17010,
+          "popularity": 17020,
           "startDate": {
             "year": 2012,
             "month": 8,
@@ -1363,7 +1363,7 @@
           "seasonYear": 2012,
           "episodes": 1,
           "averageScore": 72,
-          "popularity": 12108,
+          "popularity": 12115,
           "startDate": {
             "year": 2012,
             "month": 12,
@@ -1383,7 +1383,7 @@
           "seasonYear": 2012,
           "episodes": 2,
           "averageScore": 69,
-          "popularity": 10949,
+          "popularity": 10957,
           "startDate": {
             "year": 2012,
             "month": 12,
@@ -1403,7 +1403,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 14815,
+          "popularity": 14827,
           "startDate": {
             "year": 2013,
             "month": 8,
@@ -1431,7 +1431,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 222240,
+          "popularity": 222331,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -1451,7 +1451,7 @@
           "seasonYear": 2013,
           "episodes": 25,
           "averageScore": 85,
-          "popularity": 1000051,
+          "popularity": 1001196,
           "startDate": {
             "year": 2013,
             "month": 4,
@@ -1471,7 +1471,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 85,
-          "popularity": 700446,
+          "popularity": 701163,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -1491,7 +1491,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 58,
-          "popularity": 6764,
+          "popularity": 6775,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -1511,7 +1511,7 @@
           "seasonYear": 2018,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 24597,
+          "popularity": 24638,
           "startDate": {
             "year": 2018,
             "month": 1,
@@ -1531,7 +1531,7 @@
           "seasonYear": 2018,
           "episodes": 12,
           "averageScore": 86,
-          "popularity": 654994,
+          "popularity": 655660,
           "startDate": {
             "year": 2018,
             "month": 7,
@@ -1551,7 +1551,7 @@
           "seasonYear": 2020,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 33277,
+          "popularity": 33320,
           "startDate": {
             "year": 2020,
             "month": 7,
@@ -1579,7 +1579,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 89,
-          "popularity": 77375,
+          "popularity": 77426,
           "startDate": {
             "year": 2001,
             "month": 7,
@@ -1599,7 +1599,7 @@
           "seasonYear": 2003,
           "episodes": 51,
           "averageScore": 79,
-          "popularity": 254572,
+          "popularity": 254847,
           "startDate": {
             "year": 2003,
             "month": 10,
@@ -1619,7 +1619,7 @@
           "seasonYear": 2009,
           "episodes": 64,
           "averageScore": 90,
-          "popularity": 693251,
+          "popularity": 694071,
           "startDate": {
             "year": 2009,
             "month": 4,
@@ -1639,7 +1639,7 @@
           "seasonYear": 2009,
           "episodes": 4,
           "averageScore": 77,
-          "popularity": 28624,
+          "popularity": 28648,
           "startDate": {
             "year": 2009,
             "month": 8,
@@ -1659,7 +1659,7 @@
           "seasonYear": 2009,
           "episodes": 16,
           "averageScore": 70,
-          "popularity": 11674,
+          "popularity": 11683,
           "startDate": {
             "year": 2009,
             "month": 8,
@@ -1679,7 +1679,7 @@
           "seasonYear": 2011,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 38260,
+          "popularity": 38297,
           "startDate": {
             "year": 2011,
             "month": 7,
@@ -1707,7 +1707,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 95997,
+          "popularity": 96051,
           "startDate": {
             "year": 1999,
             "month": 9,
@@ -1727,7 +1727,7 @@
           "seasonYear": 2002,
           "episodes": 220,
           "averageScore": 80,
-          "popularity": 689246,
+          "popularity": 689980,
           "startDate": {
             "year": 2002,
             "month": 10,
@@ -1747,7 +1747,7 @@
           "seasonYear": 2003,
           "episodes": 1,
           "averageScore": 62,
-          "popularity": 17774,
+          "popularity": 17796,
           "startDate": {
             "year": 2003,
             "month": 5,
@@ -1767,7 +1767,7 @@
           "seasonYear": 2003,
           "episodes": 1,
           "averageScore": 64,
-          "popularity": 20009,
+          "popularity": 20033,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -1787,7 +1787,7 @@
           "seasonYear": 2004,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 50665,
+          "popularity": 50711,
           "startDate": {
             "year": 2004,
             "month": 8,
@@ -1807,7 +1807,7 @@
           "seasonYear": 2005,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 45289,
+          "popularity": 45343,
           "startDate": {
             "year": 2005,
             "month": 8,
@@ -1827,7 +1827,7 @@
           "seasonYear": 2006,
           "episodes": 1,
           "averageScore": 63,
-          "popularity": 15309,
+          "popularity": 15329,
           "startDate": {
             "year": 2005,
             "month": 12,
@@ -1847,7 +1847,7 @@
           "seasonYear": 2006,
           "episodes": 1,
           "averageScore": 66,
-          "popularity": 40182,
+          "popularity": 40222,
           "startDate": {
             "year": 2006,
             "month": 8,
@@ -1867,7 +1867,7 @@
           "seasonYear": 2007,
           "episodes": 500,
           "averageScore": 82,
-          "popularity": 580530,
+          "popularity": 581103,
           "startDate": {
             "year": 2007,
             "month": 2,
@@ -1887,7 +1887,7 @@
           "seasonYear": 2009,
           "episodes": 1,
           "averageScore": 64,
-          "popularity": 14090,
+          "popularity": 14112,
           "startDate": {
             "year": 2009,
             "month": 10,
@@ -1907,7 +1907,7 @@
           "seasonYear": 2010,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 12736,
+          "popularity": 12759,
           "startDate": {
             "year": 2010,
             "month": 7,
@@ -1927,7 +1927,7 @@
           "seasonYear": 2022,
           "episodes": 1,
           "averageScore": 82,
-          "popularity": 19817,
+          "popularity": 19837,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -1947,7 +1947,7 @@
           "seasonYear": null,
           "episodes": 4,
           "averageScore": null,
-          "popularity": 14028,
+          "popularity": 14047,
           "startDate": {
             "year": null,
             "month": null,
@@ -1975,7 +1975,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 77,
-          "popularity": 14958,
+          "popularity": 14966,
           "startDate": {
             "year": 2009,
             "month": 4,
@@ -1995,7 +1995,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 62,
-          "popularity": 4660,
+          "popularity": 4661,
           "startDate": {
             "year": 2010,
             "month": 8,
@@ -2015,7 +2015,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 66,
-          "popularity": 2927,
+          "popularity": 2926,
           "startDate": {
             "year": 2012,
             "month": 4,
@@ -2035,7 +2035,7 @@
           "seasonYear": 2012,
           "episodes": 25,
           "averageScore": 70,
-          "popularity": 686409,
+          "popularity": 687084,
           "startDate": {
             "year": 2012,
             "month": 7,
@@ -2055,7 +2055,7 @@
           "seasonYear": 2012,
           "episodes": 9,
           "averageScore": 55,
-          "popularity": 17542,
+          "popularity": 17555,
           "startDate": {
             "year": 2012,
             "month": 10,
@@ -2075,7 +2075,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 62,
-          "popularity": 76479,
+          "popularity": 76541,
           "startDate": {
             "year": 2013,
             "month": 12,
@@ -2095,7 +2095,7 @@
           "seasonYear": 2014,
           "episodes": 24,
           "averageScore": 66,
-          "popularity": 434301,
+          "popularity": 434688,
           "startDate": {
             "year": 2014,
             "month": 7,
@@ -2115,7 +2115,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 60,
-          "popularity": 180749,
+          "popularity": 180899,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -2135,7 +2135,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 75,
-          "popularity": 926,
+          "popularity": 923,
           "startDate": {
             "year": 2021,
             "month": 10,
@@ -2155,7 +2155,7 @@
           "seasonYear": 2021,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 96395,
+          "popularity": 96501,
           "startDate": {
             "year": 2021,
             "month": 10,
@@ -2175,7 +2175,7 @@
           "seasonYear": 2022,
           "episodes": 1,
           "averageScore": 66,
-          "popularity": 2979,
+          "popularity": 2988,
           "startDate": {
             "year": 2022,
             "month": 11,
@@ -2195,7 +2195,7 @@
           "seasonYear": 2026,
           "episodes": 1,
           "averageScore": null,
-          "popularity": 2905,
+          "popularity": 2964,
           "startDate": {
             "year": 2026,
             "month": 7,
@@ -2215,7 +2215,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": null,
-          "popularity": 10382,
+          "popularity": 10404,
           "startDate": {
             "year": null,
             "month": null,
@@ -2243,7 +2243,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 238935,
+          "popularity": 239157,
           "startDate": {
             "year": 2013,
             "month": 5,
@@ -2263,7 +2263,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 80,
-          "popularity": 19599,
+          "popularity": 19610,
           "startDate": {
             "year": 2016,
             "month": 5,
@@ -2283,7 +2283,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 75,
-          "popularity": 1872,
+          "popularity": 1873,
           "startDate": {
             "year": 2016,
             "month": 7,
@@ -2303,7 +2303,7 @@
           "seasonYear": 2016,
           "episodes": 1,
           "averageScore": 86,
-          "popularity": 679163,
+          "popularity": 679878,
           "startDate": {
             "year": 2016,
             "month": 8,
@@ -2323,7 +2323,7 @@
           "seasonYear": 2016,
           "episodes": 3,
           "averageScore": 57,
-          "popularity": 7079,
+          "popularity": 7083,
           "startDate": {
             "year": 2016,
             "month": 8,
@@ -2343,7 +2343,7 @@
           "seasonYear": 2019,
           "episodes": 1,
           "averageScore": 81,
-          "popularity": 338351,
+          "popularity": 338738,
           "startDate": {
             "year": 2019,
             "month": 7,
@@ -2371,7 +2371,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 88280,
+          "popularity": 88337,
           "startDate": {
             "year": 2013,
             "month": 8,
@@ -2391,7 +2391,7 @@
           "seasonYear": 2016,
           "episodes": 1,
           "averageScore": 88,
-          "popularity": 676253,
+          "popularity": 677118,
           "startDate": {
             "year": 2016,
             "month": 9,
@@ -2411,7 +2411,7 @@
           "seasonYear": 2017,
           "episodes": 2,
           "averageScore": 70,
-          "popularity": 9647,
+          "popularity": 9656,
           "startDate": {
             "year": 2017,
             "month": 5,
@@ -2439,7 +2439,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 222240,
+          "popularity": 222331,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -2459,7 +2459,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 85,
-          "popularity": 700446,
+          "popularity": 701163,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -2479,7 +2479,7 @@
           "seasonYear": 2017,
           "episodes": 3,
           "averageScore": 77,
-          "popularity": 92090,
+          "popularity": 92177,
           "startDate": {
             "year": 2017,
             "month": 12,
@@ -2499,7 +2499,7 @@
           "seasonYear": 2018,
           "episodes": 12,
           "averageScore": 86,
-          "popularity": 654994,
+          "popularity": 655660,
           "startDate": {
             "year": 2018,
             "month": 7,
@@ -2519,7 +2519,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 62,
-          "popularity": 1082,
+          "popularity": 1085,
           "startDate": {
             "year": 2018,
             "month": 9,
@@ -2539,7 +2539,7 @@
           "seasonYear": 2018,
           "episodes": 4,
           "averageScore": 75,
-          "popularity": 15973,
+          "popularity": 16001,
           "startDate": {
             "year": 2018,
             "month": 10,
@@ -2559,7 +2559,7 @@
           "seasonYear": 2019,
           "episodes": 10,
           "averageScore": 90,
-          "popularity": 583065,
+          "popularity": 583650,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -2579,7 +2579,7 @@
           "seasonYear": 2020,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 33277,
+          "popularity": 33320,
           "startDate": {
             "year": 2020,
             "month": 7,
@@ -2607,7 +2607,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 78,
-          "popularity": 174441,
+          "popularity": 174505,
           "startDate": {
             "year": 2014,
             "month": 7,
@@ -2627,7 +2627,7 @@
           "seasonYear": 2016,
           "episodes": 13,
           "averageScore": 77,
-          "popularity": 834900,
+          "popularity": 835781,
           "startDate": {
             "year": 2016,
             "month": 4,
@@ -2647,7 +2647,7 @@
           "seasonYear": 2017,
           "episodes": 25,
           "averageScore": 80,
-          "popularity": 630108,
+          "popularity": 630717,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -2667,7 +2667,7 @@
           "seasonYear": 2017,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 37041,
+          "popularity": 37104,
           "startDate": {
             "year": 2017,
             "month": 6,
@@ -2687,7 +2687,7 @@
           "seasonYear": 2018,
           "episodes": 25,
           "averageScore": 79,
-          "popularity": 577418,
+          "popularity": 577972,
           "startDate": {
             "year": 2018,
             "month": 4,
@@ -2715,7 +2715,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 222240,
+          "popularity": 222331,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -2735,7 +2735,7 @@
           "seasonYear": 2019,
           "episodes": 10,
           "averageScore": 90,
-          "popularity": 583065,
+          "popularity": 583650,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -2755,7 +2755,7 @@
           "seasonYear": 2021,
           "episodes": 16,
           "averageScore": 87,
-          "popularity": 612311,
+          "popularity": 612940,
           "startDate": {
             "year": 2020,
             "month": 12,
@@ -2775,7 +2775,7 @@
           "seasonYear": 2021,
           "episodes": 2,
           "averageScore": 77,
-          "popularity": 9680,
+          "popularity": 9706,
           "startDate": {
             "year": 2021,
             "month": 7,
@@ -2795,7 +2795,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 86,
-          "popularity": 414675,
+          "popularity": 415237,
           "startDate": {
             "year": 2022,
             "month": 1,
@@ -2823,7 +2823,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 130452,
+          "popularity": 130506,
           "startDate": {
             "year": 2016,
             "month": 8,
@@ -2843,7 +2843,7 @@
           "seasonYear": 2019,
           "episodes": 12,
           "averageScore": 84,
-          "popularity": 609761,
+          "popularity": 610291,
           "startDate": {
             "year": 2019,
             "month": 1,
@@ -2883,7 +2883,7 @@
           "seasonYear": 2021,
           "episodes": 11,
           "averageScore": 52,
-          "popularity": 312224,
+          "popularity": 312458,
           "startDate": {
             "year": 2021,
             "month": 1,
@@ -2911,7 +2911,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 81,
-          "popularity": 53250,
+          "popularity": 53280,
           "startDate": {
             "year": 2012,
             "month": 7,
@@ -2931,7 +2931,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 19392,
+          "popularity": 19406,
           "startDate": {
             "year": 2013,
             "month": 10,
@@ -2951,7 +2951,7 @@
           "seasonYear": 2014,
           "episodes": 1,
           "averageScore": 71,
-          "popularity": 30079,
+          "popularity": 30123,
           "startDate": {
             "year": 2014,
             "month": 11,
@@ -2971,7 +2971,7 @@
           "seasonYear": 2015,
           "episodes": 22,
           "averageScore": 79,
-          "popularity": 601325,
+          "popularity": 601987,
           "startDate": {
             "year": 2015,
             "month": 1,
@@ -2991,7 +2991,7 @@
           "seasonYear": 2016,
           "episodes": 25,
           "averageScore": 83,
-          "popularity": 354684,
+          "popularity": 355056,
           "startDate": {
             "year": 2016,
             "month": 1,
@@ -3011,7 +3011,7 @@
           "seasonYear": 2016,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 5822,
+          "popularity": 5823,
           "startDate": {
             "year": 2016,
             "month": 11,
@@ -3030,8 +3030,8 @@
           "season": "FALL",
           "seasonYear": 2016,
           "episodes": 1,
-          "averageScore": 71,
-          "popularity": 38281,
+          "averageScore": 72,
+          "popularity": 38323,
           "startDate": {
             "year": 2016,
             "month": 11,
@@ -3051,7 +3051,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 67,
-          "popularity": 15087,
+          "popularity": 15100,
           "startDate": {
             "year": 2016,
             "month": 12,
@@ -3071,7 +3071,7 @@
           "seasonYear": 2026,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 11562,
+          "popularity": 11613,
           "startDate": {
             "year": 2026,
             "month": 3,
@@ -3099,7 +3099,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 47945,
+          "popularity": 47968,
           "startDate": {
             "year": 2012,
             "month": 4,
@@ -3119,7 +3119,7 @@
           "seasonYear": 2016,
           "episodes": 12,
           "averageScore": 84,
-          "popularity": 595943,
+          "popularity": 596592,
           "startDate": {
             "year": 2016,
             "month": 7,
@@ -3139,7 +3139,7 @@
           "seasonYear": 2016,
           "episodes": 6,
           "averageScore": 64,
-          "popularity": 14715,
+          "popularity": 14731,
           "startDate": {
             "year": 2016,
             "month": 9,
@@ -3159,7 +3159,7 @@
           "seasonYear": 2018,
           "episodes": 1,
           "averageScore": 73,
-          "popularity": 35826,
+          "popularity": 35862,
           "startDate": {
             "year": 2018,
             "month": 3,
@@ -3179,7 +3179,7 @@
           "seasonYear": 2019,
           "episodes": 13,
           "averageScore": 87,
-          "popularity": 430346,
+          "popularity": 430772,
           "startDate": {
             "year": 2019,
             "month": 1,
@@ -3207,7 +3207,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 320379,
+          "popularity": 320614,
           "startDate": {
             "year": 2018,
             "month": 12,
@@ -3227,7 +3227,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 83,
-          "popularity": 586646,
+          "popularity": 587616,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -3247,7 +3247,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 2773,
+          "popularity": 2777,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -3267,7 +3267,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 64,
-          "popularity": 2006,
+          "popularity": 2008,
           "startDate": {
             "year": 2022,
             "month": 11,
@@ -3287,7 +3287,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 68,
-          "popularity": 2112,
+          "popularity": 2114,
           "startDate": {
             "year": 2022,
             "month": 11,
@@ -3307,7 +3307,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 66,
-          "popularity": 2389,
+          "popularity": 2392,
           "startDate": {
             "year": 2022,
             "month": 11,
@@ -3327,7 +3327,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 3615,
+          "popularity": 3619,
           "startDate": {
             "year": 2022,
             "month": 12,
@@ -3347,7 +3347,7 @@
           "seasonYear": 2025,
           "episodes": 1,
           "averageScore": 90,
-          "popularity": 198644,
+          "popularity": 199553,
           "startDate": {
             "year": 2025,
             "month": 9,
@@ -3367,7 +3367,7 @@
           "seasonYear": 2025,
           "episodes": 5,
           "averageScore": 72,
-          "popularity": 2715,
+          "popularity": 2725,
           "startDate": {
             "year": 2025,
             "month": 9,
@@ -3395,7 +3395,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 82,
-          "popularity": 21900,
+          "popularity": 21915,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -3415,7 +3415,7 @@
           "seasonYear": 2014,
           "episodes": 22,
           "averageScore": 84,
-          "popularity": 585219,
+          "popularity": 585798,
           "startDate": {
             "year": 2014,
             "month": 10,
@@ -3435,7 +3435,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 31533,
+          "popularity": 31559,
           "startDate": {
             "year": 2015,
             "month": 5,
@@ -3463,7 +3463,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 88,
-          "popularity": 28285,
+          "popularity": 28313,
           "startDate": {
             "year": 2014,
             "month": 1,
@@ -3483,7 +3483,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 75,
-          "popularity": 8073,
+          "popularity": 8077,
           "startDate": {
             "year": 2014,
             "month": 6,
@@ -3503,7 +3503,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 78,
-          "popularity": 6232,
+          "popularity": 6237,
           "startDate": {
             "year": 2014,
             "month": 10,
@@ -3523,7 +3523,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 5187,
+          "popularity": 5189,
           "startDate": {
             "year": 2015,
             "month": 5,
@@ -3543,7 +3543,7 @@
           "seasonYear": 2016,
           "episodes": 25,
           "averageScore": 81,
-          "popularity": 583381,
+          "popularity": 584157,
           "startDate": {
             "year": 2016,
             "month": 4,
@@ -3563,7 +3563,7 @@
           "seasonYear": 2016,
           "episodes": 11,
           "averageScore": 65,
-          "popularity": 23022,
+          "popularity": 23043,
           "startDate": {
             "year": 2016,
             "month": 4,
@@ -3583,7 +3583,7 @@
           "seasonYear": 2016,
           "episodes": 14,
           "averageScore": 64,
-          "popularity": 14836,
+          "popularity": 14847,
           "startDate": {
             "year": 2016,
             "month": 6,
@@ -3603,7 +3603,7 @@
           "seasonYear": 2018,
           "episodes": 2,
           "averageScore": 76,
-          "popularity": 106110,
+          "popularity": 106241,
           "startDate": {
             "year": 2018,
             "month": 10,
@@ -3623,7 +3623,7 @@
           "seasonYear": 2019,
           "episodes": 12,
           "averageScore": 72,
-          "popularity": 104644,
+          "popularity": 104740,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -3643,7 +3643,7 @@
           "seasonYear": 2020,
           "episodes": 12,
           "averageScore": 72,
-          "popularity": 65701,
+          "popularity": 65755,
           "startDate": {
             "year": 2020,
             "month": 1,
@@ -3663,7 +3663,7 @@
           "seasonYear": 2020,
           "episodes": 13,
           "averageScore": 83,
-          "popularity": 355148,
+          "popularity": 355661,
           "startDate": {
             "year": 2020,
             "month": 7,
@@ -3683,7 +3683,7 @@
           "seasonYear": 2022,
           "episodes": 1,
           "averageScore": 73,
-          "popularity": 29186,
+          "popularity": 29217,
           "startDate": {
             "year": 2022,
             "month": 6,
@@ -3702,8 +3702,8 @@
           "season": "WINTER",
           "seasonYear": 2024,
           "episodes": 13,
-          "averageScore": 58,
-          "popularity": 4000,
+          "averageScore": 59,
+          "popularity": 4008,
           "startDate": {
             "year": 2024,
             "month": 1,
@@ -3731,7 +3731,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 222240,
+          "popularity": 222331,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -3751,7 +3751,7 @@
           "seasonYear": 2018,
           "episodes": 12,
           "averageScore": 86,
-          "popularity": 654994,
+          "popularity": 655660,
           "startDate": {
             "year": 2018,
             "month": 7,
@@ -3771,7 +3771,7 @@
           "seasonYear": 2019,
           "episodes": 10,
           "averageScore": 90,
-          "popularity": 583065,
+          "popularity": 583650,
           "startDate": {
             "year": 2019,
             "month": 4,
@@ -3791,7 +3791,7 @@
           "seasonYear": 2019,
           "episodes": 3,
           "averageScore": 79,
-          "popularity": 14175,
+          "popularity": 14192,
           "startDate": {
             "year": 2019,
             "month": 7,
@@ -3811,7 +3811,7 @@
           "seasonYear": 2020,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 33277,
+          "popularity": 33320,
           "startDate": {
             "year": 2020,
             "month": 7,
@@ -3831,7 +3831,7 @@
           "seasonYear": 2021,
           "episodes": 16,
           "averageScore": 87,
-          "popularity": 612311,
+          "popularity": 612940,
           "startDate": {
             "year": 2020,
             "month": 12,
@@ -3859,7 +3859,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 95997,
+          "popularity": 96051,
           "startDate": {
             "year": 1999,
             "month": 9,
@@ -3879,7 +3879,7 @@
           "seasonYear": 2002,
           "episodes": 220,
           "averageScore": 80,
-          "popularity": 689246,
+          "popularity": 689980,
           "startDate": {
             "year": 2002,
             "month": 10,
@@ -3899,7 +3899,7 @@
           "seasonYear": 2007,
           "episodes": 500,
           "averageScore": 82,
-          "popularity": 580530,
+          "popularity": 581103,
           "startDate": {
             "year": 2007,
             "month": 2,
@@ -3919,7 +3919,7 @@
           "seasonYear": 2007,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 56583,
+          "popularity": 56643,
           "startDate": {
             "year": 2007,
             "month": 8,
@@ -3939,7 +3939,7 @@
           "seasonYear": 2008,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 11583,
+          "popularity": 11597,
           "startDate": {
             "year": 2008,
             "month": 2,
@@ -3959,7 +3959,7 @@
           "seasonYear": 2008,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 49493,
+          "popularity": 49536,
           "startDate": {
             "year": 2008,
             "month": 8,
@@ -3979,7 +3979,7 @@
           "seasonYear": 2009,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 46415,
+          "popularity": 46465,
           "startDate": {
             "year": 2009,
             "month": 8,
@@ -3999,7 +3999,7 @@
           "seasonYear": 2010,
           "episodes": 1,
           "averageScore": 71,
-          "popularity": 53307,
+          "popularity": 53359,
           "startDate": {
             "year": 2010,
             "month": 7,
@@ -4019,7 +4019,7 @@
           "seasonYear": 2011,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 11950,
+          "popularity": 11965,
           "startDate": {
             "year": 2011,
             "month": 1,
@@ -4039,7 +4039,7 @@
           "seasonYear": 2011,
           "episodes": 1,
           "averageScore": 72,
-          "popularity": 55582,
+          "popularity": 55644,
           "startDate": {
             "year": 2011,
             "month": 7,
@@ -4059,7 +4059,7 @@
           "seasonYear": 2012,
           "episodes": 51,
           "averageScore": 66,
-          "popularity": 19346,
+          "popularity": 19372,
           "startDate": {
             "year": 2012,
             "month": 4,
@@ -4079,7 +4079,7 @@
           "seasonYear": 2012,
           "episodes": 1,
           "averageScore": 74,
-          "popularity": 70549,
+          "popularity": 70621,
           "startDate": {
             "year": 2012,
             "month": 7,
@@ -4099,7 +4099,7 @@
           "seasonYear": 2014,
           "episodes": 1,
           "averageScore": 76,
-          "popularity": 136677,
+          "popularity": 136829,
           "startDate": {
             "year": 2014,
             "month": 12,
@@ -4127,7 +4127,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 78,
-          "popularity": 174441,
+          "popularity": 174505,
           "startDate": {
             "year": 2014,
             "month": 7,
@@ -4147,7 +4147,7 @@
           "seasonYear": 2017,
           "episodes": 25,
           "averageScore": 80,
-          "popularity": 630108,
+          "popularity": 630717,
           "startDate": {
             "year": 2017,
             "month": 4,
@@ -4167,7 +4167,7 @@
           "seasonYear": 2018,
           "episodes": 25,
           "averageScore": 79,
-          "popularity": 577418,
+          "popularity": 577972,
           "startDate": {
             "year": 2018,
             "month": 4,
@@ -4187,7 +4187,7 @@
           "seasonYear": 2018,
           "episodes": 1,
           "averageScore": 74,
-          "popularity": 214421,
+          "popularity": 214621,
           "startDate": {
             "year": 2018,
             "month": 8,
@@ -4207,7 +4207,7 @@
           "seasonYear": 2019,
           "episodes": 25,
           "averageScore": 79,
-          "popularity": 510649,
+          "popularity": 511186,
           "startDate": {
             "year": 2019,
             "month": 10,
@@ -4235,7 +4235,7 @@
           "seasonYear": 2008,
           "episodes": 12,
           "averageScore": 57,
-          "popularity": 49489,
+          "popularity": 49525,
           "startDate": {
             "year": 2008,
             "month": 10,
@@ -4255,7 +4255,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 76,
-          "popularity": 7688,
+          "popularity": 7689,
           "startDate": {
             "year": 2009,
             "month": 9,
@@ -4295,7 +4295,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 63,
-          "popularity": 847,
+          "popularity": 846,
           "startDate": {
             "year": 2011,
             "month": 1,
@@ -4315,7 +4315,7 @@
           "seasonYear": 2011,
           "episodes": 24,
           "averageScore": 89,
-          "popularity": 567005,
+          "popularity": 567615,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -4335,7 +4335,7 @@
           "seasonYear": 2011,
           "episodes": 1,
           "averageScore": 54,
-          "popularity": 6184,
+          "popularity": 6185,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -4375,7 +4375,7 @@
           "seasonYear": 2012,
           "episodes": 1,
           "averageScore": 81,
-          "popularity": 111983,
+          "popularity": 112080,
           "startDate": {
             "year": 2012,
             "month": 2,
@@ -4395,7 +4395,7 @@
           "seasonYear": 2012,
           "episodes": 22,
           "averageScore": 70,
-          "popularity": 40658,
+          "popularity": 40682,
           "startDate": {
             "year": 2012,
             "month": 10,
@@ -4415,7 +4415,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 82,
-          "popularity": 134920,
+          "popularity": 135051,
           "startDate": {
             "year": 2013,
             "month": 4,
@@ -4435,7 +4435,7 @@
           "seasonYear": 2014,
           "episodes": 4,
           "averageScore": 72,
-          "popularity": 31441,
+          "popularity": 31466,
           "startDate": {
             "year": 2014,
             "month": 10,
@@ -4455,7 +4455,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 81,
-          "popularity": 80506,
+          "popularity": 80582,
           "startDate": {
             "year": 2015,
             "month": 12,
@@ -4483,7 +4483,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 89,
-          "popularity": 99335,
+          "popularity": 99393,
           "startDate": {
             "year": 2012,
             "month": 2,
@@ -4503,7 +4503,7 @@
           "seasonYear": 2014,
           "episodes": 25,
           "averageScore": 84,
-          "popularity": 559489,
+          "popularity": 560020,
           "startDate": {
             "year": 2014,
             "month": 4,
@@ -4523,7 +4523,7 @@
           "seasonYear": null,
           "episodes": 3,
           "averageScore": 62,
-          "popularity": 9744,
+          "popularity": 9759,
           "startDate": {
             "year": 2014,
             "month": 9,
@@ -4543,7 +4543,7 @@
           "seasonYear": 2014,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 37855,
+          "popularity": 37897,
           "startDate": {
             "year": 2014,
             "month": 11,
@@ -4563,7 +4563,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 25377,
+          "popularity": 25422,
           "startDate": {
             "year": 2015,
             "month": 7,
@@ -4583,7 +4583,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 24168,
+          "popularity": 24198,
           "startDate": {
             "year": 2015,
             "month": 9,
@@ -4603,7 +4603,7 @@
           "seasonYear": 2015,
           "episodes": 25,
           "averageScore": 86,
-          "popularity": 384336,
+          "popularity": 384669,
           "startDate": {
             "year": 2015,
             "month": 10,
@@ -4623,7 +4623,7 @@
           "seasonYear": 2020,
           "episodes": 10,
           "averageScore": 65,
-          "popularity": 4806,
+          "popularity": 4818,
           "startDate": {
             "year": 2020,
             "month": 3,
@@ -4651,7 +4651,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 77,
-          "popularity": 103751,
+          "popularity": 103828,
           "startDate": {
             "year": 2015,
             "month": 2,
@@ -4691,7 +4691,7 @@
           "seasonYear": 2016,
           "episodes": 1,
           "averageScore": 63,
-          "popularity": 11455,
+          "popularity": 11464,
           "startDate": {
             "year": 2016,
             "month": 11,
@@ -4711,7 +4711,7 @@
           "seasonYear": 2017,
           "episodes": 170,
           "averageScore": 79,
-          "popularity": 549428,
+          "popularity": 550125,
           "startDate": {
             "year": 2017,
             "month": 10,
@@ -4731,7 +4731,7 @@
           "seasonYear": 2018,
           "episodes": 15,
           "averageScore": 65,
-          "popularity": 2982,
+          "popularity": 2989,
           "startDate": {
             "year": 2018,
             "month": 2,
@@ -4751,7 +4751,7 @@
           "seasonYear": 2018,
           "episodes": 1,
           "averageScore": 62,
-          "popularity": 10340,
+          "popularity": 10353,
           "startDate": {
             "year": 2018,
             "month": 11,
@@ -4771,7 +4771,7 @@
           "seasonYear": 2019,
           "episodes": 8,
           "averageScore": 61,
-          "popularity": 6794,
+          "popularity": 6802,
           "startDate": {
             "year": 2019,
             "month": 7,
@@ -4791,7 +4791,7 @@
           "seasonYear": 2023,
           "episodes": 1,
           "averageScore": 80,
-          "popularity": 93419,
+          "popularity": 93581,
           "startDate": {
             "year": 2023,
             "month": 6,
@@ -4811,7 +4811,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": null,
-          "popularity": 34328,
+          "popularity": 34522,
           "startDate": {
             "year": 2026,
             "month": null,
@@ -4839,7 +4839,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 80,
-          "popularity": 115742,
+          "popularity": 115832,
           "startDate": {
             "year": 2001,
             "month": 8,
@@ -4859,7 +4859,7 @@
           "seasonYear": 2004,
           "episodes": 366,
           "averageScore": 79,
-          "popularity": 480951,
+          "popularity": 481727,
           "startDate": {
             "year": 2004,
             "month": 10,
@@ -4879,7 +4879,7 @@
           "seasonYear": 2004,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 9768,
+          "popularity": 9803,
           "startDate": {
             "year": 2004,
             "month": 12,
@@ -4899,7 +4899,7 @@
           "seasonYear": 2006,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 19435,
+          "popularity": 19470,
           "startDate": {
             "year": 2006,
             "month": 3,
@@ -4919,7 +4919,7 @@
           "seasonYear": 2006,
           "episodes": 1,
           "averageScore": 71,
-          "popularity": 45845,
+          "popularity": 45907,
           "startDate": {
             "year": 2006,
             "month": 12,
@@ -4939,7 +4939,7 @@
           "seasonYear": 2007,
           "episodes": 1,
           "averageScore": 70,
-          "popularity": 40316,
+          "popularity": 40374,
           "startDate": {
             "year": 2007,
             "month": 12,
@@ -4959,7 +4959,7 @@
           "seasonYear": 2008,
           "episodes": 1,
           "averageScore": 61,
-          "popularity": 5445,
+          "popularity": 5456,
           "startDate": {
             "year": 2008,
             "month": 9,
@@ -4979,7 +4979,7 @@
           "seasonYear": 2008,
           "episodes": 1,
           "averageScore": 71,
-          "popularity": 39754,
+          "popularity": 39813,
           "startDate": {
             "year": 2008,
             "month": 12,
@@ -4999,7 +4999,7 @@
           "seasonYear": 2010,
           "episodes": 1,
           "averageScore": 73,
-          "popularity": 42473,
+          "popularity": 42539,
           "startDate": {
             "year": 2010,
             "month": 12,
@@ -5019,7 +5019,7 @@
           "seasonYear": 2020,
           "episodes": 3,
           "averageScore": 70,
-          "popularity": 98404,
+          "popularity": 98491,
           "startDate": {
             "year": 2020,
             "month": 10,
@@ -5039,7 +5039,7 @@
           "seasonYear": 2022,
           "episodes": 13,
           "averageScore": 88,
-          "popularity": 189380,
+          "popularity": 189742,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -5059,7 +5059,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 81,
-          "popularity": 5354,
+          "popularity": 5375,
           "startDate": {
             "year": 2024,
             "month": 10,
@@ -5087,7 +5087,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 81293,
+          "popularity": 81375,
           "startDate": {
             "year": 2020,
             "month": 4,
@@ -5107,7 +5107,7 @@
           "seasonYear": 2023,
           "episodes": 28,
           "averageScore": 91,
-          "popularity": 433130,
+          "popularity": 434288,
           "startDate": {
             "year": 2023,
             "month": 9,
@@ -5127,7 +5127,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 79,
-          "popularity": 4926,
+          "popularity": 4933,
           "startDate": {
             "year": 2023,
             "month": 9,
@@ -5147,7 +5147,7 @@
           "seasonYear": 2023,
           "episodes": 12,
           "averageScore": 73,
-          "popularity": 9859,
+          "popularity": 9890,
           "startDate": {
             "year": 2023,
             "month": 10,
@@ -5166,8 +5166,8 @@
           "season": null,
           "seasonYear": null,
           "episodes": 1,
-          "averageScore": 71,
-          "popularity": 1981,
+          "averageScore": 70,
+          "popularity": 1984,
           "startDate": {
             "year": 2024,
             "month": 3,
@@ -5187,7 +5187,7 @@
           "seasonYear": 2025,
           "episodes": 6,
           "averageScore": 71,
-          "popularity": 4042,
+          "popularity": 4051,
           "startDate": {
             "year": 2025,
             "month": 4,
@@ -5207,7 +5207,7 @@
           "seasonYear": 2026,
           "episodes": 10,
           "averageScore": 88,
-          "popularity": 191676,
+          "popularity": 192601,
           "startDate": {
             "year": 2026,
             "month": 1,
@@ -5235,7 +5235,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 47945,
+          "popularity": 47968,
           "startDate": {
             "year": 2012,
             "month": 4,
@@ -5255,7 +5255,7 @@
           "seasonYear": 2016,
           "episodes": 12,
           "averageScore": 84,
-          "popularity": 595943,
+          "popularity": 596592,
           "startDate": {
             "year": 2016,
             "month": 7,
@@ -5275,7 +5275,7 @@
           "seasonYear": 2019,
           "episodes": 13,
           "averageScore": 87,
-          "popularity": 430346,
+          "popularity": 430772,
           "startDate": {
             "year": 2019,
             "month": 1,
@@ -5295,7 +5295,7 @@
           "seasonYear": 2019,
           "episodes": 1,
           "averageScore": 76,
-          "popularity": 44326,
+          "popularity": 44360,
           "startDate": {
             "year": 2019,
             "month": 9,
@@ -5315,7 +5315,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 87,
-          "popularity": 248709,
+          "popularity": 249063,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -5343,7 +5343,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 12356,
+          "popularity": 12373,
           "startDate": {
             "year": 2014,
             "month": 8,
@@ -5363,7 +5363,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 44106,
+          "popularity": 44165,
           "startDate": {
             "year": 2017,
             "month": 5,
@@ -5383,7 +5383,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 74,
-          "popularity": 2343,
+          "popularity": 2348,
           "startDate": {
             "year": 2017,
             "month": 8,
@@ -5403,7 +5403,7 @@
           "seasonYear": 2023,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 289623,
+          "popularity": 290428,
           "startDate": {
             "year": 2023,
             "month": 10,
@@ -5423,7 +5423,7 @@
           "seasonYear": 2023,
           "episodes": 24,
           "averageScore": 65,
-          "popularity": 3773,
+          "popularity": 3778,
           "startDate": {
             "year": 2023,
             "month": 10,
@@ -5443,7 +5443,7 @@
           "seasonYear": 2025,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 179469,
+          "popularity": 180020,
           "startDate": {
             "year": 2025,
             "month": 1,
@@ -5471,7 +5471,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 116151,
+          "popularity": 116201,
           "startDate": {
             "year": 2015,
             "month": 5,
@@ -5491,7 +5491,7 @@
           "seasonYear": 2020,
           "episodes": 12,
           "averageScore": 85,
-          "popularity": 416536,
+          "popularity": 416943,
           "startDate": {
             "year": 2020,
             "month": 4,
@@ -5511,7 +5511,7 @@
           "seasonYear": 2021,
           "episodes": 1,
           "averageScore": 79,
-          "popularity": 13607,
+          "popularity": 13641,
           "startDate": {
             "year": 2021,
             "month": 10,
@@ -5531,7 +5531,7 @@
           "seasonYear": 2022,
           "episodes": 13,
           "averageScore": 89,
-          "popularity": 276862,
+          "popularity": 277228,
           "startDate": {
             "year": 2022,
             "month": 4,
@@ -5551,7 +5551,7 @@
           "seasonYear": 2023,
           "episodes": 4,
           "averageScore": 87,
-          "popularity": 138129,
+          "popularity": 138364,
           "startDate": {
             "year": 2023,
             "month": 4,
@@ -5579,7 +5579,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 90,
-          "popularity": 133194,
+          "popularity": 133284,
           "startDate": {
             "year": 2005,
             "month": 4,
@@ -5599,7 +5599,7 @@
           "seasonYear": 2019,
           "episodes": 24,
           "averageScore": 87,
-          "popularity": 511724,
+          "popularity": 512535,
           "startDate": {
             "year": 2019,
             "month": 7,
@@ -5619,7 +5619,7 @@
           "seasonYear": 2023,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 254909,
+          "popularity": 255394,
           "startDate": {
             "year": 2023,
             "month": 1,
@@ -5639,7 +5639,7 @@
           "seasonYear": 2023,
           "episodes": 1,
           "averageScore": 75,
-          "popularity": 12289,
+          "popularity": 12307,
           "startDate": {
             "year": 2023,
             "month": 2,
@@ -5659,7 +5659,7 @@
           "seasonYear": 2023,
           "episodes": 1,
           "averageScore": 71,
-          "popularity": 8511,
+          "popularity": 8526,
           "startDate": {
             "year": 2023,
             "month": 5,
@@ -5687,7 +5687,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 81,
-          "popularity": 61367,
+          "popularity": 61479,
           "startDate": {
             "year": 2022,
             "month": 2,
@@ -5707,7 +5707,7 @@
           "seasonYear": 2025,
           "episodes": 24,
           "averageScore": 82,
-          "popularity": 221100,
+          "popularity": 222177,
           "startDate": {
             "year": 2025,
             "month": 7,
@@ -5747,7 +5747,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 59,
-          "popularity": 603,
+          "popularity": 605,
           "startDate": {
             "year": 2025,
             "month": 11,
@@ -5767,7 +5767,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": null,
-          "popularity": 20644,
+          "popularity": 20786,
           "startDate": {
             "year": null,
             "month": null,
@@ -5775,6 +5775,114 @@
           },
           "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204436-gGUp9DNszIY5.png",
           "siteUrl": "https://anilist.co/anime/204436"
+        }
+      ]
+    },
+    {
+      "slug": "172463-jujutsu-kaisen-season-3-the-culling-game-part-1",
+      "rootAnimeId": 172463,
+      "title": "JUJUTSU KAISEN Season 3: The Culling Game Part 1 watch order",
+      "description": "A compact viewing order for JUJUTSU KAISEN Season 3: The Culling Game Part 1 and its connected anime entries.",
+      "entries": [
+        {
+          "animeId": 101517,
+          "title": "Jujutsu Kaisen",
+          "slug": "101517-jujutsu-kaisen",
+          "relationType": "SOURCE",
+          "format": "MANGA",
+          "status": "FINISHED",
+          "season": null,
+          "seasonYear": null,
+          "episodes": null,
+          "averageScore": 80,
+          "popularity": 243641,
+          "startDate": {
+            "year": 2018,
+            "month": 3,
+            "day": 5
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx101517-H3TdM3g5ZUe9.jpg",
+          "siteUrl": "https://anilist.co/manga/101517"
+        },
+        {
+          "animeId": 145064,
+          "title": "JUJUTSU KAISEN Season 2",
+          "slug": "145064-jujutsu-kaisen-season-2",
+          "relationType": "PREQUEL",
+          "format": "TV",
+          "status": "FINISHED",
+          "season": "SUMMER",
+          "seasonYear": 2023,
+          "episodes": 23,
+          "averageScore": 86,
+          "popularity": 453954,
+          "startDate": {
+            "year": 2023,
+            "month": 7,
+            "day": 6
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx145064-hSNRJM03pvv1.jpg",
+          "siteUrl": "https://anilist.co/anime/145064"
+        },
+        {
+          "animeId": 204066,
+          "title": "JUJUTSU KAISEN: Execution -Shibuya Incident x The Culling Game Begins-",
+          "slug": "204066-jujutsu-kaisen-execution-shibuya-incident-x-the-culling-game-begins-",
+          "relationType": "PREQUEL",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "season": "FALL",
+          "seasonYear": 2025,
+          "episodes": 1,
+          "averageScore": 76,
+          "popularity": 16655,
+          "startDate": {
+            "year": 2025,
+            "month": 11,
+            "day": 7
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204066-Gb5k7j6Cpbng.jpg",
+          "siteUrl": "https://anilist.co/anime/204066"
+        },
+        {
+          "animeId": 172463,
+          "title": "JUJUTSU KAISEN Season 3: The Culling Game Part 1",
+          "slug": "172463-jujutsu-kaisen-season-3-the-culling-game-part-1",
+          "relationType": "MAIN",
+          "format": "TV",
+          "status": "FINISHED",
+          "season": "WINTER",
+          "seasonYear": 2026,
+          "episodes": 12,
+          "averageScore": 86,
+          "popularity": 219881,
+          "startDate": {
+            "year": 2026,
+            "month": 1,
+            "day": 9
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172463-LnXqHzt74SJL.jpg",
+          "siteUrl": "https://anilist.co/anime/172463"
+        },
+        {
+          "animeId": 209895,
+          "title": "Jujutsu Kaisen: Shimetsu Kaiyuu - Kouhen",
+          "slug": "209895-jujutsu-kaisen-shimetsu-kaiyuu-kouhen",
+          "relationType": "SEQUEL",
+          "format": null,
+          "status": "NOT_YET_RELEASED",
+          "season": null,
+          "seasonYear": null,
+          "episodes": null,
+          "averageScore": null,
+          "popularity": 15456,
+          "startDate": {
+            "year": null,
+            "month": null,
+            "day": null
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209895-rrl9Ys8iVTiV.jpg",
+          "siteUrl": "https://anilist.co/anime/209895"
         }
       ]
     },
@@ -5795,7 +5903,7 @@
           "seasonYear": 2007,
           "episodes": 1,
           "averageScore": 67,
-          "popularity": 30907,
+          "popularity": 30938,
           "startDate": {
             "year": 2007,
             "month": 9,
@@ -5815,7 +5923,7 @@
           "seasonYear": 2007,
           "episodes": 23,
           "averageScore": 77,
-          "popularity": 286141,
+          "popularity": 286444,
           "startDate": {
             "year": 2007,
             "month": 10,
@@ -5835,7 +5943,7 @@
           "seasonYear": 2008,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 214969,
+          "popularity": 215144,
           "startDate": {
             "year": 2008,
             "month": 10,
@@ -5855,7 +5963,7 @@
           "seasonYear": 2021,
           "episodes": 12,
           "averageScore": 69,
-          "popularity": 10091,
+          "popularity": 10097,
           "startDate": {
             "year": 2021,
             "month": 10,
@@ -5875,7 +5983,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 72,
-          "popularity": 4722,
+          "popularity": 4725,
           "startDate": {
             "year": 2022,
             "month": 4,
@@ -5903,7 +6011,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 320379,
+          "popularity": 320614,
           "startDate": {
             "year": 2018,
             "month": 12,
@@ -5923,7 +6031,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 83,
-          "popularity": 586646,
+          "popularity": 587616,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -5943,7 +6051,7 @@
           "seasonYear": 2025,
           "episodes": 1,
           "averageScore": 90,
-          "popularity": 198644,
+          "popularity": 199553,
           "startDate": {
             "year": 2025,
             "month": 9,
@@ -5963,7 +6071,7 @@
           "seasonYear": 2025,
           "episodes": 1,
           "averageScore": 84,
-          "popularity": 4268,
+          "popularity": 4287,
           "startDate": {
             "year": 2025,
             "month": 12,
@@ -5983,7 +6091,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": null,
-          "popularity": 21764,
+          "popularity": 21887,
           "startDate": {
             "year": null,
             "month": null,
@@ -6011,7 +6119,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 81293,
+          "popularity": 81375,
           "startDate": {
             "year": 2020,
             "month": 4,
@@ -6031,7 +6139,7 @@
           "seasonYear": 2023,
           "episodes": 28,
           "averageScore": 91,
-          "popularity": 433130,
+          "popularity": 434288,
           "startDate": {
             "year": 2023,
             "month": 9,
@@ -6051,7 +6159,7 @@
           "seasonYear": 2026,
           "episodes": 10,
           "averageScore": 88,
-          "popularity": 191676,
+          "popularity": 192601,
           "startDate": {
             "year": 2026,
             "month": 1,
@@ -6071,7 +6179,7 @@
           "seasonYear": 2026,
           "episodes": null,
           "averageScore": 68,
-          "popularity": 1860,
+          "popularity": 1868,
           "startDate": {
             "year": 2026,
             "month": 1,
@@ -6091,7 +6199,7 @@
           "seasonYear": 2027,
           "episodes": null,
           "averageScore": null,
-          "popularity": 29408,
+          "popularity": 29710,
           "startDate": {
             "year": 2027,
             "month": 10,
@@ -6119,7 +6227,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 80,
-          "popularity": 115742,
+          "popularity": 115832,
           "startDate": {
             "year": 2001,
             "month": 8,
@@ -6139,7 +6247,7 @@
           "seasonYear": 2004,
           "episodes": 366,
           "averageScore": 79,
-          "popularity": 480951,
+          "popularity": 481727,
           "startDate": {
             "year": 2004,
             "month": 10,
@@ -6159,7 +6267,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 748,
+          "popularity": 752,
           "startDate": {
             "year": 2021,
             "month": 11,
@@ -6179,7 +6287,7 @@
           "seasonYear": 2022,
           "episodes": 13,
           "averageScore": 88,
-          "popularity": 189380,
+          "popularity": 189742,
           "startDate": {
             "year": 2022,
             "month": 10,
@@ -6199,7 +6307,7 @@
           "seasonYear": 2023,
           "episodes": 13,
           "averageScore": 86,
-          "popularity": 128435,
+          "popularity": 128730,
           "startDate": {
             "year": 2023,
             "month": 7,
@@ -6227,7 +6335,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 12356,
+          "popularity": 12373,
           "startDate": {
             "year": 2014,
             "month": 8,
@@ -6247,7 +6355,7 @@
           "seasonYear": 2023,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 289623,
+          "popularity": 290428,
           "startDate": {
             "year": 2023,
             "month": 10,
@@ -6267,7 +6375,7 @@
           "seasonYear": 2025,
           "episodes": 24,
           "averageScore": 88,
-          "popularity": 179469,
+          "popularity": 180020,
           "startDate": {
             "year": 2025,
             "month": 1,
@@ -6287,7 +6395,7 @@
           "seasonYear": 2025,
           "episodes": 24,
           "averageScore": 66,
-          "popularity": 2152,
+          "popularity": 2161,
           "startDate": {
             "year": 2025,
             "month": 1,
@@ -6298,8 +6406,8 @@
         },
         {
           "animeId": 195516,
-          "title": "Kusuriya no Hitorigoto 3rd Season",
-          "slug": "195516-kusuriya-no-hitorigoto-3rd-season",
+          "title": "The Apothecary Diaries Season 3",
+          "slug": "195516-the-apothecary-diaries-season-3",
           "relationType": "SEQUEL",
           "format": "TV",
           "status": "NOT_YET_RELEASED",
@@ -6307,7 +6415,7 @@
           "seasonYear": 2026,
           "episodes": null,
           "averageScore": null,
-          "popularity": 36690,
+          "popularity": 36922,
           "startDate": {
             "year": 2026,
             "month": 10,
@@ -6335,7 +6443,7 @@
           "seasonYear": 2020,
           "episodes": 25,
           "averageScore": 85,
-          "popularity": 179581,
+          "popularity": 179731,
           "startDate": {
             "year": 2020,
             "month": 4,
@@ -6355,7 +6463,7 @@
           "seasonYear": 2021,
           "episodes": 13,
           "averageScore": 89,
-          "popularity": 169514,
+          "popularity": 169673,
           "startDate": {
             "year": 2021,
             "month": 4,
@@ -6375,7 +6483,7 @@
           "seasonYear": 2022,
           "episodes": 1,
           "averageScore": 82,
-          "popularity": 46966,
+          "popularity": 47016,
           "startDate": {
             "year": 2022,
             "month": 2,
@@ -6383,134 +6491,6 @@
           },
           "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx136192-hxeNRzBHizBZ.jpg",
           "siteUrl": "https://anilist.co/anime/136192"
-        }
-      ]
-    },
-    {
-      "slug": "156822-that-time-i-got-reincarnated-as-a-slime-season-3",
-      "rootAnimeId": 156822,
-      "title": "That Time I Got Reincarnated as a Slime Season 3 watch order",
-      "description": "A compact viewing order for That Time I Got Reincarnated as a Slime Season 3 and its connected anime entries.",
-      "entries": [
-        {
-          "animeId": 86355,
-          "title": "That Time I Got Reincarnated as a Slime",
-          "slug": "86355-that-time-i-got-reincarnated-as-a-slime",
-          "relationType": "SOURCE",
-          "format": "NOVEL",
-          "status": "FINISHED",
-          "season": null,
-          "seasonYear": null,
-          "episodes": null,
-          "averageScore": 84,
-          "popularity": 17415,
-          "startDate": {
-            "year": 2014,
-            "month": 5,
-            "day": 30
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx86355-pGwmLqVTwwE4.jpg",
-          "siteUrl": "https://anilist.co/manga/86355"
-        },
-        {
-          "animeId": 86399,
-          "title": "That Time I Got Reincarnated as a Slime",
-          "slug": "86399-that-time-i-got-reincarnated-as-a-slime",
-          "relationType": "SOURCE",
-          "format": "MANGA",
-          "status": "RELEASING",
-          "season": null,
-          "seasonYear": null,
-          "episodes": null,
-          "averageScore": 82,
-          "popularity": 58433,
-          "startDate": {
-            "year": 2015,
-            "month": 3,
-            "day": 26
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx86399-NwbRFVh5koqc.jpg",
-          "siteUrl": "https://anilist.co/manga/86399"
-        },
-        {
-          "animeId": 116742,
-          "title": "That Time I Got Reincarnated as a Slime Season 2 Part 2",
-          "slug": "116742-that-time-i-got-reincarnated-as-a-slime-season-2-part-2",
-          "relationType": "PREQUEL",
-          "format": "TV",
-          "status": "FINISHED",
-          "season": "SUMMER",
-          "seasonYear": 2021,
-          "episodes": 12,
-          "averageScore": 82,
-          "popularity": 251863,
-          "startDate": {
-            "year": 2021,
-            "month": 7,
-            "day": 6
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx116742-jn0dW23ftehq.jpg",
-          "siteUrl": "https://anilist.co/anime/116742"
-        },
-        {
-          "animeId": 156822,
-          "title": "That Time I Got Reincarnated as a Slime Season 3",
-          "slug": "156822-that-time-i-got-reincarnated-as-a-slime-season-3",
-          "relationType": "MAIN",
-          "format": "TV",
-          "status": "FINISHED",
-          "season": "SPRING",
-          "seasonYear": 2024,
-          "episodes": 24,
-          "averageScore": 78,
-          "popularity": 167416,
-          "startDate": {
-            "year": 2024,
-            "month": 4,
-            "day": 5
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx156822-Jzo2ITWgm4kM.jpg",
-          "siteUrl": "https://anilist.co/anime/156822"
-        },
-        {
-          "animeId": 182206,
-          "title": "That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea",
-          "slug": "182206-that-time-i-got-reincarnated-as-a-slime-the-movie-tears-of-the-azure-sea",
-          "relationType": "SEQUEL",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "season": "WINTER",
-          "seasonYear": 2026,
-          "episodes": 1,
-          "averageScore": 74,
-          "popularity": 37127,
-          "startDate": {
-            "year": 2026,
-            "month": 2,
-            "day": 27
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182206-LcitQfDLsdnC.png",
-          "siteUrl": "https://anilist.co/anime/182206"
-        },
-        {
-          "animeId": 182205,
-          "title": "That Time I Got Reincarnated as a Slime Season 4",
-          "slug": "182205-that-time-i-got-reincarnated-as-a-slime-season-4",
-          "relationType": "SEQUEL",
-          "format": "TV",
-          "status": "RELEASING",
-          "season": "SPRING",
-          "seasonYear": 2026,
-          "episodes": null,
-          "averageScore": 81,
-          "popularity": 90669,
-          "startDate": {
-            "year": 2026,
-            "month": 4,
-            "day": 3
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182205-q2AeO1owuQbO.jpg",
-          "siteUrl": "https://anilist.co/anime/182205"
         }
       ]
     },
@@ -6531,7 +6511,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 88,
-          "popularity": 8079,
+          "popularity": 8080,
           "startDate": {
             "year": 2010,
             "month": 10,
@@ -6551,7 +6531,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 82,
-          "popularity": 2349,
+          "popularity": 2352,
           "startDate": {
             "year": 2010,
             "month": 12,
@@ -6571,7 +6551,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 85,
-          "popularity": 2312,
+          "popularity": 2318,
           "startDate": {
             "year": 2011,
             "month": 6,
@@ -6591,7 +6571,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 79,
-          "popularity": 2111,
+          "popularity": 2115,
           "startDate": {
             "year": 2011,
             "month": 9,
@@ -6611,7 +6591,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 88,
-          "popularity": 2568,
+          "popularity": 2573,
           "startDate": {
             "year": 2011,
             "month": 12,
@@ -6631,7 +6611,7 @@
           "seasonYear": 2012,
           "episodes": 11,
           "averageScore": 79,
-          "popularity": 181112,
+          "popularity": 181230,
           "startDate": {
             "year": 2012,
             "month": 1,
@@ -6651,7 +6631,7 @@
           "seasonYear": 2013,
           "episodes": 26,
           "averageScore": 88,
-          "popularity": 166779,
+          "popularity": 166887,
           "startDate": {
             "year": 2013,
             "month": 7,
@@ -6671,7 +6651,7 @@
           "seasonYear": 2015,
           "episodes": 12,
           "averageScore": 85,
-          "popularity": 126477,
+          "popularity": 126558,
           "startDate": {
             "year": 2015,
             "month": 10,
@@ -6691,7 +6671,7 @@
           "seasonYear": 2016,
           "episodes": 12,
           "averageScore": 74,
-          "popularity": 84343,
+          "popularity": 84393,
           "startDate": {
             "year": 2016,
             "month": 1,
@@ -6711,7 +6691,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 65,
-          "popularity": 9117,
+          "popularity": 9124,
           "startDate": {
             "year": 2016,
             "month": 9,
@@ -6739,7 +6719,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 74166,
+          "popularity": 74385,
           "startDate": {
             "year": 2016,
             "month": 7,
@@ -6759,7 +6739,7 @@
           "seasonYear": 2026,
           "episodes": 13,
           "averageScore": 86,
-          "popularity": 155039,
+          "popularity": 157640,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -6779,7 +6759,7 @@
           "seasonYear": null,
           "episodes": 1,
           "averageScore": 74,
-          "popularity": 1065,
+          "popularity": 1075,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -6807,7 +6787,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 78,
-          "popularity": 15750,
+          "popularity": 15908,
           "startDate": {
             "year": 2020,
             "month": 12,
@@ -6826,8 +6806,8 @@
           "season": "SUMMER",
           "seasonYear": 2024,
           "episodes": 12,
-          "averageScore": 78,
-          "popularity": 146878,
+          "averageScore": 79,
+          "popularity": 147928,
           "startDate": {
             "year": 2024,
             "month": 7,
@@ -6847,7 +6827,7 @@
           "seasonYear": 2026,
           "episodes": 12,
           "averageScore": 82,
-          "popularity": 79749,
+          "popularity": 81632,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -6875,7 +6855,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 33336,
+          "popularity": 33349,
           "startDate": {
             "year": 2007,
             "month": 7,
@@ -6895,7 +6875,7 @@
           "seasonYear": 2016,
           "episodes": 22,
           "averageScore": 83,
-          "popularity": 206427,
+          "popularity": 206594,
           "startDate": {
             "year": 2016,
             "month": 10,
@@ -6915,7 +6895,7 @@
           "seasonYear": 2017,
           "episodes": 22,
           "averageScore": 89,
-          "popularity": 126920,
+          "popularity": 126998,
           "startDate": {
             "year": 2017,
             "month": 10,
@@ -6963,7 +6943,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 87,
-          "popularity": 2311,
+          "popularity": 2314,
           "startDate": {
             "year": 2013,
             "month": 10,
@@ -6983,7 +6963,7 @@
           "seasonYear": 2014,
           "episodes": 4,
           "averageScore": 79,
-          "popularity": 118070,
+          "popularity": 118144,
           "startDate": {
             "year": 2014,
             "month": 12,
@@ -7003,7 +6983,7 @@
           "seasonYear": 2017,
           "episodes": 7,
           "averageScore": 89,
-          "popularity": 120153,
+          "popularity": 120239,
           "startDate": {
             "year": 2017,
             "month": 8,
@@ -7023,7 +7003,7 @@
           "seasonYear": 2019,
           "episodes": 6,
           "averageScore": 84,
-          "popularity": 83429,
+          "popularity": 83483,
           "startDate": {
             "year": 2019,
             "month": 2,
@@ -7051,7 +7031,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 86,
-          "popularity": 30848,
+          "popularity": 30864,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -7071,7 +7051,7 @@
           "seasonYear": 2012,
           "episodes": 13,
           "averageScore": 89,
-          "popularity": 81892,
+          "popularity": 81966,
           "startDate": {
             "year": 2012,
             "month": 10,
@@ -7091,7 +7071,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 87,
-          "popularity": 53894,
+          "popularity": 53963,
           "startDate": {
             "year": 2013,
             "month": 7,
@@ -7111,7 +7091,7 @@
           "seasonYear": 2015,
           "episodes": 51,
           "averageScore": 90,
-          "popularity": 115665,
+          "popularity": 115777,
           "startDate": {
             "year": 2015,
             "month": 4,
@@ -7131,7 +7111,7 @@
           "seasonYear": 2015,
           "episodes": 1,
           "averageScore": 76,
-          "popularity": 9343,
+          "popularity": 9355,
           "startDate": {
             "year": 2015,
             "month": 11,
@@ -7151,7 +7131,7 @@
           "seasonYear": 2016,
           "episodes": 2,
           "averageScore": 80,
-          "popularity": 21065,
+          "popularity": 21092,
           "startDate": {
             "year": 2016,
             "month": 8,
@@ -7171,7 +7151,7 @@
           "seasonYear": 2017,
           "episodes": 12,
           "averageScore": 88,
-          "popularity": 80284,
+          "popularity": 80371,
           "startDate": {
             "year": 2017,
             "month": 1,
@@ -7199,7 +7179,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 86,
-          "popularity": 30848,
+          "popularity": 30864,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -7219,7 +7199,7 @@
           "seasonYear": 2006,
           "episodes": 201,
           "averageScore": 85,
-          "popularity": 282775,
+          "popularity": 283085,
           "startDate": {
             "year": 2006,
             "month": 4,
@@ -7239,7 +7219,7 @@
           "seasonYear": 2011,
           "episodes": 51,
           "averageScore": 89,
-          "popularity": 106624,
+          "popularity": 106730,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -7259,7 +7239,7 @@
           "seasonYear": 2011,
           "episodes": 77,
           "averageScore": 78,
-          "popularity": 45689,
+          "popularity": 45711,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -7279,7 +7259,7 @@
           "seasonYear": 2012,
           "episodes": 2,
           "averageScore": 80,
-          "popularity": 9875,
+          "popularity": 9887,
           "startDate": {
             "year": 2012,
             "month": 8,
@@ -7299,7 +7279,7 @@
           "seasonYear": 2012,
           "episodes": 13,
           "averageScore": 89,
-          "popularity": 81892,
+          "popularity": 81966,
           "startDate": {
             "year": 2012,
             "month": 10,
@@ -7319,7 +7299,7 @@
           "seasonYear": 2023,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 2326,
+          "popularity": 2332,
           "startDate": {
             "year": 2023,
             "month": 11,
@@ -7347,7 +7327,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 88,
-          "popularity": 28285,
+          "popularity": 28313,
           "startDate": {
             "year": 2014,
             "month": 1,
@@ -7367,7 +7347,7 @@
           "seasonYear": 2024,
           "episodes": 16,
           "averageScore": 84,
-          "popularity": 172247,
+          "popularity": 172781,
           "startDate": {
             "year": 2024,
             "month": 10,
@@ -7387,7 +7367,7 @@
           "seasonYear": 2026,
           "episodes": 19,
           "averageScore": 87,
-          "popularity": 95643,
+          "popularity": 96668,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -7407,7 +7387,7 @@
           "seasonYear": 2026,
           "episodes": null,
           "averageScore": 64,
-          "popularity": 1588,
+          "popularity": 1615,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -7435,7 +7415,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 17415,
+          "popularity": 17438,
           "startDate": {
             "year": 2014,
             "month": 5,
@@ -7455,7 +7435,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 82,
-          "popularity": 58433,
+          "popularity": 58507,
           "startDate": {
             "year": 2015,
             "month": 3,
@@ -7475,7 +7455,7 @@
           "seasonYear": 2024,
           "episodes": 24,
           "averageScore": 78,
-          "popularity": 167416,
+          "popularity": 167895,
           "startDate": {
             "year": 2024,
             "month": 4,
@@ -7495,7 +7475,7 @@
           "seasonYear": 2026,
           "episodes": null,
           "averageScore": 81,
-          "popularity": 90669,
+          "popularity": 91771,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -7503,6 +7483,94 @@
           },
           "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182205-q2AeO1owuQbO.jpg",
           "siteUrl": "https://anilist.co/anime/182205"
+        }
+      ]
+    },
+    {
+      "slug": "184951-you-and-i-are-polar-opposites",
+      "rootAnimeId": 184951,
+      "title": "You and I Are Polar Opposites watch order",
+      "description": "A compact viewing order for You and I Are Polar Opposites and its connected anime entries.",
+      "entries": [
+        {
+          "animeId": 147997,
+          "title": "You and I Are Polar Opposites",
+          "slug": "147997-you-and-i-are-polar-opposites",
+          "relationType": "SOURCE",
+          "format": "MANGA",
+          "status": "FINISHED",
+          "season": null,
+          "seasonYear": null,
+          "episodes": null,
+          "averageScore": 79,
+          "popularity": 18665,
+          "startDate": {
+            "year": 2022,
+            "month": 5,
+            "day": 2
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx147997-QSf3nuWPkYcE.jpg",
+          "siteUrl": "https://anilist.co/manga/147997"
+        },
+        {
+          "animeId": 184951,
+          "title": "You and I Are Polar Opposites",
+          "slug": "184951-you-and-i-are-polar-opposites",
+          "relationType": "MAIN",
+          "format": "TV",
+          "status": "FINISHED",
+          "season": "WINTER",
+          "seasonYear": 2026,
+          "episodes": 12,
+          "averageScore": 83,
+          "popularity": 91025,
+          "startDate": {
+            "year": 2026,
+            "month": 1,
+            "day": 11
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184951-s8Lg2muPBhdX.jpg",
+          "siteUrl": "https://anilist.co/anime/184951"
+        },
+        {
+          "animeId": 186497,
+          "title": "The Ramparts of Ice",
+          "slug": "186497-the-ramparts-of-ice",
+          "relationType": "CHARACTER",
+          "format": "TV",
+          "status": "RELEASING",
+          "season": "SPRING",
+          "seasonYear": 2026,
+          "episodes": null,
+          "averageScore": 78,
+          "popularity": 43910,
+          "startDate": {
+            "year": 2026,
+            "month": 4,
+            "day": 2
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186497-uwPrNPphXvjP.jpg",
+          "siteUrl": "https://anilist.co/anime/186497"
+        },
+        {
+          "animeId": 210031,
+          "title": "You and I Are Polar Opposites Season 2",
+          "slug": "210031-you-and-i-are-polar-opposites-season-2",
+          "relationType": "SEQUEL",
+          "format": "TV",
+          "status": "NOT_YET_RELEASED",
+          "season": "SUMMER",
+          "seasonYear": 2026,
+          "episodes": null,
+          "averageScore": null,
+          "popularity": 17365,
+          "startDate": {
+            "year": 2026,
+            "month": 7,
+            "day": 5
+          },
+          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210031-KX5ojmxY7XtY.png",
+          "siteUrl": "https://anilist.co/anime/210031"
         }
       ]
     },
@@ -7523,7 +7591,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 84,
-          "popularity": 16010,
+          "popularity": 16028,
           "startDate": {
             "year": 2020,
             "month": 1,
@@ -7543,7 +7611,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 75,
-          "popularity": 3273,
+          "popularity": 3281,
           "startDate": {
             "year": 2021,
             "month": 12,
@@ -7563,7 +7631,7 @@
           "seasonYear": 2024,
           "episodes": 13,
           "averageScore": 78,
-          "popularity": 172301,
+          "popularity": 172738,
           "startDate": {
             "year": 2024,
             "month": 1,
@@ -7583,7 +7651,7 @@
           "seasonYear": 2026,
           "episodes": 16,
           "averageScore": 79,
-          "popularity": 88822,
+          "popularity": 89676,
           "startDate": {
             "year": 2026,
             "month": 4,
@@ -7611,7 +7679,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": 86,
-          "popularity": 30848,
+          "popularity": 30864,
           "startDate": {
             "year": 2003,
             "month": 12,
@@ -7631,7 +7699,7 @@
           "seasonYear": 2011,
           "episodes": 51,
           "averageScore": 89,
-          "popularity": 106624,
+          "popularity": 106730,
           "startDate": {
             "year": 2011,
             "month": 4,
@@ -7651,7 +7719,7 @@
           "seasonYear": 2012,
           "episodes": 13,
           "averageScore": 89,
-          "popularity": 81892,
+          "popularity": 81966,
           "startDate": {
             "year": 2012,
             "month": 10,
@@ -7671,7 +7739,7 @@
           "seasonYear": 2013,
           "episodes": 1,
           "averageScore": 87,
-          "popularity": 53894,
+          "popularity": 53963,
           "startDate": {
             "year": 2013,
             "month": 7,
@@ -7691,7 +7759,7 @@
           "seasonYear": 2014,
           "episodes": 1,
           "averageScore": 77,
-          "popularity": 10337,
+          "popularity": 10349,
           "startDate": {
             "year": 2014,
             "month": 11,
@@ -7711,7 +7779,7 @@
           "seasonYear": 2015,
           "episodes": 51,
           "averageScore": 90,
-          "popularity": 115665,
+          "popularity": 115777,
           "startDate": {
             "year": 2015,
             "month": 4,
@@ -7731,7 +7799,7 @@
           "seasonYear": 2024,
           "episodes": 1,
           "averageScore": 66,
-          "popularity": 2498,
+          "popularity": 2506,
           "startDate": {
             "year": 2024,
             "month": 6,
@@ -7751,7 +7819,7 @@
           "seasonYear": 2024,
           "episodes": 1,
           "averageScore": 69,
-          "popularity": 1532,
+          "popularity": 1537,
           "startDate": {
             "year": 2024,
             "month": 11,
@@ -7799,7 +7867,7 @@
           "seasonYear": 1988,
           "episodes": 110,
           "averageScore": 88,
-          "popularity": 81558,
+          "popularity": 81636,
           "startDate": {
             "year": 1988,
             "month": 1,
@@ -7819,7 +7887,7 @@
           "seasonYear": 1988,
           "episodes": 1,
           "averageScore": 76,
-          "popularity": 15201,
+          "popularity": 15209,
           "startDate": {
             "year": 1988,
             "month": 2,
@@ -7839,7 +7907,7 @@
           "seasonYear": 1993,
           "episodes": 1,
           "averageScore": 78,
-          "popularity": 12519,
+          "popularity": 12526,
           "startDate": {
             "year": 1993,
             "month": 12,
@@ -7879,7 +7947,7 @@
           "seasonYear": 2018,
           "episodes": 12,
           "averageScore": 74,
-          "popularity": 26261,
+          "popularity": 26279,
           "startDate": {
             "year": 2018,
             "month": 4,
@@ -7899,7 +7967,7 @@
           "seasonYear": 2019,
           "episodes": 12,
           "averageScore": 79,
-          "popularity": 11054,
+          "popularity": 11064,
           "startDate": {
             "year": 2019,
             "month": 9,
@@ -7919,7 +7987,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 80,
-          "popularity": 7905,
+          "popularity": 7915,
           "startDate": {
             "year": 2022,
             "month": 3,
@@ -7939,7 +8007,7 @@
           "seasonYear": 2022,
           "episodes": 12,
           "averageScore": 81,
-          "popularity": 5681,
+          "popularity": 5690,
           "startDate": {
             "year": 2022,
             "month": 9,
@@ -7959,7 +8027,7 @@
           "seasonYear": null,
           "episodes": null,
           "averageScore": null,
-          "popularity": 1981,
+          "popularity": 1986,
           "startDate": {
             "year": null,
             "month": null,
@@ -7967,94 +8035,6 @@
           },
           "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx170816-YDgi6rrC8Jel.jpg",
           "siteUrl": "https://anilist.co/anime/170816"
-        }
-      ]
-    },
-    {
-      "slug": "97889-gintama-season-4",
-      "rootAnimeId": 97889,
-      "title": "Gintama Season 4 watch order",
-      "description": "A compact viewing order for Gintama Season 4 and its connected anime entries.",
-      "entries": [
-        {
-          "animeId": 30044,
-          "title": "Gin Tama",
-          "slug": "30044-gin-tama",
-          "relationType": "SOURCE",
-          "format": "MANGA",
-          "status": "FINISHED",
-          "season": null,
-          "seasonYear": null,
-          "episodes": null,
-          "averageScore": 86,
-          "popularity": 30848,
-          "startDate": {
-            "year": 2003,
-            "month": 12,
-            "day": 8
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx30044-vPmoz3vTPvZs.jpg",
-          "siteUrl": "https://anilist.co/manga/30044"
-        },
-        {
-          "animeId": 20996,
-          "title": "Gintama Season 3",
-          "slug": "20996-gintama-season-3",
-          "relationType": "PREQUEL",
-          "format": "TV",
-          "status": "FINISHED",
-          "season": "SPRING",
-          "seasonYear": 2015,
-          "episodes": 51,
-          "averageScore": 90,
-          "popularity": 115665,
-          "startDate": {
-            "year": 2015,
-            "month": 4,
-            "day": 8
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20996-kBEGEGdeK1r7.jpg",
-          "siteUrl": "https://anilist.co/anime/20996"
-        },
-        {
-          "animeId": 97889,
-          "title": "Gintama Season 4",
-          "slug": "97889-gintama-season-4",
-          "relationType": "MAIN",
-          "format": "TV",
-          "status": "FINISHED",
-          "season": "WINTER",
-          "seasonYear": 2017,
-          "episodes": 12,
-          "averageScore": 88,
-          "popularity": 80284,
-          "startDate": {
-            "year": 2017,
-            "month": 1,
-            "day": 9
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97889-ytqHdmus9wQi.jpg",
-          "siteUrl": "https://anilist.co/anime/97889"
-        },
-        {
-          "animeId": 99714,
-          "title": "Gintama.: Slip Arc",
-          "slug": "99714-gintama-slip-arc",
-          "relationType": "SEQUEL",
-          "format": "TV",
-          "status": "FINISHED",
-          "season": "FALL",
-          "seasonYear": 2017,
-          "episodes": 13,
-          "averageScore": 82,
-          "popularity": 51775,
-          "startDate": {
-            "year": 2017,
-            "month": 10,
-            "day": 2
-          },
-          "coverImage": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx99714-0pCKHe4XYIz7.jpg",
-          "siteUrl": "https://anilist.co/anime/99714"
         }
       ]
     }

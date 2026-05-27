@@ -4,14 +4,17 @@ import AnimeCard from "@/components/AnimeCard.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAiringEntries, animeById, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { discoveryClusters } from "@/lib/discovery-clusters";
 import { qualityWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
+import { futureAiringEntries, isQualityNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 import { websiteJsonLd } from "@/lib/seo";
 
-const upcoming = allAiringEntries.slice(0, 5);
+const upcoming = futureAiringEntries(allAiringEntries).slice(0, 5);
 const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
 const topGenres = genreIndex.items.slice(0, 6);
+const featuredClusters = discoveryClusters.slice(0, 4);
 const watchGuides = qualityWatchOrderGuides(watchOrderIndex.items).slice(0, 4);
 const jujutsuGuide = qualityWatchOrderFor(113415) || watchGuides[0];
 const attackOnTitan = animeById(16498);
@@ -24,7 +27,12 @@ const keywordPaths = [
   attackOnTitan && { label: "anime like Attack on Titan", href: `/anime-like/${animeLikeSlug(attackOnTitan)}/`, intent: "Similar guide" },
   demonSlayer && { label: "anime like Demon Slayer", href: `/anime-like/${animeLikeSlug(demonSlayer)}/`, intent: "Similar guide" },
   jujutsuGuide && { label: "Jujutsu Kaisen watch order", href: `/watch-order/${jujutsuGuide.slug}/`, intent: "Watch order" },
-  onePiece?.nextAiringEpisode && { label: "One Piece next episode", href: `/next-episode/${nextEpisodeSlug(onePiece)}/`, intent: "Next episode" },
+  onePiece && isQualityNextEpisodeAnime(onePiece) && { label: "One Piece next episode", href: `/next-episode/${nextEpisodeSlug(onePiece)}/`, intent: "Next episode" },
+  ...featuredClusters.map((cluster) => ({
+    label: cluster.title.toLowerCase(),
+    href: `/discover/${cluster.slug}/`,
+    intent: "Discovery"
+  })),
   ...topGenres.slice(0, 3).map((genre) => ({
     label: `best ${genre.genre.toLowerCase()} anime`,
     href: `/genres/${genre.slug}/`,
@@ -55,8 +63,9 @@ const keywordPaths = [
     </div>
     <div class="ticker-panel">
       <p class="eyebrow">Next episodes in your local time</p>
+      <p class="freshness-note">Updated <time data-generated-at={animeCatalog.generatedAt}>{new Date(animeCatalog.generatedAt).toUTCString()}</time>.</p>
       <div class="airing-list">
-        {upcoming.map((entry) => <AiringRow entry={entry} />)}
+        {upcoming.length ? upcoming.map((entry) => <AiringRow entry={entry} />) : <p>No future episodes are listed in the current build.</p>}
       </div>
     </div>
   </section>
@@ -71,6 +80,11 @@ const keywordPaths = [
       <span class="eyebrow">Discover</span>
       <strong>Search by mood</strong>
       <small>Filter by genre, year, format, score, and status.</small>
+    </a>
+    <a class="quick-entry" href="/discover/dark-fantasy-anime/" data-track-event="home_tool_discover_cluster" data-track-label="Dark fantasy anime">
+      <span class="eyebrow">SEO guides</span>
+      <strong>Curated discovery</strong>
+      <small>Dark fantasy, battle shounen, mind games, romance drama, and more.</small>
     </a>
     <a class="quick-entry" href="/anime-like/" data-track-event="home_tool_anime_like" data-track-label="Anime like guides">
       <span class="eyebrow">Guides</span>
@@ -89,7 +103,7 @@ const keywordPaths = [
       <div class="stat-tile"><strong>{animeCatalog.season}</strong><span>current season</span></div>
       <div class="stat-tile"><strong>{animeCatalog.seasonYear}</strong><span>season year</span></div>
       <div class="stat-tile"><strong>{formatNumber(animeCatalog.anime.length)}</strong><span>indexed titles</span></div>
-      <div class="stat-tile"><strong>{formatNumber(allAiringEntries.length)}</strong><span>scheduled episodes</span></div>
+      <div class="stat-tile"><strong>{formatNumber(futureAiringEntries(allAiringEntries).length)}</strong><span>future episodes</span></div>
     </div>
   </section>
 
@@ -144,6 +158,7 @@ const keywordPaths = [
       </div>
       <div class="chip-grid">
         {topGenres.map((genre) => <a href={`/genres/${genre.slug}/`}>{genre.genre}<span>{genre.count}</span></a>)}
+        {featuredClusters.map((cluster) => <a href={`/discover/${cluster.slug}/`}>{cluster.shortLabel}<span>guide</span></a>)}
       </div>
     </div>
     <div>

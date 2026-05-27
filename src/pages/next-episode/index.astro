@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { allAnime, canonicalPath, displayTitle, episodeLabel, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { allAnime, animeCatalog, canonicalPath, displayTitle, episodeLabel, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { publicNextEpisodeAnime } from "@/lib/quality";
 import { nextEpisodeSlug, weeklyAiringLabel } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 
-const upcoming = allAnime
-  .filter((anime) => anime.nextAiringEpisode?.airingAt)
-  .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0));
+const upcoming = publicNextEpisodeAnime(allAnime);
 const title = "Anime Next Episode Schedule";
 const description = "Track next episode times, local release schedules, weekly airing days, and episode numbers for currently airing anime.";
 ---
@@ -31,23 +30,24 @@ const description = "Track next episode times, local release schedules, weekly a
           Browse currently airing anime with next episode time, local browser conversion,
           episode number, and weekly airing pattern in one crawlable schedule.
         </p>
+        <p class="freshness-note">Last updated <time data-generated-at={animeCatalog.generatedAt}>{new Date(animeCatalog.generatedAt).toUTCString()}</time>. This hub only lists future episodes with enough public search demand.</p>
       </div>
       <a class="button primary" href="/calendar/">Open calendar</a>
     </div>
   </section>
 
   <section class="section result-grid">
-    {upcoming.map((anime) => {
+    {upcoming.length ? upcoming.map((anime, index) => {
       const next = anime.nextAiringEpisode;
       const label = `${displayTitle(anime)} next episode`;
       return (
-        <article class="result-card">
-          <a class="result-poster" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label}>
+        <article class="result-card" data-next-episode-card data-airing-at-card={next?.airingAt}>
+          <a class="result-poster" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label} data-result-position={index + 1}>
             <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
           </a>
           <div>
             <p class="eyebrow">{seasonLabel(anime)} · {anime.format ? titleCase(anime.format) : "Anime"}</p>
-            <h2><a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label}>{displayTitle(anime)}</a></h2>
+            <h2><a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={label} data-result-position={index + 1}>{displayTitle(anime)}</a></h2>
             <p>Episode {next?.episode || "TBA"} airs <time data-airing-at={next?.airingAt}>{next ? new Date(next.airingAt * 1000).toUTCString() : "TBA"}</time>.</p>
             <div class="meta-grid">
               <span>{weeklyAiringLabel(next?.airingAt)}</span>
@@ -57,6 +57,12 @@ const description = "Track next episode times, local release schedules, weekly a
           </div>
         </article>
       );
-    })}
+    }) : (
+      <section class="empty-state">
+        <p class="eyebrow">Schedule refreshing</p>
+        <h2>No future next-episode pages meet the public quality gate right now.</h2>
+        <p>Use the full calendar for broader airing data while the next sync runs.</p>
+      </section>
+    )}
   </section>
 </BaseLayout>

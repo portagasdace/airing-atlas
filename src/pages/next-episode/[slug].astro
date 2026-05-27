@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { isQualityNextEpisodeAnime } from "@/lib/quality";
 import { nextEpisodeSlug, relatedSearchIntents, weeklyAiringLabel } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -10,7 +11,7 @@ import type { AnimeSummary } from "@/types/anime";
 export function getStaticPaths() {
   const seen = new Set<string>();
   return allAnime
-    .filter((anime) => anime.nextAiringEpisode?.airingAt)
+    .filter((anime) => isQualityNextEpisodeAnime(anime))
     .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0))
     .flatMap((anime) => {
       const slug = nextEpisodeSlug(anime);
@@ -64,7 +65,7 @@ const structuredData = [
         name: `Why can ${title} release times change?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Anime schedules can shift because of broadcaster changes, production delays, special programming, or regional platform updates. Airing Atlas refreshes AniList data during daily builds."
+          text: "Anime schedules can shift because of broadcaster changes, production delays, special programming, or regional platform updates. Airing Atlas refreshes AniList data several times per day."
         }
       }
     ]
@@ -107,6 +108,7 @@ const structuredData = [
           <div><span>Weekly pattern</span><strong>{weeklyAiringLabel(next?.airingAt)}</strong></div>
           <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
         </div>
+        {next && <p class="freshness-note" data-expiry-note data-airing-at-expiry={next.airingAt} hidden>This listed episode has already aired. Airing Atlas will refresh this page after the next scheduled sync.</p>}
       </div>
     </div>
   </section>
@@ -117,7 +119,7 @@ const structuredData = [
       <h2>{title} release schedule</h2>
       <p>{cleanText(anime.description || "", 220)}</p>
       <p>
-        The next episode time is sourced at build time from AniList and refreshed daily by
+        The next episode time is sourced at build time from AniList and refreshed several times per day by
         the Airing Atlas deployment workflow. If a broadcast is delayed, this page updates
         after the next successful data sync.
       </p>
@@ -128,7 +130,7 @@ const structuredData = [
       <h2>Quick answers</h2>
       <p><strong>Is this a streaming page?</strong> No. Airing Atlas tracks timing and links to legal information sources.</p>
       <p><strong>Why can the local day differ?</strong> Anime releases cross time zones, so the browser converts the listed timestamp to each visitor's local time.</p>
-      <p><strong>Why did the time change?</strong> Broadcasts can move because of delays, special programming, or platform updates. The site refreshes daily.</p>
+      <p><strong>Why did the time change?</strong> Broadcasts can move because of delays, special programming, or platform updates. The site refreshes several times per day.</p>
     </div>
   </section>
 

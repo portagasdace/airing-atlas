@@ -1,0 +1,131 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAnime, animeByIds, canonicalPath, displayTitle, recommendationsFor } from "@/lib/anime";
+import { clusterReason, discoveryClusters, rankedClusterAnime, type DiscoveryCluster } from "@/lib/discovery-clusters";
+import { manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { isQualityNextEpisodeAnime } from "@/lib/quality";
+import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
+import { collectionPageJsonLd } from "@/lib/seo";
+import type { AnimeSummary } from "@/types/anime";
+
+export function getStaticPaths() {
+  return discoveryClusters.map((cluster) => ({
+    params: { slug: cluster.slug },
+    props: { cluster }
+  }));
+}
+
+const { cluster } = Astro.props as { cluster: DiscoveryCluster };
+const ranked = rankedClusterAnime(cluster, allAnime);
+const highlighted = animeByIds(cluster.highlightAnimeIds);
+const featured = [...highlighted, ...ranked]
+  .filter((anime, index, items) => items.findIndex((item) => item.id === anime.id) === index)
+  .slice(0, 8);
+const morePicks = ranked.filter((anime) => !featured.some((item) => item.id === anime.id)).slice(0, 12);
+const relatedGuides = animeByIds(cluster.relatedGuideIds).slice(0, 6);
+const title = `${cluster.title}: Best Picks and Related Guides`;
+const canonical = `/discover/${cluster.slug}/`;
+const structuredData = collectionPageJsonLd({
+  name: cluster.title,
+  description: cluster.description,
+  path: canonical,
+  items: featured
+});
+---
+
+<BaseLayout
+  title={title}
+  description={cluster.description}
+  canonical={canonicalPath(canonical)}
+  structuredData={structuredData}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Curated discovery</p>
+        <h1>{cluster.title}</h1>
+        <p>{cluster.intro}</p>
+      </div>
+      <a class="button primary" href={`/discover/?q=${encodeURIComponent(cluster.shortLabel)}`} data-track-event="discover_cluster_open_filter" data-track-label={cluster.title}>Open filter</a>
+    </div>
+  </section>
+
+  <section class="section split-feature">
+    <div class="editor-note">
+      <p class="eyebrow">Selection criteria</p>
+      <h2>What this guide means</h2>
+      <ul class="plain-list">
+        {cluster.criteria.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <div class="editor-note">
+      <p class="eyebrow">Related guides</p>
+      <h2>Useful next routes</h2>
+      <div class="link-stack">
+        {relatedGuides.map((anime) => {
+          const guide = qualityWatchOrderFor(anime.id);
+          const hasSimilarGuide = Boolean(manualSimilarGuideFor(anime.id) || recommendationsFor(anime.id).length >= 3);
+          return (
+            <>
+              {hasSimilarGuide && <a href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like {displayTitle(anime)}</a>}
+              {guide && <a href={`/watch-order/${guide.slug}/`} data-track-event="related_guide_click" data-track-label={guide.title}>{guide.title}</a>}
+              {isQualityNextEpisodeAnime(anime) && <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`${displayTitle(anime)} next episode`}>{displayTitle(anime)} next episode</a>}
+            </>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Top picks</p>
+        <h2>Best {cluster.shortLabel.toLowerCase()} anime to start with</h2>
+        <p>These picks are ranked from curated anchors plus genre, tag, score, and popularity signals in the current Airing Atlas catalog.</p>
+      </div>
+    </div>
+    <div class="guide-grid">
+      {featured.map((anime, index) => (
+        <article class="guide-card">
+          <p class="eyebrow">#{index + 1} pick</p>
+          <h2><a href={`/anime/${anime.slug}/`}>{displayTitle(anime)}</a></h2>
+          <p>{clusterReason(cluster, anime)}</p>
+          <div class="tag-row">
+            {(anime.genres || []).slice(0, 4).map((genre) => <span>{genre}</span>)}
+          </div>
+          <div class="button-row">
+            <a class="button small" href={`/anime/${anime.slug}/`} data-track-event="discover_result_click" data-track-label={displayTitle(anime)} data-result-position={index + 1}>Details</a>
+            {recommendationsFor(anime.id).length >= 3 && <a class="button small" href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like this</a>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {morePicks.length > 0 && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">More matches</p>
+          <h2>More {cluster.shortLabel.toLowerCase()} picks</h2>
+          <p>Additional titles that match the same discovery pattern.</p>
+        </div>
+      </div>
+      <div class="anime-grid">
+        {morePicks.slice(0, 6).map((anime, index) => <AnimeCard anime={anime as AnimeSummary} rank={index + 1} compact />)}
+      </div>
+      <div class="link-stack">
+        {morePicks.slice(6, 12).map((anime) => (
+          <a href={`/anime/${anime.slug}/`} data-track-event="discover_result_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>

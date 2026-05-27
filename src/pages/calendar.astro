@@ -3,6 +3,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AiringRow from "@/components/AiringRow.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { airingCalendar, canonicalPath } from "@/lib/anime";
+import { isFutureTimestamp } from "@/lib/quality";
+
+const futureDays = airingCalendar.days
+  .map((day) => ({
+    ...day,
+    items: day.items.filter((entry) => isFutureTimestamp(entry.airingAt))
+  }))
+  .filter((day) => day.items.length);
 ---
 
 <BaseLayout
@@ -19,13 +27,14 @@ import { airingCalendar, canonicalPath } from "@/lib/anime";
           Upcoming episodes are generated at build time, then localized in your browser
           so the schedule reads naturally wherever you watch from.
         </p>
+        <p class="freshness-note">Last updated <time data-generated-at={airingCalendar.generatedAt}>{new Date(airingCalendar.generatedAt).toUTCString()}</time>. Past entries are removed from the public schedule.</p>
       </div>
       <a class="button primary" href="/watchlist/">Open watchlist</a>
     </div>
   </section>
 
   <section class="section">
-    {airingCalendar.days.map((day, index) => (
+    {futureDays.length ? futureDays.map((day, index) => (
       <>
         <div class="calendar-day">
           <h2 data-local-date={day.items[0]?.airingAt}>{day.date}</h2>
@@ -35,6 +44,12 @@ import { airingCalendar, canonicalPath } from "@/lib/anime";
         </div>
         {index === 1 && <AdSlot />}
       </>
-    ))}
+    )) : (
+      <section class="empty-state">
+        <p class="eyebrow">Schedule refreshing</p>
+        <h2>No future episode entries are available in the current build.</h2>
+        <p>Try the rankings or discovery pages while the next scheduled sync refreshes AniList data.</p>
+      </section>
+    )}
   </section>
 </BaseLayout>
