@@ -23,9 +23,12 @@ const description = "Choose a mood, length, and release status to get anime reco
           Pick the mood, time commitment, and release status you want tonight.
           Airing Atlas ranks the catalog and explains why each recommendation fits.
         </p>
-        <p class="freshness-note">Using {animeCatalog.anime.length} indexed titles from the latest build.</p>
+      <p class="freshness-note">Using {animeCatalog.anime.length} indexed titles from the latest build.</p>
       </div>
-      <a class="button primary" href="/finished-anime/" data-track-event="watch_next_finished_shortcut" data-track-label="Finished anime finder">Finished anime</a>
+      <div class="button-row compact-actions">
+        <a class="button primary" href="/binge-planner/" data-track-event="watch_next_binge_planner_shortcut" data-track-label="Binge planner">Build a plan</a>
+        <a class="button" href="/finished-anime/" data-track-event="watch_next_finished_shortcut" data-track-label="Finished anime finder">Finished anime</a>
+      </div>
     </div>
   </section>
 

@@ -7,6 +7,7 @@ import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 const staticPages = [
   "/",
   "/calendar/",
+  "/binge-planner/",
   "/watch-next/",
   "/finished-anime/",
   "/discover/",

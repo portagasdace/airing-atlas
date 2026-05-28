@@ -853,6 +853,10 @@ button[aria-pressed="true"],
   grid-template-columns: repeat(5, minmax(150px, 1fr));
 }
 
+.tool-panel.binge-tool {
+  grid-template-columns: repeat(5, minmax(145px, 1fr));
+}
+
 .tool-panel label {
   display: grid;
   gap: 7px;
@@ -878,7 +882,8 @@ button[aria-pressed="true"],
 .result-grid,
 .recommendation-grid,
 .guide-grid,
-.split-feature {
+.split-feature,
+.planner-route-list {
   display: grid;
   gap: 18px;
 }
@@ -889,7 +894,8 @@ button[aria-pressed="true"],
 
 .recommendation-grid,
 .guide-grid,
-.split-feature {
+.split-feature,
+.planner-route-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -945,6 +951,49 @@ button[aria-pressed="true"],
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 12px;
+}
+
+.planner-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.planner-share-panel {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  border: 2px solid var(--ink);
+  border-left: 8px solid var(--gold);
+  background: var(--panel);
+  padding: 18px;
+  box-shadow: 5px 5px 0 var(--ink);
+  margin-bottom: 18px;
+}
+
+.planner-share-panel h2,
+.planner-share-panel p {
+  margin: 0;
+}
+
+.planner-share-panel p {
+  color: var(--ink-soft);
+  max-width: 70ch;
+}
+
+.binge-result {
+  border-left: 8px solid var(--cyan);
+}
+
+.binge-result:nth-child(3n + 1) {
+  border-left-color: var(--coral);
+}
+
+.binge-result:nth-child(3n + 2) {
+  border-left-color: var(--gold);
 }
 
 .guide-card {
@@ -1054,11 +1103,13 @@ button[aria-pressed="true"],
   .tool-panel,
   .tool-panel.compact-tool,
   .tool-panel.decision-tool,
+  .tool-panel.binge-tool,
   .release-panel,
   .result-grid,
   .recommendation-grid,
   .guide-grid,
-  .split-feature {
+  .split-feature,
+  .planner-route-list {
     grid-template-columns: 1fr;
   }
 
@@ -1083,7 +1134,8 @@ button[aria-pressed="true"],
   .site-header,
   .site-footer,
   .section-header,
-  .watchlist-row {
+  .watchlist-row,
+  .planner-share-panel {
     align-items: stretch;
     flex-direction: column;
   }

@@ -1,0 +1,119 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeCatalog, canonicalPath } from "@/lib/anime";
+import { webAppJsonLd } from "@/lib/seo";
+
+const title = "Anime Binge Planner";
+const description = "Build a shareable anime binge plan with completed picks, time budgets, moods, episode lengths, and stable result links.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/binge-planner/")}
+  structuredData={webAppJsonLd(title, description, "/binge-planner/")}
+>
+  <section class="section" data-track-section="binge_planner_hero">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Shareable route</p>
+        <h1>Build an anime binge plan</h1>
+        <p>
+          Choose a time budget, mood, and episode range to create a compact route
+          you can save, copy, and share with another anime fan.
+        </p>
+        <p class="freshness-note">Planning from {animeCatalog.anime.length} indexed titles in the latest build.</p>
+      </div>
+      <a class="button primary" href="/finished-anime/" data-track-event="binge_planner_finished_shortcut" data-track-label="Finished anime finder">Finished picks</a>
+    </div>
+  </section>
+
+  <section class="section" data-track-section="binge_planner_controls">
+    <div class="tool-panel binge-tool">
+      <label>
+        <span>Time budget</span>
+        <select data-binge-time>
+          <option value="weekend">Weekend plan</option>
+          <option value="night">One night</option>
+          <option value="month">Month project</option>
+          <option value="long">Long quest</option>
+        </select>
+      </label>
+      <label>
+        <span>Mood</span>
+        <select data-binge-mood>
+          <option value="balanced">Balanced</option>
+          <option value="dark">Dark fantasy</option>
+          <option value="action">Action</option>
+          <option value="emotional">Emotional drama</option>
+          <option value="romance">Romance</option>
+          <option value="mind">Mind games</option>
+          <option value="comedy">Comedy</option>
+          <option value="adventure">Adventure</option>
+        </select>
+      </label>
+      <label>
+        <span>Length</span>
+        <select data-binge-length>
+          <option value="any">Any length</option>
+          <option value="short">Short</option>
+          <option value="medium">Medium</option>
+          <option value="long">Long</option>
+        </select>
+      </label>
+      <label>
+        <span>Finished only</span>
+        <select data-binge-finished>
+          <option value="true">Yes</option>
+          <option value="false">Include airing</option>
+        </select>
+      </label>
+      <label>
+        <span>Reference</span>
+        <input data-binge-query type="search" placeholder="Try Titan, romance, mystery..." />
+      </label>
+    </div>
+    <div class="planner-actions">
+      <button class="button primary" type="button" data-binge-generate>Generate plan</button>
+      <button class="button" type="button" data-binge-copy>Copy share link</button>
+      <span class="tool-summary" data-binge-summary>Loading planner data...</span>
+    </div>
+    <p class="freshness-note" data-binge-message aria-live="polite"></p>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Fast starts</p>
+      <h2>Common binge routes</h2>
+      <div class="keyword-list">
+        <a href="/binge-planner/?time=night&mood=dark&length=short&finished=true" data-binge-preset data-track-event="binge_plan_preset_click" data-track-label="One night dark anime">
+          <span>One night</span>
+          short dark anime route
+        </a>
+        <a href="/binge-planner/?time=weekend&mood=romance&length=medium&finished=true" data-binge-preset data-track-event="binge_plan_preset_click" data-track-label="Weekend romance plan">
+          <span>Weekend</span>
+          romance drama binge plan
+        </a>
+        <a href="/binge-planner/?time=month&mood=mind&length=any&finished=true" data-binge-preset data-track-event="binge_plan_preset_click" data-track-label="Month mind game plan">
+          <span>Month</span>
+          smart character catch-up
+        </a>
+        <a href="/binge-planner/?time=long&mood=adventure&length=long&finished=false" data-binge-preset data-track-event="binge_plan_preset_click" data-track-label="Long adventure plan">
+          <span>Long quest</span>
+          adventure franchise route
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="planner-route" data-binge-results></div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <script is:inline src="/scripts/binge-planner.js" defer></script>
+</BaseLayout>

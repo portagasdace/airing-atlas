@@ -44,7 +44,10 @@ const description = "Find completed anime to binge by length, mood, score, and g
           and high-score picks when you do not want to wait for new episodes.
         </p>
       </div>
-      <a class="button primary" href="/watch-next/?status=finished" data-track-event="finished_open_watch_next" data-track-label="Finished anime recommendations">Get recommendations</a>
+      <div class="button-row compact-actions">
+        <a class="button primary" href="/binge-planner/?finished=true" data-track-event="finished_open_binge_planner" data-track-label="Binge planner">Build a plan</a>
+        <a class="button" href="/watch-next/?status=finished" data-track-event="finished_open_watch_next" data-track-label="Finished anime recommendations">Get recommendations</a>
+      </div>
     </div>
   </section>
 

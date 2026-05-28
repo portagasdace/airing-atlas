@@ -5,6 +5,7 @@ An English anime calendar and tracking MVP built with Astro, TypeScript, and Fir
 ## What is included
 
 - Seasonal anime calendar with local-time display
+- Shareable binge planner with stable URL plans
 - Static anime detail pages generated at build time
 - Rankings for trending, popular, top rated, and current season anime
 - Browser-only watchlist stored in `localStorage`
@@ -38,9 +39,9 @@ pnpm run build
 pnpm dlx firebase-tools deploy --only hosting --project airing-atlas
 ```
 
-## Daily GitHub Actions update
+## GitHub Actions update
 
-The workflow at `.github/workflows/daily-update.yml` runs every day at 10:00 Asia/Shanghai time and whenever `main` is pushed. It syncs live AniList data, builds the Astro site, and deploys Firebase Hosting.
+The workflow at `.github/workflows/daily-update.yml` runs every 4 hours and whenever `main` is pushed. It syncs live AniList data, builds the Astro site, runs the quality audit, and deploys Firebase Hosting.
 
 Before it can deploy from GitHub, add this repository secret:
 
