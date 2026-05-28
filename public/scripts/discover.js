@@ -23,9 +23,31 @@
     const catalog = await response.json();
     state.anime = catalog.anime || [];
     hydrateOptions();
-    const requestedQuery = new URLSearchParams(window.location.search).get("q");
-    if (requestedQuery && state.controls.query) state.controls.query.value = requestedQuery;
+    applyUrlParams();
     render();
+  };
+
+  const applyUrlParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    const mapping = {
+      query: params.get("q"),
+      genre: params.get("genre"),
+      season: params.get("season"),
+      year: params.get("year"),
+      format: params.get("format"),
+      status: params.get("status"),
+      sort: params.get("sort")
+    };
+    for (const [key, value] of Object.entries(mapping)) {
+      const control = state.controls[key];
+      if (!value || !control) continue;
+      if (control.tagName === "SELECT") {
+        const option = [...control.options].find((item) => item.value === value);
+        if (option) control.value = value;
+      } else {
+        control.value = value;
+      }
+    }
   };
 
   const hydrateOptions = () => {

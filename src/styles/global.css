@@ -849,6 +849,10 @@ button[aria-pressed="true"],
   grid-template-columns: minmax(240px, 0.8fr) minmax(260px, 1.2fr);
 }
 
+.tool-panel.decision-tool {
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+}
+
 .tool-panel label {
   display: grid;
   gap: 7px;
@@ -930,6 +934,17 @@ button[aria-pressed="true"],
 .timeline-item p {
   color: var(--ink-soft);
   margin: 8px 0;
+}
+
+.decision-result .tag-row span {
+  background: rgba(34, 167, 184, 0.12);
+}
+
+.result-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }
 
 .guide-card {
@@ -1038,6 +1053,7 @@ button[aria-pressed="true"],
   .quick-entry-grid,
   .tool-panel,
   .tool-panel.compact-tool,
+  .tool-panel.decision-tool,
   .release-panel,
   .result-grid,
   .recommendation-grid,

@@ -22,6 +22,8 @@ const attackOnTitan = animeById(16498);
 const demonSlayer = animeById(101922);
 const onePiece = animeById(21);
 const keywordPaths = [
+  { label: "what anime should I watch next", href: "/watch-next/", intent: "Decision tool" },
+  { label: "finished anime to watch", href: "/finished-anime/", intent: "Binge finder" },
   { label: "anime airing schedule", href: "/calendar/", intent: "Calendar" },
   { label: "anime next episode schedule", href: "/next-episode/", intent: "Next episode" },
   { label: "anime watch order", href: "/watch-order/", intent: "Watch order" },
@@ -43,8 +45,8 @@ const keywordPaths = [
 ---
 
 <BaseLayout
-  title="Anime Airing Schedule, Watch Orders & Similar Anime Finder"
-  description="Track anime airing times, next episodes, watch orders, similar anime guides, seasonal rankings, and a private browser watchlist."
+  title="Anime Airing Schedule & Watch Next Finder"
+  description="Decide what anime to watch next, track airing times, next episodes, watch orders, similar anime guides, and a private browser watchlist."
   canonical={canonicalPath("/")}
   structuredData={websiteJsonLd()}
 >
@@ -53,13 +55,13 @@ const keywordPaths = [
       <p class="eyebrow">Global anime schedule</p>
       <h1>Airing Atlas</h1>
       <p class="lede">
-        Anime airing schedule, next episode tracker, watch order maps, and similar anime
-        guides for fans who want useful discovery without unauthorized streams.
+        Decide what anime to watch next, track airing schedules, follow next episodes,
+        and map watch orders without unauthorized streams.
       </p>
       <div class="hero-actions">
-        <a class="button primary" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Open calendar</a>
+        <a class="button primary" href="/watch-next/" data-track-event="home_primary_watch_next" data-track-label="Watch next finder">Watch next</a>
+        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Open calendar</a>
         <a class="button" href="/discover/" data-track-event="home_primary_discover" data-track-label="Search catalog">Search catalog</a>
-        <a class="button" href="/anime-like/" data-track-event="home_primary_anime_like" data-track-label="Anime like guides">Anime like guides</a>
       </div>
     </div>
     <div class="ticker-panel">
@@ -76,8 +78,8 @@ const keywordPaths = [
       <p class="eyebrow">Daily tool desk</p>
       <h2>Start with what changed today</h2>
       <p>
-        Use the schedule first, then jump into the guides that tend to earn
-        repeat visits: next episodes, watch orders, and anime-like paths.
+        Start with a decision tool, then jump into fresh schedules, franchise maps,
+        and completed anime when you want something you can finish.
       </p>
     </div>
     <div class="mini-list">
@@ -92,10 +94,15 @@ const keywordPaths = [
   </section>
 
   <section class="section quick-entry-grid" aria-label="Start with a tool" data-track-section="home_tool_grid">
-    <a class="quick-entry primary-entry" href="/calendar/" data-track-event="home_tool_calendar" data-track-label="Today schedule">
-      <span class="eyebrow">Today</span>
-      <strong>Airing calendar</strong>
-      <small>Local-time episode drops and this week&apos;s schedule.</small>
+    <a class="quick-entry primary-entry" href="/watch-next/" data-track-event="home_tool_watch_next" data-track-label="Watch next finder">
+      <span class="eyebrow">Tonight</span>
+      <strong>What should I watch next?</strong>
+      <small>Pick a mood, length, and status to get ranked recommendations.</small>
+    </a>
+    <a class="quick-entry" href="/finished-anime/" data-track-event="home_tool_finished_anime" data-track-label="Finished anime finder">
+      <span class="eyebrow">Binge</span>
+      <strong>Finished anime finder</strong>
+      <small>Short completed picks, weekend binges, and high-score stories.</small>
     </a>
     <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
       <span class="eyebrow">Updated</span>

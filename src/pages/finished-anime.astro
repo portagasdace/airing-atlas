@@ -1,0 +1,134 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AnimeCard from "@/components/AnimeCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { allAnime, canonicalPath, displayTitle } from "@/lib/anime";
+import { collectionPageJsonLd } from "@/lib/seo";
+import type { AnimeSummary } from "@/types/anime";
+
+const blockedGenres = new Set(["Ecchi"]);
+const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
+const scoreFor = (anime: AnimeSummary) => anime.averageScore || anime.meanScore || 0;
+const safeFinished = allAnime
+  .filter((anime) => anime.status === "FINISHED")
+  .filter((anime) => !blockedFormats.has(String(anime.format || "").toUpperCase()))
+  .filter((anime) => !(anime.genres || []).some((genre) => blockedGenres.has(genre)))
+  .sort((a, b) => scoreFor(b) - scoreFor(a) || (b.popularity || 0) - (a.popularity || 0));
+
+const shortPicks = safeFinished.filter((anime) => anime.episodes && anime.episodes <= 13).slice(0, 6);
+const weekendPicks = safeFinished.filter((anime) => anime.episodes && anime.episodes > 13 && anime.episodes <= 26).slice(0, 6);
+const actionPicks = safeFinished.filter((anime) => (anime.genres || []).includes("Action")).slice(0, 6);
+const dramaPicks = safeFinished.filter((anime) => (anime.genres || []).includes("Drama") || (anime.genres || []).includes("Romance")).slice(0, 6);
+const title = "Finished Anime Finder";
+const description = "Find completed anime to binge by length, mood, score, and genre without starting an unfinished airing series.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/finished-anime/")}
+  structuredData={collectionPageJsonLd({
+    name: title,
+    description,
+    path: "/finished-anime/",
+    items: safeFinished.slice(0, 24)
+  })}
+>
+  <section class="section" data-track-section="finished_anime_hero">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Binge planner</p>
+        <h1>Finished anime to watch now</h1>
+        <p>
+          A focused route for completed anime, short series, weekend binges,
+          and high-score picks when you do not want to wait for new episodes.
+        </p>
+      </div>
+      <a class="button primary" href="/watch-next/?status=finished" data-track-event="finished_open_watch_next" data-track-label="Finished anime recommendations">Get recommendations</a>
+    </div>
+  </section>
+
+  <section class="section quick-entry-grid" data-track-section="finished_anime_filters">
+    <a class="quick-entry primary-entry" href="/discover/?status=FINISHED&sort=score" data-track-event="finished_filter_click" data-track-label="Best completed anime">
+      <span class="eyebrow">Score first</span>
+      <strong>Best completed anime</strong>
+      <small>Finished titles sorted by score inside Discover.</small>
+    </a>
+    <a class="quick-entry" href="/watch-next/?status=finished&length=short" data-track-event="finished_filter_click" data-track-label="Short completed anime">
+      <span class="eyebrow">One night</span>
+      <strong>Short completed anime</strong>
+      <small>Thirteen episodes or less, ranked for quick decisions.</small>
+    </a>
+    <a class="quick-entry" href="/watch-next/?status=finished&length=weekend" data-track-event="finished_filter_click" data-track-label="Weekend anime binge">
+      <span class="eyebrow">Weekend</span>
+      <strong>Weekend binge</strong>
+      <small>Fourteen to twenty-six episodes for a compact watch plan.</small>
+    </a>
+    <a class="quick-entry" href="/watch-next/?mood=mind&status=finished" data-track-event="finished_filter_click" data-track-label="Finished smart anime">
+      <span class="eyebrow">Smart leads</span>
+      <strong>Finished mind games</strong>
+      <small>Strategy, deduction, pressure, and complete stories.</small>
+    </a>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Short picks</p>
+        <h2>Completed anime under 14 episodes</h2>
+        <p>Good for a single night or a light weekend without starting a huge franchise.</p>
+      </div>
+      <a class="button" href="/watch-next/?status=finished&length=short">More short picks</a>
+    </div>
+    <div class="anime-grid">
+      {shortPicks.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Weekend binge</p>
+        <h2>Completed anime from 14 to 26 episodes</h2>
+        <p>Enough room for a full arc, without turning the watchlist into homework.</p>
+      </div>
+      <a class="button" href="/watch-next/?status=finished&length=weekend">Plan a weekend</a>
+    </div>
+    <div class="anime-grid">
+      {weekendPicks.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    </div>
+  </section>
+
+  <section class="section split-feature">
+    <div>
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Action complete</p>
+          <h2>Finished action anime</h2>
+        </div>
+      </div>
+      <div class="link-stack">
+        {actionPicks.map((anime) => (
+          <a href={`/anime/${anime.slug}/`} data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+        ))}
+      </div>
+    </div>
+    <div>
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Drama complete</p>
+          <h2>Finished emotional anime</h2>
+        </div>
+      </div>
+      <div class="link-stack">
+        {dramaPicks.map((anime) => (
+          <a href={`/anime/${anime.slug}/`} data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+</BaseLayout>

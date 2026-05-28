@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeCatalog, canonicalPath } from "@/lib/anime";
+import { webAppJsonLd } from "@/lib/seo";
+
+const title = "What Anime Should I Watch Next?";
+const description = "Choose a mood, length, and release status to get anime recommendations with clear match reasons from the Airing Atlas catalog.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/watch-next/")}
+  structuredData={webAppJsonLd(title, description, "/watch-next/")}
+>
+  <section class="section" data-track-section="watch_next_hero">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Decision tool</p>
+        <h1>What anime should I watch next?</h1>
+        <p>
+          Pick the mood, time commitment, and release status you want tonight.
+          Airing Atlas ranks the catalog and explains why each recommendation fits.
+        </p>
+        <p class="freshness-note">Using {animeCatalog.anime.length} indexed titles from the latest build.</p>
+      </div>
+      <a class="button primary" href="/finished-anime/" data-track-event="watch_next_finished_shortcut" data-track-label="Finished anime finder">Finished anime</a>
+    </div>
+  </section>
+
+  <section class="section" data-track-section="watch_next_controls">
+    <div class="tool-panel decision-tool">
+      <label>
+        <span>Mood</span>
+        <select data-watch-next-mood>
+          <option value="balanced">Balanced</option>
+          <option value="action">Action and battles</option>
+          <option value="dark">Dark fantasy</option>
+          <option value="funny">Funny and light</option>
+          <option value="emotional">Emotional drama</option>
+          <option value="romance">Romance drama</option>
+          <option value="mind">Mind games</option>
+          <option value="adventure">Long adventure</option>
+          <option value="cozy">Cozy slice of life</option>
+        </select>
+      </label>
+      <label>
+        <span>Length</span>
+        <select data-watch-next-length>
+          <option value="any">Any length</option>
+          <option value="short">Short: 13 episodes or less</option>
+          <option value="weekend">Weekend: 14-26 episodes</option>
+          <option value="long">Long project: 50+ episodes</option>
+        </select>
+      </label>
+      <label>
+        <span>Status</span>
+        <select data-watch-next-status>
+          <option value="either">Either</option>
+          <option value="finished">Finished only</option>
+          <option value="airing">Currently airing</option>
+        </select>
+      </label>
+      <label>
+        <span>Optional reference</span>
+        <input data-watch-next-query type="search" placeholder="Try Frieren, Titan, romance..." />
+      </label>
+      <label>
+        <span>Priority</span>
+        <select data-watch-next-priority>
+          <option value="balanced">Balanced</option>
+          <option value="score">Higher score</option>
+          <option value="popular">More popular</option>
+          <option value="fresh">Airing soon</option>
+        </select>
+      </label>
+    </div>
+    <p class="tool-summary" data-watch-next-summary>Loading recommendations...</p>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Fast starts</p>
+      <h2>Common watching decisions</h2>
+      <div class="keyword-list">
+        <a href="/watch-next/?mood=dark&length=short&status=finished" data-watch-next-preset data-track-event="watch_next_preset_click" data-track-label="Short finished dark fantasy">
+          <span>Tonight</span>
+          short finished dark fantasy anime
+        </a>
+        <a href="/watch-next/?mood=romance&length=weekend&status=finished" data-watch-next-preset data-track-event="watch_next_preset_click" data-track-label="Weekend romance drama">
+          <span>Weekend</span>
+          romance drama anime to binge
+        </a>
+        <a href="/watch-next/?mood=mind&status=finished&priority=score" data-watch-next-preset data-track-event="watch_next_preset_click" data-track-label="Smart main character anime">
+          <span>Smart leads</span>
+          anime with clever characters
+        </a>
+        <a href="/watch-next/?mood=action&status=airing&priority=fresh" data-watch-next-preset data-track-event="watch_next_preset_click" data-track-label="Airing action anime">
+          <span>Airing</span>
+          action anime with upcoming episodes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section result-grid" data-watch-next-results></section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <script is:inline src="/scripts/watch-next.js" defer></script>
+</BaseLayout>

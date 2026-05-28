@@ -24,6 +24,8 @@
   const contentType = () => {
     const current = path();
     if (current === "/") return "home";
+    if (current === "/watch-next/") return "watch_next";
+    if (current === "/finished-anime/") return "finished_anime";
     if (current.startsWith("/anime-like/")) return current === "/anime-like/" ? "anime_like_hub" : "anime_like";
     if (current.startsWith("/watch-order/")) return current === "/watch-order/" ? "watch_order_hub" : "watch_order";
     if (current.startsWith("/next-episode/")) return current === "/next-episode/" ? "next_episode_hub" : "next_episode";
