@@ -55,6 +55,72 @@ Regenerate the favicon after editing `scripts/generate-favicon.mjs`:
 pnpm run favicon
 ```
 
+## Analytics workflow
+
+Production uses GA4 measurement ID `G-7LC772Z7PH`. Keep Firebase, GA4, GitHub Actions, and local deploy commands on the same `PUBLIC_GA_MEASUREMENT_ID` so reports do not split across properties.
+
+Before owner testing, opt this browser out of Analytics:
+
+```js
+localStorage.setItem("airingAtlasAnalyticsOptOut", "true")
+```
+
+To turn tracking back on in that browser:
+
+```js
+localStorage.removeItem("airingAtlasAnalyticsOptOut")
+```
+
+Configure these GA4 custom dimensions from event parameters:
+
+- `content_type`
+- `guide_type`
+- `source_section`
+- `audience_type`
+- `trigger_event`
+- `anime_id`
+- `result_position`
+- `local_watchlist_items`
+- `local_saved_plans`
+
+Configure these GA4 user-scoped custom dimensions from user properties:
+
+- `primary_audience`
+- `returning_local_user`
+- `has_watchlist`
+- `has_saved_plans`
+
+Mark these events as key events once they appear in GA4:
+
+- `binge_plan_generate`
+- `binge_plan_share_copy`
+- `binge_plan_save`
+- `binge_plan_add_all_watchlist`
+- `watchlist_add`
+- `discover_result_click`
+- `anime_like_result_click`
+- `next_episode_detail_click`
+
+Use scroll events such as `scroll_depth_50` and `scroll_depth_90` as quality signals, not key events.
+
+The Firebase/GA Audience hub should eventually replace the default `Purchasers` audience with Airing Atlas-specific audiences. Build them from `audience_signal` or direct events:
+
+- `Planner builders`: `audience_type = planner`, or users who trigger `binge_plan_generate`, `binge_plan_save`, or `binge_plan_share_copy`.
+- `Watchlist users`: `audience_type = watchlist`, or users with `watchlist_add`, `saved_plan_open`, or `has_watchlist = true`.
+- `Discovery users`: `audience_type = discovery`, or users with `discover_result_click`, `anime_like_result_click`, or `similar_result_click`.
+- `Schedule trackers`: `audience_type = schedule`, or users with `next_episode_detail_click` or repeated calendar / next episode page views.
+- `Guide readers`: `audience_type = guide`, or users with watch order guide clicks and high scroll depth.
+
+## Search Console workflow
+
+Every week, export Search Console Queries, Pages, and Indexing CSV files into `reports/search-console/`, then run:
+
+```bash
+pnpm run seo:opportunities
+```
+
+Use the generated backlog to make 5-10 focused changes: rewrite titles for impression-heavy low-CTR pages, improve or noindex crawled-but-not-indexed pages, and only create new guides when queries show demand.
+
 ## Environment variables
 
 - `ANILIST_API_ENDPOINT`: defaults to `https://graphql.anilist.co`.

@@ -2,6 +2,8 @@
   const mount = document.querySelector("[data-binge-results]");
   if (!mount) return;
 
+  const savedPlansKey = "airing-atlas-binge-plans-v1";
+  const watchlistKey = "airing-atlas-watchlist-v1";
   const blockedGenres = new Set(["Ecchi"]);
   const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
   const controls = {
@@ -232,7 +234,11 @@
           <h2>${escapeHtml(planTitle(state))}</h2>
           <p>${escapeHtml(planSummary(items, state))}</p>
         </div>
-        <button class="button primary" type="button" data-binge-copy-inline>Copy share link</button>
+        <div class="planner-share-actions">
+          <button class="button primary" type="button" data-binge-copy-inline>Copy share link</button>
+          <button class="button" type="button" data-binge-save-inline>Save locally</button>
+          <button class="button" type="button" data-binge-add-all-inline>Add all</button>
+        </div>
       </section>
       <div class="planner-route-list">
         ${items.map((anime, index) => cardHtml(anime, index, state)).join("")}
@@ -305,6 +311,113 @@
       time_budget: currentState().time,
       result_count: currentPlan.length
     });
+  };
+
+  const saveCurrentPlan = () => {
+    if (!currentPlan.length) generatePlan({ replaceUrl: true });
+    const state = currentState();
+    updateShareUrl(state, currentPlan, true);
+    const plan = planSnapshot(state);
+    const saved = readSavedPlans();
+    writeSavedPlans([plan, ...saved.filter((item) => item.id !== plan.id)].slice(0, 12));
+    setMessage("Plan saved in this browser.");
+    track("binge_plan_save", {
+      mood: state.mood,
+      time_budget: state.time,
+      result_count: currentPlan.length
+    });
+  };
+
+  const addCurrentPlanToWatchlist = () => {
+    if (!currentPlan.length) generatePlan({ replaceUrl: true });
+    const state = currentState();
+    const incoming = currentPlan.map(watchlistEntryFromAnime).filter(Boolean);
+    writeWatchlist(mergeWatchlist(readWatchlist(), incoming));
+    setMessage(`Added ${incoming.length} plan titles to your watchlist.`);
+    track("binge_plan_add_all_watchlist", {
+      mood: state.mood,
+      time_budget: state.time,
+      result_count: incoming.length
+    });
+  };
+
+  const planSnapshot = (state) => {
+    const ids = currentPlan.map((anime) => anime.id).join(",");
+    return {
+      id: `${state.time}-${state.mood}-${state.length}-${state.finished ? "finished" : "mixed"}-${ids}`,
+      savedAt: new Date().toISOString(),
+      title: planTitle(state),
+      summary: planSummary(currentPlan, state),
+      url: window.location.href,
+      state,
+      items: currentPlan.map(planItemFromAnime)
+    };
+  };
+
+  const planItemFromAnime = (anime) => ({
+    animeId: Number(anime.id),
+    title: titleFor(anime),
+    coverImage: anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg",
+    slug: anime.slug || "",
+    nextEpisodeAt: anime.nextAiringEpisode?.airingAt || null,
+    episodes: anime.episodes || null,
+    score: scoreFor(anime) || null,
+    genres: (anime.genres || []).slice(0, 3)
+  });
+
+  const watchlistEntryFromAnime = (anime) => {
+    if (!anime?.id) return null;
+    return {
+      animeId: Number(anime.id),
+      title: titleFor(anime),
+      coverImage: anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg",
+      slug: anime.slug || "",
+      status: "planned",
+      nextEpisodeAt: anime.nextAiringEpisode?.airingAt || null,
+      updatedAt: new Date().toISOString()
+    };
+  };
+
+  const readSavedPlans = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(savedPlansKey) || "[]");
+      return Array.isArray(parsed) ? parsed.filter((item) => item?.id && item?.url && Array.isArray(item.items)) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeSavedPlans = (plans) => {
+    localStorage.setItem(savedPlansKey, JSON.stringify(plans));
+    window.dispatchEvent(new CustomEvent("airing-atlas-binge-plans-change"));
+  };
+
+  const readWatchlist = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(watchlistKey) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeWatchlist = (items) => {
+    localStorage.setItem(watchlistKey, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent("airing-atlas-watchlist-change"));
+  };
+
+  const mergeWatchlist = (existing, incoming) => {
+    const map = new Map(existing.filter(Boolean).map((item) => [String(item.animeId), item]));
+    for (const item of incoming) {
+      const previous = map.get(String(item.animeId));
+      map.set(String(item.animeId), {
+        ...previous,
+        ...item,
+        status: previous?.status || item.status,
+        updatedAt: new Date().toISOString()
+      });
+    }
+    return [...map.values()];
   };
 
   const updateShareUrl = (state, items, replace = true) => {
@@ -391,6 +504,8 @@
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
     if (target.closest("[data-binge-copy-inline]")) copyShareLink();
+    if (target.closest("[data-binge-save], [data-binge-save-inline]")) saveCurrentPlan();
+    if (target.closest("[data-binge-add-all], [data-binge-add-all-inline]")) addCurrentPlanToWatchlist();
   });
 
   document.querySelectorAll("[data-binge-preset]").forEach((link) => {

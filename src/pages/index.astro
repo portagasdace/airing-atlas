@@ -12,7 +12,6 @@ import { websiteJsonLd } from "@/lib/seo";
 
 const upcoming = futureAiringEntries(allAiringEntries).slice(0, 5);
 const publicNextEpisodes = publicNextEpisodeAnime(allAnime).slice(0, 4);
-const trending = animeByRanking("trending").slice(0, 6);
 const topAiring = animeByRanking("current").slice(0, 3);
 const topGenres = genreIndex.items.slice(0, 6);
 const featuredClusters = discoveryClusters.slice(0, 4);
@@ -100,35 +99,20 @@ const keywordPaths = [
       <strong>Build a binge plan</strong>
       <small>Create a 3-6 title route and copy a stable share link.</small>
     </a>
-    <a class="quick-entry" href="/watch-next/" data-track-event="home_tool_watch_next" data-track-label="Watch next finder">
-      <span class="eyebrow">Tonight</span>
-      <strong>What should I watch next?</strong>
-      <small>Pick a mood, length, and status to get ranked recommendations.</small>
-    </a>
-    <a class="quick-entry" href="/finished-anime/" data-track-event="home_tool_finished_anime" data-track-label="Finished anime finder">
-      <span class="eyebrow">Binge</span>
-      <strong>Finished anime finder</strong>
-      <small>Short completed picks, weekend binges, and high-score stories.</small>
-    </a>
-    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
-      <span class="eyebrow">Updated</span>
-      <strong>Next episode hub</strong>
-      <small>Fresh future releases from the latest four-hour build.</small>
-    </a>
-    <a class="quick-entry" href="/discover/dark-fantasy-anime/" data-track-event="home_tool_discover_cluster" data-track-label="Dark fantasy anime">
-      <span class="eyebrow">Popular guides</span>
-      <strong>Curated discovery</strong>
-      <small>Dark fantasy, battle shounen, mind games, romance drama, and more.</small>
-    </a>
     <a class="quick-entry" href="/anime-like/" data-track-event="home_tool_anime_like" data-track-label="Anime like guides">
       <span class="eyebrow">Guides</span>
       <strong>Anime like X</strong>
       <small>Curated pages for Attack on Titan, Demon Slayer, Jujutsu Kaisen, and more.</small>
     </a>
-    <a class="quick-entry" href="/watchlist/" data-track-event="home_tool_watchlist" data-track-label="Watchlist">
-      <span class="eyebrow">Retention</span>
-      <strong>Your watchlist</strong>
-      <small>Browser-only next-up sorting, airing today, export, and import.</small>
+    <a class="quick-entry" href="/watch-order/" data-track-event="home_tool_watch_order" data-track-label="Watch order hub">
+      <span class="eyebrow">Franchise</span>
+      <strong>Watch order guides</strong>
+      <small>Curated paths for long series, sequels, movies, and optional entries.</small>
+    </a>
+    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
+      <span class="eyebrow">Updated</span>
+      <strong>Next episode hub</strong>
+      <small>Fresh future releases from the latest four-hour build.</small>
     </a>
   </section>
 
@@ -212,17 +196,20 @@ const keywordPaths = [
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Trending</p>
-        <h2>Audience heat map</h2>
+        <p class="eyebrow">Focused paths</p>
+        <h2>Use the site as a tool first</h2>
         <p>
-          These pages are static and crawlable, with local watchlist actions layered on top
-          in the browser.
+          These entry points are easier to measure than broad catalog browsing:
+          plan a route, find a similar anime, check an order, or track a future episode.
         </p>
       </div>
-      <a class="button" href="/rankings/">All rankings</a>
+      <a class="button" href="/watchlist/" data-track-event="home_secondary_watchlist" data-track-label="Watchlist">Open watchlist</a>
     </div>
-    <div class="anime-grid">
-      {trending.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
+    <div class="link-stack" data-track-section="home_focused_paths">
+      <a href="/binge-planner/" data-track-event="related_guide_click" data-track-label="Binge planner">Build a binge plan</a>
+      <a href="/anime-like/" data-track-event="related_guide_click" data-track-label="Anime like hub">Find anime like a favorite</a>
+      <a href="/watch-order/" data-track-event="related_guide_click" data-track-label="Watch order hub">Check a watch order</a>
+      <a href="/next-episode/" data-track-event="related_guide_click" data-track-label="Next episode hub">See the next episode schedule</a>
     </div>
   </section>
 </BaseLayout>

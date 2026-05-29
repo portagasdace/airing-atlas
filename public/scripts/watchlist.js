@@ -1,5 +1,6 @@
 (() => {
   const key = "airing-atlas-watchlist-v1";
+  const savedPlansKey = "airing-atlas-binge-plans-v1";
   const statuses = ["watching", "planned", "completed", "dropped"];
   const statusRank = new Map(statuses.map((status, index) => [status, index]));
 
@@ -66,6 +67,7 @@
     if (!mount && !dashboard) return;
 
     const items = sortedItems(read());
+    const savedPlans = readSavedPlans();
     const counts = statuses.reduce((acc, status) => {
       acc[status] = items.filter((item) => item.status === status).length;
       return acc;
@@ -76,11 +78,11 @@
 
     const summary = document.querySelector("[data-watchlist-summary]");
     if (summary) {
-      summary.textContent = `${items.length} saved titles · ${counts.watching} watching · ${counts.planned} planned · ${today.length} airing today`;
+      summary.textContent = `${items.length} saved titles · ${savedPlans.length} saved plans · ${counts.watching} watching · ${counts.planned} planned · ${today.length} airing today`;
     }
 
     if (dashboard) {
-      dashboard.innerHTML = items.length ? dashboardHtml({ counts, today, thisWeek, nextUp }) : "";
+      dashboard.innerHTML = items.length || savedPlans.length ? `${dashboardHtml({ counts, today, thisWeek, nextUp })}${savedPlansHtml(savedPlans)}` : "";
     }
 
     if (!mount) return;
@@ -131,6 +133,41 @@
         ${escapeHtml(item.title)}
         <span>${escapeHtml(formatNext(item.nextEpisodeAt).replace(/^Next episode: /, ""))}</span>
       </a>
+    `;
+  };
+
+  const savedPlansHtml = (plans) => {
+    if (!plans.length) return "";
+    return `
+      <section class="watchlist-next-up saved-plans" aria-label="Saved binge plans">
+        <div>
+          <p class="eyebrow">Saved binge plans</p>
+          <h2>Continue a route you built</h2>
+        </div>
+        <div class="saved-plan-grid">
+          ${plans.map(savedPlanHtml).join("")}
+        </div>
+      </section>
+    `;
+  };
+
+  const savedPlanHtml = (plan) => {
+    const href = safePlanUrl(plan);
+    const count = Array.isArray(plan.items) ? plan.items.length : 0;
+    return `
+      <article class="saved-plan-card">
+        <div>
+          <p class="eyebrow">${count} picks</p>
+          <h3><a href="${escapeHtml(href)}" data-saved-plan-open data-plan-id="${escapeHtml(plan.id)}">${escapeHtml(plan.title || "Saved binge plan")}</a></h3>
+          <p>${escapeHtml(plan.summary || "A saved Airing Atlas route.")}</p>
+          <small>${escapeHtml(formatSavedAt(plan.savedAt))}</small>
+        </div>
+        <div class="result-actions">
+          <a class="button small" href="${escapeHtml(href)}" data-saved-plan-open data-plan-id="${escapeHtml(plan.id)}">Open</a>
+          <button class="button small" type="button" data-saved-plan-add-all data-plan-id="${escapeHtml(plan.id)}">Add all</button>
+          <button class="button small ghost" type="button" data-saved-plan-remove data-plan-id="${escapeHtml(plan.id)}">Remove</button>
+        </div>
+      </article>
     `;
   };
 
@@ -192,6 +229,40 @@
     }
   };
 
+  const readSavedPlans = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(savedPlansKey) || "[]");
+      return Array.isArray(parsed) ? parsed.filter((plan) => plan?.id && plan?.url && Array.isArray(plan.items)) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeSavedPlans = (plans) => {
+    localStorage.setItem(savedPlansKey, JSON.stringify(plans));
+    window.dispatchEvent(new CustomEvent("airing-atlas-binge-plans-change"));
+  };
+
+  const removeSavedPlan = (planId) => {
+    writeSavedPlans(readSavedPlans().filter((plan) => String(plan.id) !== String(planId)));
+    setMessage("Saved plan removed.");
+  };
+
+  const addSavedPlanToWatchlist = (planId) => {
+    const plan = readSavedPlans().find((item) => String(item.id) === String(planId));
+    if (!plan) return;
+    const incoming = plan.items.map((item) => normalizeItem({ ...item, status: "planned" })).filter(Boolean);
+    const merged = mergeItems(read(), incoming);
+    write(merged);
+    setMessage(`Added ${incoming.length} saved plan titles to your watchlist.`);
+    track("binge_plan_add_all_watchlist", {
+      result_count: incoming.length,
+      source_section: "watchlist_saved_plan"
+    });
+    renderWatchlistPage();
+    syncButtons();
+  };
+
   const mergeItems = (existing, incoming) => {
     const map = new Map(existing.map((item) => [String(item.animeId), item]));
     for (const item of incoming) {
@@ -249,6 +320,23 @@
     }).format(new Date(timestamp * 1000))}`;
   };
 
+  const formatSavedAt = (value) => {
+    if (!value) return "Saved locally";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Saved locally";
+    return `Saved ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(date)}`;
+  };
+
+  const safePlanUrl = (plan) => {
+    try {
+      const url = new URL(plan.url, window.location.origin);
+      if (url.origin === window.location.origin && url.pathname === "/binge-planner/") return `${url.pathname}${url.search}`;
+    } catch {
+      return "/binge-planner/";
+    }
+    return "/binge-planner/";
+  };
+
   const setMessage = (message) => {
     const node = document.querySelector("[data-watchlist-message]");
     if (node) node.textContent = message;
@@ -295,6 +383,25 @@
       exportWatchlist();
     }
 
+    const savedPlanOpen = target.closest("[data-saved-plan-open]");
+    if (savedPlanOpen) {
+      track("saved_plan_open", {
+        plan_id: savedPlanOpen.dataset.planId || "",
+        source_section: "watchlist_saved_plan"
+      });
+    }
+
+    const savedPlanAddAll = target.closest("[data-saved-plan-add-all]");
+    if (savedPlanAddAll) {
+      addSavedPlanToWatchlist(savedPlanAddAll.dataset.planId);
+    }
+
+    const savedPlanRemove = target.closest("[data-saved-plan-remove]");
+    if (savedPlanRemove) {
+      removeSavedPlan(savedPlanRemove.dataset.planId);
+      renderWatchlistPage();
+    }
+
     const nextUp = target.closest("[data-watchlist-next-up]");
     if (nextUp) {
       track("watchlist_next_up_click", {
@@ -328,6 +435,7 @@
   });
 
   window.addEventListener("airing-atlas-watchlist-change", syncButtons);
+  window.addEventListener("airing-atlas-binge-plans-change", renderWatchlistPage);
   syncButtons();
   renderWatchlistPage();
 })();

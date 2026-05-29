@@ -47,17 +47,32 @@ const structuredDataItems = Array.isArray(structuredData) ? structuredData : str
     <meta name="theme-color" content="#111216" />
     {
       gaMeasurementId && (
-        <>
-          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
-          <script is:inline define:vars={{ gaMeasurementId }}>
+        <script is:inline define:vars={{ gaMeasurementId }}>
+          (() => {
+            const isOptedOut = () => {
+              try {
+                return localStorage.getItem("airingAtlasAnalyticsOptOut") === "true";
+              } catch {
+                return false;
+              }
+            };
+
+            window.airingAtlasAnalyticsOptedOut = isOptedOut();
+            if (window.airingAtlasAnalyticsOptedOut) return;
+
             window.dataLayer = window.dataLayer || [];
             window.gtag = window.gtag || function gtag() {
               window.dataLayer.push(arguments);
             };
+            const script = document.createElement("script");
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaMeasurementId)}`;
+            document.head.append(script);
+
             window.gtag("js", new Date());
             window.gtag("config", gaMeasurementId, { anonymize_ip: true });
-          </script>
-        </>
+          })();
+        </script>
       )
     }
     {structuredDataItems.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
