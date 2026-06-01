@@ -1,4 +1,5 @@
 import { canonicalPath } from "@/lib/anime";
+import { dedupeExternalLinks, normalizeExternalUrl } from "@/lib/external-links";
 import type { AnimeSummary, GenreIndexItem, SeasonIndexItem, WatchOrderGuide } from "@/types/anime";
 
 type JsonLd = Record<string, unknown>;
@@ -40,7 +41,10 @@ export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>): 
 }
 
 export function animeJsonLd(anime: AnimeSummary, title: string, description: string, image: string): JsonLd {
-  const sameAs = [anime.siteUrl, ...(anime.externalLinks || []).map((link) => link.url)].filter(Boolean);
+  const sameAs = uniqueValues([
+    anime.siteUrl ? normalizeExternalUrl(anime.siteUrl) : "",
+    ...dedupeExternalLinks(anime.externalLinks, 10).map((link) => link.url || "")
+  ]);
   return compactJsonLd({
     "@context": "https://schema.org",
     "@type": anime.format === "MOVIE" ? "Movie" : "TVSeries",
@@ -53,6 +57,15 @@ export function animeJsonLd(anime: AnimeSummary, title: string, description: str
     numberOfEpisodes: anime.episodes || undefined,
     datePublished: fuzzyIsoDate(anime.startDate),
     sameAs: sameAs.length ? sameAs : undefined
+  });
+}
+
+function uniqueValues(values: string[]): string[] {
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    if (!value || seen.has(value)) return false;
+    seen.add(value);
+    return true;
   });
 }
 

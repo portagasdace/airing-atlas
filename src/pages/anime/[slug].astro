@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { dedupeExternalLinks } from "@/lib/external-links";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
 import { isPublicAnimeDetail, isQualityNextEpisodeAnime } from "@/lib/quality";
 import { animeLikeGuideHref, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
@@ -25,7 +26,7 @@ const metaDescription = animeSeoDescription(anime, manualEditorial?.intro);
 const recommendations = recommendationsFor(anime.id).slice(0, 4);
 const guide = qualityWatchOrderFor(anime.id);
 const tags = (anime.tags || []).slice(0, 8);
-const officialLinks = (anime.externalLinks || []).filter((link) => link.url && link.site).slice(0, 5);
+const officialLinks = dedupeExternalLinks(anime.externalLinks, 5);
 const studio = anime.studios?.[0]?.name;
 const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,

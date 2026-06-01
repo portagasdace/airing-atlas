@@ -466,17 +466,112 @@ function safeRecommendations(nodes = []) {
     });
 }
 
+const externalLinkSitePriority = [
+  "official site",
+  "crunchyroll",
+  "netflix",
+  "hulu",
+  "hidive",
+  "disney",
+  "adult swim",
+  "amazon prime video",
+  "tubi tv",
+  "bilibili",
+  "iq",
+  "wetv",
+  "youtube",
+  "twitter",
+  "x",
+  "facebook"
+];
+
+const externalLinkHttpsHosts = new Set([
+  "adultswim.com",
+  "amazon.com",
+  "bilibili.tv",
+  "crunchyroll.com",
+  "facebook.com",
+  "hoopladigital.com",
+  "hulu.com",
+  "iq.com",
+  "netflix.com",
+  "tubitv.com",
+  "twitter.com",
+  "wetv.vip",
+  "www.adultswim.com",
+  "www.amazon.com",
+  "www.bilibili.tv",
+  "www.crunchyroll.com",
+  "www.facebook.com",
+  "www.hoopladigital.com",
+  "www.hulu.com",
+  "www.iq.com",
+  "www.netflix.com",
+  "www.tubitv.com",
+  "www.youtube.com",
+  "x.com",
+  "youtube.com",
+  "youtu.be"
+]);
+
+function externalSiteKey(site = "") {
+  return site.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function normalizeExternalUrl(url = "") {
+  const trimmed = url.trim();
+  if (!trimmed) return "";
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === "http:" && externalLinkHttpsHosts.has(parsed.hostname.toLowerCase())) {
+      parsed.protocol = "https:";
+    }
+    return parsed.toString();
+  } catch {
+    return trimmed;
+  }
+}
+
+function externalUrlKey(url = "") {
+  return normalizeExternalUrl(url)
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/\/$/, "")
+    .toLowerCase();
+}
+
+function externalLinkRank(link) {
+  const key = externalSiteKey(link.site || "");
+  const priority = externalLinkSitePriority.findIndex((site) => key.includes(site));
+  const siteScore = priority === -1 ? 99 : priority;
+  const languageScore = !link.language || String(link.language).toUpperCase() === "ENGLISH" ? 0 : 5;
+  const typeScore = link.type === "SOCIAL" ? 4 : 0;
+  const dubScore = /dub/i.test(link.url || "") ? 2 : 0;
+  return siteScore * 10 + languageScore + typeScore + dubScore;
+}
+
 function safeExternalLinks(links = []) {
+  const seenSites = new Set();
+  const seenUrls = new Set();
   return links
     .filter((link) => link?.url && link?.site && !link.isDisabled)
-    .slice(0, 8)
     .map((link) => ({
-      site: link.site,
-      url: link.url,
+      site: link.site.trim(),
+      url: normalizeExternalUrl(link.url),
       type: link.type || null,
       language: link.language || null,
       isDisabled: Boolean(link.isDisabled)
-    }));
+    }))
+    .sort((a, b) => externalLinkRank(a) - externalLinkRank(b))
+    .filter((link) => {
+      const site = externalSiteKey(link.site);
+      const url = externalUrlKey(link.url);
+      if (!site || !url || seenSites.has(site) || seenUrls.has(url)) return false;
+      seenSites.add(site);
+      seenUrls.add(url);
+      return true;
+    })
+    .slice(0, 8);
 }
 
 function safeStreamingEpisodes(episodes = []) {
