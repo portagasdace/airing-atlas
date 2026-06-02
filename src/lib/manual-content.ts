@@ -9,6 +9,9 @@ export interface ManualFAQ {
 export interface ManualEditorialEntry {
   animeId: number;
   intro: string;
+  atlasTake: string;
+  whoShouldWatch: string;
+  beforeStarting: string;
   legalWatchingNote: string;
 }
 
@@ -47,51 +50,81 @@ export const manualEditorialByAnimeId: Record<number, ManualEditorialEntry> = {
   16498: {
     animeId: 16498,
     intro: "Attack on Titan is best searched as a tense survival war story: giant-horror spectacle at first, then conspiracy, politics, and military tragedy as the cast learns what the world really is.",
+    atlasTake: "Airing Atlas treats Attack on Titan as more than a dark action hit. Its value for discovery is the way each season changes the viewer's question: survival first, then truth, then the cost of choosing a side.",
+    whoShouldWatch: "Start here if you want high-stakes mystery, military pressure, brutal reversals, and a story that rewards keeping track of factions and motives.",
+    beforeStarting: "The early horror tone is only the entry point. Avoid recap movies on a first run, and expect later seasons to become more political and morally complicated.",
     legalWatchingNote
   },
   101922: {
     animeId: 101922,
     intro: "Demon Slayer works as a clean gateway pick for action fans: easy emotional stakes, high-end sword animation, demons, family loyalty, and a clear arc-by-arc release path.",
+    atlasTake: "Demon Slayer is strongest as a polished gateway anime: simple emotional goals, clear training arcs, tragic enemy backstories, and fight scenes that make each arc easy to remember.",
+    whoShouldWatch: "Pick it if you want accessible supernatural action, family-driven stakes, and a watch order that is easy to explain to a new anime fan.",
+    beforeStarting: "The Mugen Train story exists as both a movie and TV arc. Choose one version first, then continue through the later seasonal arcs.",
     legalWatchingNote
   },
   113415: {
     animeId: 113415,
     intro: "Jujutsu Kaisen is a fast modern exorcist battle series, so the best adjacent picks usually share urban fantasy, curse-like monsters, sharp team chemistry, and stylish fights.",
+    atlasTake: "Airing Atlas classifies Jujutsu Kaisen as a modern supernatural action anchor: it is fast, stylish, and easy to pair with other curse-hunting or demon-hunting shows.",
+    whoShouldWatch: "Watch it if you like team missions, mentor figures, tactical powers, sharp comedy, and fights that move quickly without losing character chemistry.",
+    beforeStarting: "Season 1 is the cleanest entry point. Jujutsu Kaisen 0 is not throwaway filler; watch it before or around Season 2 for better character context.",
     legalWatchingNote
   },
   21: {
     animeId: 21,
     intro: "One Piece is a long-running adventure first and a release-schedule problem second. New viewers usually need a simple main-series route, then movie and special notes as optional extras.",
+    atlasTake: "One Piece is the site's long-form adventure benchmark. The useful question is not just whether it is good, but how to approach a huge main series without letting optional movies derail the path.",
+    whoShouldWatch: "Choose it if you want found family, island-to-island discovery, emotional backstories, comedy, and a story that can become a long-term watchlist project.",
+    beforeStarting: "The TV series is the core route. Movies and specials are best saved as optional side trips after you know the crew and world.",
     legalWatchingNote
   },
   20: {
     animeId: 20,
     intro: "Naruto is a character-growth shounen with a large sequel path, many movies, and plenty of side material. The safest guide keeps the main TV route separate from optional films.",
+    atlasTake: "Naruto remains useful because it teaches the classic underdog-shounen pattern: rivalry, mentors, training, painful friendship, and a world that expands through village politics.",
+    whoShouldWatch: "Start Naruto if you like long character growth, school-to-battle progression, emotional rivalries, and a large cast that keeps gaining history.",
+    beforeStarting: "Keep the main TV route separate from movies and specials. Most films are optional, while Shippuden is the direct continuation.",
     legalWatchingNote
   },
   1535: {
     animeId: 1535,
     intro: "Death Note is a psychological cat-and-mouse thriller. Users searching for similar anime usually want mind games, moral pressure, crime tension, and high-stakes strategy.",
+    atlasTake: "Death Note is the site's clearest mind-game reference point: the appeal is not action volume, but watching intelligent characters turn rules, pride, and secrecy into weapons.",
+    whoShouldWatch: "Pick it if you want compact suspense, antihero tension, deduction, identity games, and moral pressure with very little filler.",
+    beforeStarting: "The main TV series is the essential version. Recap specials can wait until after the full story, and they are not needed for a first watch.",
     legalWatchingNote
   },
   21459: {
     animeId: 21459,
     intro: "My Hero Academia blends superhero training, school arcs, tournaments, villains, and long-term character growth, making it useful for both watch-order and anime-like searches.",
+    atlasTake: "My Hero Academia works as a bridge between superhero fiction and battle shounen. Its discovery value comes from school structure, class dynamics, and a society built around public hero work.",
+    whoShouldWatch: "Watch it if you want hopeful training arcs, ensemble classmates, tournaments, mentors, rivalries, and villains that question the hero system.",
+    beforeStarting: "Follow the TV seasons first. OVAs and films are extras, and they make more sense once the class and hero society are familiar.",
     legalWatchingNote
   },
   127230: {
     animeId: 127230,
     intro: "Chainsaw Man is useful for darker recommendation intent: chaotic supernatural action, horror comedy, broken characters, stylish violence, and a messy emotional core.",
+    atlasTake: "Chainsaw Man is the messy counterweight to cleaner battle shounen. It matters because its comedy, horror, desire, and sadness all sit in the same scene instead of taking turns.",
+    whoShouldWatch: "Pick it if you want supernatural action with rougher edges, damaged leads, brutal jokes, devils, and a tone that can flip quickly.",
+    beforeStarting: "The main route is short for now, so it is easy to sample. Music videos and promotional extras are optional rather than story requirements.",
     legalWatchingNote
   },
   5114: {
     animeId: 5114,
     intro: "Fullmetal Alchemist: Brotherhood is a compact adventure drama with alchemy, military conspiracy, moral cost, and a complete ending, so users often need clear comparison guidance.",
+    atlasTake: "Brotherhood is the site's complete-adventure benchmark: a finished story with strong plotting, moral cost, family bonds, and enough scale to feel epic without becoming endless.",
+    whoShouldWatch: "Choose it if you want a full story, smart adventure, emotional payoff, military conspiracy, and powers with clear rules and consequences.",
+    beforeStarting: "You do not need the 2003 adaptation first. Treat that version and the movies as alternate or optional material after Brotherhood.",
     legalWatchingNote
   },
   11061: {
     animeId: 11061,
     intro: "Hunter x Hunter is a long-form adventure built around tactical fights, changing arcs, and a deceptively playful start that grows stranger and darker as it goes.",
+    atlasTake: "Hunter x Hunter is the site's tactical-adventure reference: it keeps changing arc shape, but the throughline is clever rules, strange tests, and fights won by reading the situation.",
+    whoShouldWatch: "Watch it if you like adventure exams, strategic powers, morally odd enemies, and long-form character growth that does not always follow the expected shounen rhythm.",
+    beforeStarting: "The 2011 series is the cleanest modern route. The older adaptation and movies are optional for viewers who want comparison material later.",
     legalWatchingNote
   }
 };

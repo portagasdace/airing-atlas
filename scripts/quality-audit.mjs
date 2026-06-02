@@ -4,8 +4,11 @@ import { resolve } from "node:path";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
 const manualFeaturedAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
+const manualEditorialAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
 const ANIME_DETAIL_POPULARITY_FLOOR = 100000;
 const ANIME_DETAIL_FAVOURITES_FLOOR = 8000;
+const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
+const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
 const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
 const SITEMAP_WARNING_CEILING = 520;
@@ -42,10 +45,10 @@ if (warnings.length) {
 function auditDataFreshness() {
   const pastCalendar = (calendar.entries || []).filter((entry) => entry.airingAt && entry.airingAt <= nowUnix);
   const futureCalendar = (calendar.entries || []).filter((entry) => entry.airingAt && entry.airingAt > nowUnix);
-  if (pastCalendar.length) info.push(`${pastCalendar.length} raw calendar entries are already in the past and should be filtered from public views.`);
-  if (!futureCalendar.length) warnings.push("No future calendar entries are available for public schedule views.");
-
   const publicNextEpisode = (catalog.anime || []).filter((anime) => isPublicNextEpisode(anime));
+  if (pastCalendar.length) info.push(`${pastCalendar.length} raw calendar entries are already in the past and should be filtered from public views.`);
+  if (!futureCalendar.length && !publicNextEpisode.length) warnings.push("No future calendar or next-episode entries are available for public schedule views.");
+
   const stalePublicNext = publicNextEpisode.filter((anime) => (anime.nextAiringEpisode?.airingAt || 0) <= nowUnix);
   if (stalePublicNext.length) warnings.push(`${stalePublicNext.length} public next-episode candidates are stale.`);
   info.push(`${publicNextEpisode.length} public next-episode candidates pass freshness and demand gates.`);
@@ -76,6 +79,7 @@ async function auditBuiltHtml() {
   let missingImageDimensions = 0;
   let missingStructuredData = 0;
   let missingNoindex = 0;
+  let missingEditorialValue = 0;
 
   for (const file of files) {
     const html = await readFile(file, "utf8");
@@ -99,6 +103,7 @@ async function auditBuiltHtml() {
     } else if (animeSlug) {
       const anime = animeBySlug.get(animeSlug);
       if (anime && !isPublicAnimeDetail(anime) && !hasNoindex) missingNoindex += 1;
+      if (anime && isPublicAnimeDetail(anime) && !html.includes("anime_editorial_value")) missingEditorialValue += 1;
     }
   }
 
@@ -109,6 +114,7 @@ async function auditBuiltHtml() {
   if (missingImageDimensions) warnings.push(`${missingImageDimensions} built image tags are missing width or height.`);
   if (missingStructuredData) warnings.push(`${missingStructuredData} key guide pages are missing ItemList structured data.`);
   if (missingNoindex) warnings.push(`${missingNoindex} low-value generated pages are missing noindex,follow.`);
+  if (missingEditorialValue) warnings.push(`${missingEditorialValue} public anime detail pages are missing Airing Atlas editorial value sections.`);
   info.push(`${files.length} built HTML files scanned.`);
 }
 
@@ -161,11 +167,29 @@ function isPublicNextEpisode(anime) {
 
 function isPublicAnimeDetail(anime) {
   return Boolean(
-    manualFeaturedAnimeIds.has(anime.id) ||
+    manualEditorialAnimeIds.has(anime.id) ||
     isPublicNextEpisode(anime) ||
-    qualityWatchOrderRoots.has(anime.id) ||
-    (anime.popularity || 0) >= ANIME_DETAIL_POPULARITY_FLOOR ||
-    (anime.favourites || 0) >= ANIME_DETAIL_FAVOURITES_FLOOR
+    isStrongWatchOrderRoot(anime) ||
+    isQualifiedAnimeLike(anime) ||
+    hasExtremeDetailDemand(anime)
+  );
+}
+
+function isStrongWatchOrderRoot(anime) {
+  return Boolean(
+    qualityWatchOrderRoots.has(anime.id) &&
+    (
+      manualFeaturedAnimeIds.has(anime.id) ||
+      (anime.popularity || 0) >= ANIME_DETAIL_POPULARITY_FLOOR ||
+      (anime.favourites || 0) >= ANIME_DETAIL_FAVOURITES_FLOOR
+    )
+  );
+}
+
+function hasExtremeDetailDemand(anime) {
+  return Boolean(
+    (anime.popularity || 0) >= ANIME_DETAIL_EXTREME_POPULARITY_FLOOR ||
+    (anime.favourites || 0) >= ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR
   );
 }
 

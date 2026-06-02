@@ -22,6 +22,7 @@ const title = displayTitle(anime);
 const seoTitle = animeSeoTitle(anime);
 const cover = anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg";
 const manualEditorial = manualEditorialFor(anime.id);
+const formatLabel = titleCase(anime.format || "Anime");
 const metaDescription = animeSeoDescription(anime, manualEditorial?.intro);
 const recommendations = recommendationsFor(anime.id).slice(0, 4);
 const guide = qualityWatchOrderFor(anime.id);
@@ -34,6 +35,32 @@ const genreLinks = (anime.genres || []).map((genre) => ({
 }));
 const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
 const isIndexable = isPublicAnimeDetail(anime);
+const primaryGenres = (anime.genres || []).slice(0, 3);
+const editorialCards = manualEditorial
+  ? [
+      { eyebrow: "Atlas take", heading: "Why this title matters here", body: manualEditorial.atlasTake },
+      { eyebrow: "Best fit", heading: "Who should watch this", body: manualEditorial.whoShouldWatch },
+      { eyebrow: "Before starting", heading: "What to know first", body: manualEditorial.beforeStarting }
+    ]
+  : [
+      {
+        eyebrow: "Atlas take",
+        heading: "Why this page is useful",
+        body: `${title} is kept in Airing Atlas as a ${seasonLabel(anime)} ${formatLabel.toLowerCase()} entry with practical routes into schedules, similar picks, genre browsing, and local watchlist planning.`
+      },
+      {
+        eyebrow: "Best fit",
+        heading: "Who should watch this",
+        body: primaryGenres.length
+          ? `Use this page if you are browsing ${primaryGenres.join(", ")} anime and want a quick read on score, popularity, status, next episode timing, and adjacent recommendations.`
+          : "Use this page if you want a quick read on score, popularity, status, next episode timing, and adjacent recommendations."
+      },
+      {
+        eyebrow: "Before starting",
+        heading: "What to know first",
+        body: `${anime.status ? `Status is ${titleCase(anime.status)}. ` : ""}${anime.source ? `Source type is ${titleCase(anime.source)}. ` : ""}Check the related guides before committing if you need a watch order, a shorter alternative, or a legal viewing route.`
+      }
+    ];
 const structuredData = [
   breadcrumbJsonLd([
     { name: "Airing Atlas", path: "/" },
@@ -117,11 +144,21 @@ const structuredData = [
     </div>
   </section>
 
+  <section class="section guide-grid" data-track-section="anime_editorial_value">
+    {editorialCards.map((card) => (
+      <article class="guide-card">
+        <p class="eyebrow">{card.eyebrow}</p>
+        <h2>{card.heading}</h2>
+        <p>{card.body}</p>
+      </article>
+    ))}
+  </section>
+
   <section class="section">
     <div class="keyword-panel" data-track-section="related_guides">
-      <p class="eyebrow">Related search keywords</p>
-      <h2>Search phrases around {title}</h2>
-      <p>Useful long-tail routes for similar anime, release timing, genre discovery, and watch order research.</p>
+      <p class="eyebrow">Related guides</p>
+      <h2>Useful routes from {title}</h2>
+      <p>Readable next steps for similar anime, release timing, genre discovery, and watch order research.</p>
       <div class="keyword-list">
         {searchIntents.map((item) => (
           <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label} data-anime-id={anime.id}>

@@ -1,10 +1,12 @@
 import { recommendationsFor, watchOrderFor } from "@/lib/anime";
-import { isQualityWatchOrderGuide, manualFeaturedAnimeIds } from "@/lib/manual-content";
+import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualWatchOrderFor } from "@/lib/manual-content";
 import type { AnimeSummary, CalendarEntry } from "@/types/anime";
 
 export const NEXT_EPISODE_POPULARITY_FLOOR = 10000;
 export const ANIME_DETAIL_POPULARITY_FLOOR = 100000;
 export const ANIME_DETAIL_FAVOURITES_FLOOR = 8000;
+export const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
+export const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
 export const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 export const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
 export const ANIME_LIKE_SITEMAP_LIMIT = 80;
@@ -46,13 +48,35 @@ export function hasQualityWatchOrderRoot(anime: AnimeSummary): boolean {
   return Boolean(guide && guide.rootAnimeId === anime.id && isQualityWatchOrderGuide(guide));
 }
 
+export function hasStrongWatchOrderRoot(anime: AnimeSummary): boolean {
+  return (
+    hasQualityWatchOrderRoot(anime) &&
+    (
+      Boolean(manualWatchOrderFor(anime.id)) ||
+      (anime.popularity || 0) >= ANIME_DETAIL_POPULARITY_FLOOR ||
+      (anime.favourites || 0) >= ANIME_DETAIL_FAVOURITES_FLOOR
+    )
+  );
+}
+
+export function hasManualEditorialValue(anime: AnimeSummary): boolean {
+  return Boolean(manualEditorialFor(anime.id));
+}
+
+export function hasExtremeDetailDemand(anime: AnimeSummary): boolean {
+  return (
+    (anime.popularity || 0) >= ANIME_DETAIL_EXTREME_POPULARITY_FLOOR ||
+    (anime.favourites || 0) >= ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR
+  );
+}
+
 export function isPublicAnimeDetail(anime: AnimeSummary, nowUnix = currentUnix()): boolean {
   return (
-    manualFeaturedAnimeIds.includes(anime.id) ||
+    hasManualEditorialValue(anime) ||
     isQualityNextEpisodeAnime(anime, nowUnix) ||
-    hasQualityWatchOrderRoot(anime) ||
-    (anime.popularity || 0) >= ANIME_DETAIL_POPULARITY_FLOOR ||
-    (anime.favourites || 0) >= ANIME_DETAIL_FAVOURITES_FLOOR
+    hasStrongWatchOrderRoot(anime) ||
+    isQualifiedAnimeLikeAnime(anime) ||
+    hasExtremeDetailDemand(anime)
   );
 }
 
