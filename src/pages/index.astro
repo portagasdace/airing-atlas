@@ -20,6 +20,32 @@ const jujutsuGuide = qualityWatchOrderFor(113415) || watchGuides[0];
 const attackOnTitan = animeById(16498);
 const demonSlayer = animeById(101922);
 const onePiece = animeById(21);
+const plannerPresets = [
+  {
+    label: "One-night dark anime",
+    detail: "Short finished route with monsters, curses, and survival pressure.",
+    href: "/binge-planner/?time=night&mood=dark&length=short&finished=true&source=home_preset",
+    trackLabel: "One-night dark anime"
+  },
+  {
+    label: "Weekend romance",
+    detail: "A compact finished romance drama route for a weekend watch.",
+    href: "/binge-planner/?time=weekend&mood=romance&length=medium&finished=true&source=home_preset",
+    trackLabel: "Weekend romance"
+  },
+  {
+    label: "Mind-game month plan",
+    detail: "Strategy, deduction, and psychological pressure across a longer plan.",
+    href: "/binge-planner/?time=month&mood=mind&length=any&finished=true&source=home_preset",
+    trackLabel: "Mind-game month plan"
+  },
+  {
+    label: "Long adventure route",
+    detail: "Bigger franchises and ongoing journeys for a long watchlist project.",
+    href: "/binge-planner/?time=long&mood=adventure&length=long&finished=false&source=home_preset",
+    trackLabel: "Long adventure route"
+  }
+];
 const keywordPaths = [
   { label: "anime binge planner", href: "/binge-planner/", intent: "Shareable planner" },
   { label: "what anime should I watch next", href: "/watch-next/", intent: "Decision tool" },
@@ -58,10 +84,23 @@ const keywordPaths = [
         Build a shareable anime binge plan, decide what to watch next, track airing schedules,
         and map watch orders without unauthorized streams.
       </p>
-      <div class="hero-actions">
-        <a class="button primary" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Binge planner">Build a plan</a>
-        <a class="button" href="/watch-next/" data-track-event="home_primary_watch_next" data-track-label="Watch next finder">Watch next</a>
-        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Open calendar</a>
+      <div class="hero-preset-grid" aria-label="Start with a binge plan preset">
+        {plannerPresets.map((preset) => (
+          <a
+            class="hero-preset"
+            href={preset.href}
+            data-track-event="home_binge_preset_click"
+            data-track-label={preset.trackLabel}
+          >
+            <strong>{preset.label}</strong>
+            <span>{preset.detail}</span>
+          </a>
+        ))}
+      </div>
+      <div class="hero-actions hero-secondary-actions">
+        <a class="button primary" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Open planner</a>
+        <a class="button" href="/watch-next/" data-track-event="home_primary_watch_next" data-track-label="Watch next finder">Pick one anime</a>
+        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Track airing times</a>
       </div>
     </div>
     <div class="ticker-panel">

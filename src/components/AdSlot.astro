@@ -5,6 +5,7 @@ interface Props {
 
 const { label = "Advertisement" } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
+const adsenseSlotId = import.meta.env.PUBLIC_ADSENSE_SLOT_ID;
 ---
 
 {
@@ -14,9 +15,18 @@ const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
         class="adsbygoogle"
         style="display:block"
         data-ad-client={adsenseClientId}
+        data-ad-slot={adsenseSlotId || undefined}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />
+      <script is:inline>
+        try {
+          window.adsbygoogle = window.adsbygoogle || [];
+          window.adsbygoogle.push({});
+        } catch {
+          /* Ad blockers or preview environments can reject the ad request. */
+        }
+      </script>
     </aside>
   ) : (
     <template data-ad-slot-disabled></template>

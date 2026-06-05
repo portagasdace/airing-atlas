@@ -9,11 +9,11 @@ const nav = [
 ---
 
 <header class="site-header" data-track-section="header">
-  <a class="brand" href="/" aria-label="Airing Atlas home">
+  <a class="brand" href="/" aria-label="Airing Atlas home" data-track-event="header_brand_click" data-track-label="Airing Atlas home">
     <span class="brand-mark">AA</span>
     <span>Airing Atlas</span>
   </a>
   <nav aria-label="Primary navigation">
-    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    {nav.map((item) => <a href={item.href} data-track-event="header_nav_click" data-track-label={item.label}>{item.label}</a>)}
   </nav>
 </header>

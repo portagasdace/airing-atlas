@@ -27,11 +27,52 @@ const morePicks = ranked.filter((anime) => !featured.some((item) => item.id === 
 const relatedGuides = animeByIds(cluster.relatedGuideIds).slice(0, 6);
 const title = `${cluster.title}: Best Picks and Related Guides`;
 const canonical = `/discover/${cluster.slug}/`;
+const plannerPresetBySlug: Record<string, { time: string; mood: string; length: string; finished: string; label: string }> = {
+  "dark-fantasy-anime": { time: "night", mood: "dark", length: "short", finished: "true", label: "Build a dark one-night plan" },
+  "battle-shounen-anime": { time: "long", mood: "action", length: "long", finished: "false", label: "Build a battle shounen route" },
+  "mind-game-anime": { time: "month", mood: "mind", length: "any", finished: "true", label: "Build a mind-game month plan" },
+  "long-running-adventure-anime": { time: "long", mood: "adventure", length: "long", finished: "false", label: "Build a long adventure route" },
+  "supernatural-action-anime": { time: "weekend", mood: "dark", length: "medium", finished: "true", label: "Build a supernatural action plan" },
+  "emotional-drama-anime": { time: "weekend", mood: "emotional", length: "medium", finished: "true", label: "Build an emotional weekend plan" },
+  "romance-drama-anime": { time: "weekend", mood: "romance", length: "medium", finished: "true", label: "Build a romance weekend plan" },
+  "anime-with-smart-main-character": { time: "month", mood: "mind", length: "any", finished: "true", label: "Build a smart-lead watch plan" }
+};
+const clusterPreset = plannerPresetBySlug[cluster.slug] || { time: "weekend", mood: "balanced", length: "any", finished: "true", label: "Build a watch plan" };
+const plannerHref = `/binge-planner/?time=${clusterPreset.time}&mood=${clusterPreset.mood}&length=${clusterPreset.length}&finished=${clusterPreset.finished}&source=cluster_cta`;
+const watchNextHref = `/watch-next/?mood=${clusterPreset.mood}&status=${clusterPreset.finished === "true" ? "finished" : "either"}`;
+const anchorAnime = highlighted[0] || featured[0];
+const animeLikeHref = anchorAnime ? animeLikeGuideHref(anchorAnime) : "/anime-like/";
+const animeLikeLabel = anchorAnime ? `Find anime like ${displayTitle(anchorAnime)}` : `Find anime like ${cluster.shortLabel}`;
+const faqItems = [
+  {
+    question: `What counts as ${cluster.shortLabel.toLowerCase()} anime on Airing Atlas?`,
+    answer: cluster.fitNote
+  },
+  {
+    question: `How does Airing Atlas choose ${cluster.shortLabel.toLowerCase()} picks?`,
+    answer: "Airing Atlas combines curated anchor titles with genre, tag, score, popularity, and catalog safety signals so the guide is useful for actual watch decisions."
+  },
+  {
+    question: "Can I turn this guide into a watch plan?",
+    answer: "Yes. Use the planner route on this page to build a shareable binge plan from the same mood and length signals."
+  }
+];
 const structuredData = collectionPageJsonLd({
   name: cluster.title,
   description: cluster.description,
   path: canonical,
   items: featured
+}).concat({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer
+    }
+  }))
 });
 ---
 
@@ -64,6 +105,33 @@ const structuredData = collectionPageJsonLd({
       <p class="eyebrow">Atlas take</p>
       <h2>Why these picks fit</h2>
       <p>{cluster.fitNote}</p>
+    </div>
+  </section>
+
+  <section class="section" data-track-section="discover_cluster_decision_routes">
+    <div class="decision-route-panel">
+      <div>
+        <p class="eyebrow">Next step</p>
+        <h2>Turn this guide into a watch decision</h2>
+        <p>
+          Use the same {cluster.shortLabel.toLowerCase()} signal to build a shareable plan,
+          pick one anime for tonight, or branch into similar-title guides.
+        </p>
+      </div>
+      <div class="decision-route-grid">
+        <a class="decision-route primary-route" href={plannerHref} data-track-event="discover_cluster_planner_click" data-track-label={cluster.title}>
+          <strong>{clusterPreset.label}</strong>
+          <span>Creates a stable route with titles, reasons, and a copyable share link.</span>
+        </a>
+        <a class="decision-route" href={watchNextHref} data-track-event="discover_cluster_watch_next_click" data-track-label={cluster.title}>
+          <strong>Pick one anime now</strong>
+          <span>Open Watch Next with this guide's mood already selected.</span>
+        </a>
+        <a class="decision-route" href={animeLikeHref} data-track-event="discover_cluster_anime_like_click" data-track-label={animeLikeLabel}>
+          <strong>{animeLikeLabel}</strong>
+          <span>Branch from a known title into similar recommendations.</span>
+        </a>
+      </div>
     </div>
   </section>
 

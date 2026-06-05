@@ -80,6 +80,7 @@ Configure these GA4 custom dimensions from event parameters:
 - `trigger_event`
 - `anime_id`
 - `result_position`
+- `interaction_type`
 - `local_watchlist_items`
 - `local_saved_plans`
 
@@ -101,7 +102,7 @@ Mark these events as key events once they appear in GA4:
 - `anime_like_result_click`
 - `next_episode_detail_click`
 
-Use scroll events such as `scroll_depth_50` and `scroll_depth_90` as quality signals, not key events.
+Do not mark `binge_plan_auto_render`, `page_content_view`, `scroll_depth_50`, or `scroll_depth_90` as key events. Use them as quality and diagnostic signals only.
 
 The Firebase/GA Audience hub should eventually replace the default `Purchasers` audience with Airing Atlas-specific audiences. Build them from `audience_signal` or direct events:
 
@@ -127,6 +128,7 @@ Use the generated backlog to make 5-10 focused changes: rewrite titles for impre
 - `PUBLIC_SITE_URL`: canonical site URL, defaults to `https://airingatlas.com`.
 - `PUBLIC_GA_MEASUREMENT_ID`: Google Analytics 4 web stream ID, for example `G-XXXXXXXXXX`.
 - `PUBLIC_ADSENSE_CLIENT_ID`: when set, the layout loads AdSense and ad slots render `<ins>` containers.
+- `PUBLIC_ADSENSE_SLOT_ID`: optional AdSense display ad slot id for rendered ad slots.
 - `PUBLIC_AFFILIATE_DISCLOSURE_ENABLED`: defaults to `true`.
 - `LIVE_ANILIST_REQUIRED=true`: fail the sync if AniList cannot be reached instead of using fixtures.
 

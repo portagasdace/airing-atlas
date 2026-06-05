@@ -197,6 +197,44 @@ h3 {
   margin-top: 22px;
 }
 
+.hero-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.hero-preset {
+  display: grid;
+  gap: 7px;
+  min-height: 126px;
+  align-content: space-between;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.hero-preset:first-child {
+  background: var(--gold);
+}
+
+.hero-preset strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  line-height: 1.04;
+}
+
+.hero-preset span {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.hero-secondary-actions {
+  margin-top: 16px;
+}
+
 .button,
 button,
 select,
@@ -511,6 +549,64 @@ button[aria-pressed="true"],
 
 .quick-entry small {
   color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.planner-results-section {
+  padding-top: 4px;
+}
+
+.decision-route-panel {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+  gap: 18px;
+  align-items: stretch;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 18px;
+  box-shadow: 5px 5px 0 var(--ink);
+  border-left: 8px solid var(--gold);
+}
+
+.decision-route-panel h2,
+.decision-route-panel p {
+  margin: 0;
+}
+
+.decision-route-panel p {
+  color: var(--ink-soft);
+}
+
+.decision-route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.decision-route {
+  display: grid;
+  gap: 8px;
+  align-content: space-between;
+  min-height: 136px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 13px;
+  box-shadow: 4px 4px 0 var(--ink);
+  font-weight: 800;
+}
+
+.decision-route.primary-route {
+  background: var(--coral);
+  color: #fff;
+}
+
+.decision-route.primary-route span {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.decision-route span {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
@@ -1138,6 +1234,8 @@ button[aria-pressed="true"],
   .tool-panel.compact-tool,
   .tool-panel.decision-tool,
   .tool-panel.binge-tool,
+  .decision-route-panel,
+  .decision-route-grid,
   .release-panel,
   .result-grid,
   .recommendation-grid,
@@ -1203,6 +1301,7 @@ button[aria-pressed="true"],
   .faq-grid,
   .watchlist-dashboard,
   .mini-list,
+  .hero-preset-grid,
   .watchlist-row,
   .result-card,
   .recommendation-card,

@@ -101,7 +101,16 @@
     const data = await response.json();
     catalog = (data.anime || []).filter(isCandidate);
     applyUrlParams();
-    generatePlan({ preserveSharedIds: true, replaceUrl: !new URLSearchParams(window.location.search).get("ids") });
+    const params = new URLSearchParams(window.location.search);
+    const hasSharedIds = Boolean(params.get("ids"));
+    const presetSource = params.get("source");
+    const fromPreset = presetSource === "home_preset" || presetSource === "cluster_cta";
+    generatePlan({
+      preserveSharedIds: true,
+      replaceUrl: !hasSharedIds,
+      eventName: fromPreset ? "binge_plan_generate" : "binge_plan_auto_render",
+      interactionType: fromPreset ? presetSource : hasSharedIds ? "shared_url" : "initial_load"
+    });
   };
 
   const applyUrlParams = () => {
@@ -128,23 +137,35 @@
     query: normalize(controls.query?.value || "")
   });
 
-  const generatePlan = ({ preserveSharedIds = false, replaceUrl = true } = {}) => {
+  const generatePlan = ({
+    preserveSharedIds = false,
+    replaceUrl = true,
+    eventName = "binge_plan_generate",
+    interactionType = "manual",
+    shouldTrack = true
+  } = {}) => {
     const state = currentState();
     const sharedIds = preserveSharedIds ? idsFromUrl() : [];
     const sharedPlan = sharedIds
       .map((id) => catalog.find((anime) => Number(anime.id) === Number(id)))
       .filter(Boolean);
+    const usedSharedPlan = sharedPlan.length >= 3;
 
-    currentPlan = sharedPlan.length >= 3 ? sharedPlan : rankedPlan(state);
-    renderPlan(currentPlan, state, Boolean(sharedPlan.length >= 3));
+    currentPlan = usedSharedPlan ? sharedPlan : rankedPlan(state);
+    renderPlan(currentPlan, state, usedSharedPlan);
     if (replaceUrl) updateShareUrl(state, currentPlan, true);
-    track("binge_plan_generate", {
-      mood: state.mood,
-      time_budget: state.time,
-      length: state.length,
-      finished_only: state.finished,
-      result_count: currentPlan.length
-    });
+    if (shouldTrack) {
+      track(eventName, {
+        mood: state.mood,
+        time_budget: state.time,
+        length: state.length,
+        finished_only: state.finished,
+        result_count: currentPlan.length,
+        interaction_type: interactionType,
+        shared_route: usedSharedPlan,
+        has_query: Boolean(state.query)
+      });
+    }
   };
 
   const rankedPlan = (state) => {
@@ -296,8 +317,8 @@
     return `A useful ${episodes} stop that balances score, popularity, and watchability.`;
   };
 
-  const copyShareLink = async () => {
-    if (!currentPlan.length) generatePlan({ replaceUrl: true });
+  const copyShareLink = async (interactionType = "button") => {
+    if (!currentPlan.length) generatePlan({ replaceUrl: true, interactionType: "copy_empty_state" });
     updateShareUrl(currentState(), currentPlan, true);
     const url = window.location.href;
     try {
@@ -309,12 +330,13 @@
     track("binge_plan_share_copy", {
       mood: currentState().mood,
       time_budget: currentState().time,
-      result_count: currentPlan.length
+      result_count: currentPlan.length,
+      interaction_type: interactionType
     });
   };
 
-  const saveCurrentPlan = () => {
-    if (!currentPlan.length) generatePlan({ replaceUrl: true });
+  const saveCurrentPlan = (interactionType = "button") => {
+    if (!currentPlan.length) generatePlan({ replaceUrl: true, interactionType: "save_empty_state" });
     const state = currentState();
     updateShareUrl(state, currentPlan, true);
     const plan = planSnapshot(state);
@@ -324,12 +346,13 @@
     track("binge_plan_save", {
       mood: state.mood,
       time_budget: state.time,
-      result_count: currentPlan.length
+      result_count: currentPlan.length,
+      interaction_type: interactionType
     });
   };
 
-  const addCurrentPlanToWatchlist = () => {
-    if (!currentPlan.length) generatePlan({ replaceUrl: true });
+  const addCurrentPlanToWatchlist = (interactionType = "button") => {
+    if (!currentPlan.length) generatePlan({ replaceUrl: true, interactionType: "add_all_empty_state" });
     const state = currentState();
     const incoming = currentPlan.map(watchlistEntryFromAnime).filter(Boolean);
     writeWatchlist(mergeWatchlist(readWatchlist(), incoming));
@@ -337,7 +360,8 @@
     track("binge_plan_add_all_watchlist", {
       mood: state.mood,
       time_budget: state.time,
-      result_count: incoming.length
+      result_count: incoming.length,
+      interaction_type: interactionType
     });
   };
 
@@ -491,21 +515,32 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
-  generateButton?.addEventListener("click", () => generatePlan({ replaceUrl: false }));
-  copyButton?.addEventListener("click", copyShareLink);
+  generateButton?.addEventListener("click", () => generatePlan({ replaceUrl: false, interactionType: "button" }));
+  copyButton?.addEventListener("click", () => copyShareLink("toolbar_button"));
   Object.values(controls).forEach((control) => {
-    control?.addEventListener("change", () => generatePlan({ replaceUrl: true }));
+    control?.addEventListener("change", () =>
+      generatePlan({ replaceUrl: true, eventName: "binge_plan_option_change", interactionType: "control_change" })
+    );
     control?.addEventListener("input", () => {
       window.clearTimeout(changeTimer);
-      changeTimer = window.setTimeout(() => generatePlan({ replaceUrl: true }), 500);
+      changeTimer = window.setTimeout(
+        () => generatePlan({ replaceUrl: true, eventName: "binge_plan_option_change", interactionType: "query_input" }),
+        500
+      );
     });
   });
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
-    if (target.closest("[data-binge-copy-inline]")) copyShareLink();
-    if (target.closest("[data-binge-save], [data-binge-save-inline]")) saveCurrentPlan();
-    if (target.closest("[data-binge-add-all], [data-binge-add-all-inline]")) addCurrentPlanToWatchlist();
+    if (target.closest("[data-binge-copy-inline]")) copyShareLink("result_inline");
+
+    const saveTrigger = target.closest("[data-binge-save], [data-binge-save-inline]");
+    if (saveTrigger) saveCurrentPlan(saveTrigger.matches("[data-binge-save-inline]") ? "result_inline" : "toolbar_button");
+
+    const addAllTrigger = target.closest("[data-binge-add-all], [data-binge-add-all-inline]");
+    if (addAllTrigger) {
+      addCurrentPlanToWatchlist(addAllTrigger.matches("[data-binge-add-all-inline]") ? "result_inline" : "toolbar_button");
+    }
   });
 
   document.querySelectorAll("[data-binge-preset]").forEach((link) => {
@@ -517,7 +552,7 @@
       setControl("length", params.get("length"));
       setControl("finished", params.get("finished"));
       if (controls.query) controls.query.value = params.get("q") || "";
-      generatePlan({ replaceUrl: false });
+      generatePlan({ replaceUrl: false, interactionType: "planner_preset" });
     });
   });
 
