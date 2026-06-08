@@ -1,6 +1,6 @@
-import { recommendationsFor, watchOrderFor } from "@/lib/anime";
-import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualWatchOrderFor } from "@/lib/manual-content";
-import type { AnimeSummary, CalendarEntry } from "@/types/anime";
+import { displayTitle, recommendationsFor, watchOrderFor } from "@/lib/anime";
+import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
+import type { AnimeSummary, CalendarEntry, WatchOrderGuide } from "@/types/anime";
 
 export const NEXT_EPISODE_POPULARITY_FLOOR = 10000;
 export const ANIME_DETAIL_POPULARITY_FLOOR = 100000;
@@ -9,7 +9,11 @@ export const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
 export const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
 export const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 export const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
-export const ANIME_LIKE_SITEMAP_LIMIT = 80;
+export const PUBLIC_ANIME_DETAIL_LIMIT = 90;
+export const PUBLIC_ANIME_LIKE_LIMIT = 30;
+export const PUBLIC_WATCH_ORDER_LIMIT = 24;
+export const PUBLIC_WATCH_ORDER_EXCLUDED_ROOT_IDS = [100166, 161645];
+export const ANIME_LIKE_SITEMAP_LIMIT = PUBLIC_ANIME_LIKE_LIMIT;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
 
 export function isFutureTimestamp(timestamp?: number | null, nowUnix = currentUnix()): boolean {
@@ -80,7 +84,7 @@ export function isPublicAnimeDetail(anime: AnimeSummary, nowUnix = currentUnix()
   );
 }
 
-export function publicAnimeDetailPages(items: AnimeSummary[], nowUnix = currentUnix()): AnimeSummary[] {
+export function publicAnimeDetailPages(items: AnimeSummary[], nowUnix = currentUnix(), limit = PUBLIC_ANIME_DETAIL_LIMIT): AnimeSummary[] {
   const seen = new Set<number>();
   return items
     .filter((anime) => isPublicAnimeDetail(anime, nowUnix))
@@ -89,7 +93,8 @@ export function publicAnimeDetailPages(items: AnimeSummary[], nowUnix = currentU
       if (seen.has(anime.id)) return false;
       seen.add(anime.id);
       return true;
-    });
+    })
+    .slice(0, limit);
 }
 
 export function isQualifiedAnimeLikeAnime(anime: AnimeSummary): boolean {
@@ -104,8 +109,9 @@ export function isQualifiedAnimeLikeAnime(anime: AnimeSummary): boolean {
   );
 }
 
-export function qualifiedAnimeLikePages(items: AnimeSummary[], limit = ANIME_LIKE_SITEMAP_LIMIT): AnimeSummary[] {
-  const seen = new Set<number>();
+export function publicAnimeLikePages(items: AnimeSummary[], limit = PUBLIC_ANIME_LIKE_LIMIT): AnimeSummary[] {
+  const seenIds = new Set<number>();
+  const seenSlugs = new Set<string>();
   const curated = manualFeaturedAnimeIds
     .map((id) => items.find((anime) => anime.id === id))
     .filter((anime): anime is AnimeSummary => Boolean(anime));
@@ -115,15 +121,58 @@ export function qualifiedAnimeLikePages(items: AnimeSummary[], limit = ANIME_LIK
 
   return [...curated, ...automatic]
     .filter((anime) => {
-      if (seen.has(anime.id)) return false;
-      seen.add(anime.id);
+      const slug = guideSlug(anime);
+      if (seenIds.has(anime.id) || seenSlugs.has(slug)) return false;
+      seenIds.add(anime.id);
+      seenSlugs.add(slug);
       return true;
     })
     .slice(0, limit);
 }
 
+export function qualifiedAnimeLikePages(items: AnimeSummary[], limit = ANIME_LIKE_SITEMAP_LIMIT): AnimeSummary[] {
+  return publicAnimeLikePages(items, limit);
+}
+
+export function publicWatchOrderGuides(guides: WatchOrderGuide[], limit = PUBLIC_WATCH_ORDER_LIMIT): WatchOrderGuide[] {
+  const selected: WatchOrderGuide[] = [];
+  const coveredAnimeIds = new Set<number>();
+
+  for (const guide of qualityWatchOrderGuides(guides)) {
+    if (PUBLIC_WATCH_ORDER_EXCLUDED_ROOT_IDS.includes(guide.rootAnimeId)) continue;
+    const coverage = watchOrderGuideCoverageIds(guide);
+    const overlapsExistingGuide = [...coverage].some((id) => coveredAnimeIds.has(id));
+    if (overlapsExistingGuide && !manualFeaturedAnimeIds.includes(guide.rootAnimeId)) continue;
+
+    selected.push(guide);
+    for (const id of coverage) coveredAnimeIds.add(id);
+    if (selected.length >= limit) break;
+  }
+
+  return selected;
+}
+
 function currentUnix(): number {
   return Math.floor(Date.now() / 1000);
+}
+
+function guideSlug(anime: AnimeSummary): string {
+  const title = displayTitle(anime);
+  const shortTitle = title.split(":")[0]?.trim();
+  const baseTitle = shortTitle && shortTitle.length >= 5 ? shortTitle : title;
+  return baseTitle
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 96);
+}
+
+function watchOrderGuideCoverageIds(guide: WatchOrderGuide): Set<number> {
+  return new Set([
+    guide.rootAnimeId,
+    ...(guide.entries || []).map((entry) => entry.animeId)
+  ]);
 }
 
 function qualityScore(anime: AnimeSummary, nowUnix: number): number {

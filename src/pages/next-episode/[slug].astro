@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { isQualityNextEpisodeAnime } from "@/lib/quality";
+import { isQualityNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
 import { nextEpisodeSlug, relatedSearchIntents, weeklyAiringLabel } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -26,11 +26,13 @@ const title = displayTitle(anime);
 const next = anime.nextAiringEpisode;
 const manualEditorial = manualEditorialFor(anime.id);
 const guide = qualityWatchOrderFor(anime.id);
+const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const publicGuide = guide && publicGuideSlugs.has(guide.slug) ? guide : undefined;
 const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
-const searchIntents = relatedSearchIntents({ anime, guide, genreLinks });
+const searchIntents = relatedSearchIntents({ anime, guide: publicGuide, genreLinks });
 const canonical = `/next-episode/${nextEpisodeSlug(anime)}/`;
 const description = `${title} next episode time, local release schedule, UTC release time, episode number, weekly airing pattern, and legal discovery links on Airing Atlas.`;
 const utcTime = next ? new Date(next.airingAt * 1000).toISOString().replace("T", " ").replace(".000Z", " UTC") : "TBA";

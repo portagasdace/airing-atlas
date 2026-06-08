@@ -2,10 +2,10 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
+import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { dedupeExternalLinks } from "@/lib/external-links";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { isPublicAnimeDetail, isQualityNextEpisodeAnime } from "@/lib/quality";
+import { isQualityNextEpisodeAnime, publicAnimeDetailPages, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeGuideHref, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -26,6 +26,8 @@ const formatLabel = titleCase(anime.format || "Anime");
 const metaDescription = animeSeoDescription(anime, manualEditorial?.intro);
 const recommendations = recommendationsFor(anime.id).slice(0, 4);
 const guide = qualityWatchOrderFor(anime.id);
+const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const publicGuide = guide && publicGuideSlugs.has(guide.slug) ? guide : undefined;
 const tags = (anime.tags || []).slice(0, 8);
 const officialLinks = dedupeExternalLinks(anime.externalLinks, 5);
 const studio = anime.studios?.[0]?.name;
@@ -33,8 +35,9 @@ const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
-const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
-const isIndexable = isPublicAnimeDetail(anime);
+const searchIntents = relatedSearchIntents({ anime, recommendations, guide: publicGuide, genreLinks });
+const publicAnimeDetailIds = new Set(publicAnimeDetailPages(allAnime).map((item) => item.id));
+const isIndexable = publicAnimeDetailIds.has(anime.id);
 const primaryGenres = (anime.genres || []).slice(0, 3);
 const editorialCards = manualEditorial
   ? [
@@ -117,7 +120,7 @@ const structuredData = [
         <a class="button" href={`/similar/?anime=${anime.id}`} data-track-event="detail_open_similar" data-track-label={title}>Similar</a>
         <a class="button" href={animeLikeGuideHref(anime)} data-track-event="detail_open_anime_like" data-track-label={title} data-anime-id={anime.id}>Anime like this</a>
         {isQualityNextEpisodeAnime(anime) && <a class="button" href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${title} next episode`} data-anime-id={anime.id}>Next episode</a>}
-        {guide && <a class="button" href={`/watch-order/${guide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={guide.title}>Watch order</a>}
+        {publicGuide && <a class="button" href={`/watch-order/${publicGuide.slug}/`} data-track-event="detail_open_watch_order" data-track-label={publicGuide.title}>Watch order</a>}
       </div>
       <div class="fact-strip">
         <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
@@ -200,13 +203,13 @@ const structuredData = [
     </section>
   )}
 
-  {guide && (
+  {publicGuide && (
     <section class="section">
       <div class="editor-note">
         <p class="eyebrow">Franchise path</p>
-        <h2>{guide.title}</h2>
-        <p>{guide.description}</p>
-        <a class="button small" href={`/watch-order/${guide.slug}/`}>Open watch order</a>
+        <h2>{publicGuide.title}</h2>
+        <p>{publicGuide.description}</p>
+        <a class="button small" href={`/watch-order/${publicGuide.slug}/`}>Open watch order</a>
       </div>
     </section>
   )}

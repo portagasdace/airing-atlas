@@ -2,10 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, watchOrderIndex } from "@/lib/anime";
-import { manualWatchOrderByAnimeId, qualityWatchOrderGuides, watchOrderQualityEntries } from "@/lib/manual-content";
+import { manualWatchOrderByAnimeId, watchOrderQualityEntries } from "@/lib/manual-content";
+import { publicWatchOrderGuides } from "@/lib/quality";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-const guides = qualityWatchOrderGuides(watchOrderIndex.items).slice(0, 48);
+const guides = publicWatchOrderGuides(watchOrderIndex.items);
 ---
 
 <BaseLayout

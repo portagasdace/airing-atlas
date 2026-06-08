@@ -1,7 +1,6 @@
 import { allAnime, canonicalPath, genreIndex, seasonIndex, watchOrderIndex } from "@/lib/anime";
 import { discoveryClusters } from "@/lib/discovery-clusters";
-import { qualityWatchOrderGuides } from "@/lib/manual-content";
-import { publicAnimeDetailPages, publicNextEpisodeAnime, qualifiedAnimeLikePages } from "@/lib/quality";
+import { publicAnimeDetailPages, publicAnimeLikePages, publicNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
 
 const staticPages = [
@@ -15,19 +14,13 @@ const staticPages = [
   "/anime-like/",
   "/next-episode/",
   "/watch-order/",
-  "/rankings/",
-  "/watchlist/",
-  "/about/",
-  "/contact/",
-  "/privacy/",
-  "/terms/",
-  "/affiliate-disclosure/"
+  "/rankings/"
 ];
 
 export function GET() {
   const today = new Date().toISOString().slice(0, 10);
   const seenAnimeLike = new Set<string>();
-  const animeLikeUrls = qualifiedAnimeLikePages(allAnime)
+  const animeLikeUrls = publicAnimeLikePages(allAnime)
     .map((anime) => animeLikeSlug(anime))
     .filter((slug): slug is string => {
       if (!slug || seenAnimeLike.has(slug)) return false;
@@ -49,10 +42,10 @@ export function GET() {
     ...publicAnimeDetailPages(allAnime).map((anime) => `/anime/${anime.slug}/`),
     ...animeLikeUrls,
     ...nextEpisodeUrls,
-    ...qualityWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`),
+    ...publicWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`),
     ...genreIndex.items.map((genre) => `/genres/${genre.slug}/`),
     ...seasonIndex.items.map((season) => `/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)
-  ];
+  ].filter(uniquePath);
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -71,4 +64,8 @@ ${urls
       "Content-Type": "application/xml; charset=utf-8"
     }
   });
+}
+
+function uniquePath(value: string, index: number, items: string[]): boolean {
+  return items.indexOf(value) === index;
 }

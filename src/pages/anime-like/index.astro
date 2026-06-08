@@ -3,13 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import { allAnime, animeById, canonicalPath, displayTitle } from "@/lib/anime";
 import { manualFeaturedAnimeIds, manualSimilarGuideFor } from "@/lib/manual-content";
-import { qualifiedAnimeLikePages } from "@/lib/quality";
+import { publicAnimeLikePages } from "@/lib/quality";
 import { animeLikeSlug } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
 const curated = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
-const automatic = qualifiedAnimeLikePages(allAnime)
+const automatic = publicAnimeLikePages(allAnime)
   .filter((anime) => !curated.some((item) => item.id === anime.id))
   .slice(0, 18);
 const title = "Anime Like Guides";
@@ -61,7 +61,7 @@ const description = "Find anime like Attack on Titan, Demon Slayer, Jujutsu Kais
       <div>
         <p class="eyebrow">Popular matches</p>
         <h2>More anime recommendation pages</h2>
-        <p>These lighter pages use AniList signals plus local similarity matching.</p>
+        <p>These selected pages have stronger demand and recommendation depth. Use the finder for the wider catalog.</p>
       </div>
     </div>
     <div class="anime-grid">

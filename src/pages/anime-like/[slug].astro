@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, animeById, animeByIds, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase } from "@/lib/anime";
-import { manualFeaturedAnimeIds, manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { qualifiedAnimeLikePages } from "@/lib/quality";
+import { allAnime, animeById, animeByIds, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
+import { manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { publicAnimeLikePages, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeGuideHref, animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeRecommendation, AnimeSummary } from "@/types/anime";
@@ -12,15 +12,7 @@ type RecommendationCard = AnimeRecommendation & { format?: string | null; status
 
 export function getStaticPaths() {
   const seen = new Set<string>();
-  const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
-  const curatedTargets = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
-  const automaticTargets = allAnime
-    .filter((anime) => recommendationsFor(anime.id).length >= 3 && !blockedFormats.has(String(anime.format || "").toUpperCase()))
-    .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
-    .slice(0, 140);
-  const targets = [...curatedTargets, ...automaticTargets].filter((anime, index, items) => items.findIndex((item) => item.id === anime.id) === index);
-
-  return targets.flatMap((anime) => {
+  return publicAnimeLikePages(allAnime).flatMap((anime) => {
     const slug = animeLikeSlug(anime);
     if (!slug || seen.has(slug)) return [];
     seen.add(slug);
@@ -33,10 +25,12 @@ export function getStaticPaths() {
 
 const { anime } = Astro.props as { anime: AnimeSummary };
 const title = displayTitle(anime);
-const indexableAnimeLikeIds = new Set(qualifiedAnimeLikePages(allAnime).map((item) => item.id));
+const indexableAnimeLikeIds = new Set(publicAnimeLikePages(allAnime).map((item) => item.id));
 const isIndexable = indexableAnimeLikeIds.has(anime.id);
 const manualGuide = manualSimilarGuideFor(anime.id);
 const guide = qualityWatchOrderFor(anime.id);
+const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const publicGuide = guide && publicGuideSlugs.has(guide.slug) ? guide : undefined;
 const blockedRecommendationFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL"]);
 const isAnimeMedia = (item?: AnimeSummary) => item ? !blockedRecommendationFormats.has(String(item.format || "").toUpperCase()) : true;
 const direct = recommendationsFor(anime.id).filter((item) => isAnimeMedia(animeById(item.animeId)));
@@ -98,7 +92,7 @@ const genreLinks = (anime.genres || []).map((genre) => ({
   name: genre,
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
-const searchIntents = relatedSearchIntents({ anime, recommendations, guide, genreLinks });
+const searchIntents = relatedSearchIntents({ anime, recommendations, guide: publicGuide, genreLinks });
 const relatedGuides = manualGuide
   ? animeByIds(manualGuide.relatedGuideIds).map((item) => ({
     label: `Anime like ${displayTitle(item)}`,

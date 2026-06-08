@@ -2,10 +2,10 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, animeByIds, canonicalPath, displayTitle } from "@/lib/anime";
+import { allAnime, animeByIds, canonicalPath, displayTitle, watchOrderIndex } from "@/lib/anime";
 import { clusterReason, discoveryClusters, rankedClusterAnime, type DiscoveryCluster } from "@/lib/discovery-clusters";
 import { qualityWatchOrderFor } from "@/lib/manual-content";
-import { isQualityNextEpisodeAnime } from "@/lib/quality";
+import { isQualityNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeGuideHref, hasPublicAnimeLikeGuide, nextEpisodeSlug } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -25,6 +25,7 @@ const featured = [...highlighted, ...ranked]
   .slice(0, 8);
 const morePicks = ranked.filter((anime) => !featured.some((item) => item.id === anime.id)).slice(0, 12);
 const relatedGuides = animeByIds(cluster.relatedGuideIds).slice(0, 6);
+const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((guide) => guide.slug));
 const title = `${cluster.title}: Best Picks and Related Guides`;
 const canonical = `/discover/${cluster.slug}/`;
 const plannerPresetBySlug: Record<string, { time: string; mood: string; length: string; finished: string; label: string }> = {
@@ -142,11 +143,12 @@ const structuredData = collectionPageJsonLd({
       <div class="link-stack">
         {relatedGuides.map((anime) => {
           const guide = qualityWatchOrderFor(anime.id);
+          const publicGuide = guide && publicGuideSlugs.has(guide.slug) ? guide : undefined;
           const hasSimilarGuide = hasPublicAnimeLikeGuide(anime);
           return (
             <>
               {hasSimilarGuide && <a href={animeLikeGuideHref(anime)} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>Anime like {displayTitle(anime)}</a>}
-              {guide && <a href={`/watch-order/${guide.slug}/`} data-track-event="related_guide_click" data-track-label={guide.title}>{guide.title}</a>}
+              {publicGuide && <a href={`/watch-order/${publicGuide.slug}/`} data-track-event="related_guide_click" data-track-label={publicGuide.title}>{publicGuide.title}</a>}
               {isQualityNextEpisodeAnime(anime) && <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`${displayTitle(anime)} next episode`}>{displayTitle(anime)} next episode</a>}
             </>
           );

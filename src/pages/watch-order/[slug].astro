@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, fuzzyDateLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { entriesForManualOrder, manualWatchOrderFor, qualityWatchOrderGuides, watchOrderQualityEntries } from "@/lib/manual-content";
+import { publicWatchOrderGuides } from "@/lib/quality";
 import { watchOrderJsonLd } from "@/lib/seo";
 import type { WatchOrderGuide } from "@/types/anime";
 
@@ -14,6 +15,8 @@ export function getStaticPaths() {
 }
 
 const { guide } = Astro.props as { guide: WatchOrderGuide };
+const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const isIndexable = publicGuideSlugs.has(guide.slug);
 const manual = manualWatchOrderFor(guide.rootAnimeId);
 const qualityEntries = watchOrderQualityEntries(guide);
 const mainRelations = new Set(["MAIN", "PREQUEL", "SEQUEL"]);
@@ -69,6 +72,7 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
   title={guide.title}
   description={guide.description}
   canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
+  robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={watchOrderJsonLd(schemaGuide, faqItems)}
 >
   <section class="section">

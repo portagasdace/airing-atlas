@@ -11,10 +11,17 @@ const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
 const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
 const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
-const SITEMAP_WARNING_CEILING = 520;
+const PUBLIC_ANIME_DETAIL_LIMIT = 90;
+const PUBLIC_ANIME_LIKE_LIMIT = 30;
+const PUBLIC_WATCH_ORDER_LIMIT = 24;
+const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
+const SITEMAP_WARNING_CEILING = 220;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
+const removedStaticPaths = new Set(["/about/", "/contact/", "/privacy/", "/terms/", "/affiliate-disclosure/", "/watchlist/"]);
 const warnings = [];
+const criticalWarnings = [];
 const info = [];
+const requireLiveData = process.env.REQUIRE_LIVE_DATA === "true";
 
 const catalog = await readJson("src/data/generated/anime-catalog.json");
 const calendar = await readJson("src/data/generated/airing-calendar.json");
@@ -26,31 +33,39 @@ const animeBySlug = new Map((catalog.anime || []).map((anime) => [anime.slug, an
 const recommendationMap = new Map((recommendations.items || []).map((item) => [item.animeId, item.recommendations || []]));
 const qualityWatchOrderRoots = new Set((watchOrders.items || []).filter(isQualityWatchOrderGuide).map((guide) => guide.rootAnimeId));
 const publicAnimeLikeGuideIds = new Set(publicAnimeLikeGuides().map((anime) => anime.id));
+const publicWatchOrderGuideSlugs = new Set(publicWatchOrderGuides().map((guide) => guide.slug));
 
 auditDataFreshness();
 auditRecommendationDepth();
 auditWatchOrders();
+auditSlugCollisions();
 await auditBuiltHtml();
 await auditSitemap();
 
 console.log("[quality] Airing Atlas quality audit");
 for (const line of info) console.log(`[quality] ${line}`);
+if (criticalWarnings.length) {
+  console.error(`[quality] ${criticalWarnings.length} critical warnings`);
+  for (const warning of criticalWarnings) console.error(`[quality] critical: ${warning}`);
+}
 if (warnings.length) {
   console.warn(`[quality] ${warnings.length} warnings`);
   for (const warning of warnings) console.warn(`[quality] warning: ${warning}`);
 } else {
   console.log("[quality] no warnings");
 }
+if (criticalWarnings.length) process.exit(1);
 
 function auditDataFreshness() {
   const pastCalendar = (calendar.entries || []).filter((entry) => entry.airingAt && entry.airingAt <= nowUnix);
   const futureCalendar = (calendar.entries || []).filter((entry) => entry.airingAt && entry.airingAt > nowUnix);
   const publicNextEpisode = (catalog.anime || []).filter((anime) => isPublicNextEpisode(anime));
   if (pastCalendar.length) info.push(`${pastCalendar.length} raw calendar entries are already in the past and should be filtered from public views.`);
-  if (!futureCalendar.length && !publicNextEpisode.length) warnings.push("No future calendar or next-episode entries are available for public schedule views.");
+  if (!futureCalendar.length && !publicNextEpisode.length) criticalWarnings.push("No future calendar or next-episode entries are available for public schedule views.");
+  if (requireLiveData && calendar.source !== "anilist") criticalWarnings.push(`Expected live AniList data but calendar source was "${calendar.source}".`);
 
   const stalePublicNext = publicNextEpisode.filter((anime) => (anime.nextAiringEpisode?.airingAt || 0) <= nowUnix);
-  if (stalePublicNext.length) warnings.push(`${stalePublicNext.length} public next-episode candidates are stale.`);
+  if (stalePublicNext.length) criticalWarnings.push(`${stalePublicNext.length} public next-episode candidates are stale.`);
   info.push(`${publicNextEpisode.length} public next-episode candidates pass freshness and demand gates.`);
 }
 
@@ -65,12 +80,20 @@ function auditWatchOrders() {
   const weak = (watchOrders.items || []).filter((guide) => (guide.entries || []).length < 3);
   if (weak.length) warnings.push(`${weak.length} watch-order guides have fewer than 3 entries.`);
   info.push(`${(watchOrders.items || []).length} watch-order guides generated before sitemap quality filtering.`);
+  info.push(`${publicWatchOrderGuideSlugs.size} watch-order guides pass public index gates.`);
+}
+
+function auditSlugCollisions() {
+  const animeLikeCollisions = slugCollisions(publicAnimeLikeGuides(), slugFromAnime);
+  const nextEpisodeCollisions = slugCollisions((catalog.anime || []).filter(isPublicNextEpisode), slugFromAnime);
+  if (animeLikeCollisions.length) warnings.push(`${animeLikeCollisions.length} public anime-like slug collisions found: ${collisionPreview(animeLikeCollisions)}.`);
+  if (nextEpisodeCollisions.length) warnings.push(`${nextEpisodeCollisions.length} public next-episode slug collisions found: ${collisionPreview(nextEpisodeCollisions)}.`);
 }
 
 async function auditBuiltHtml() {
   const dist = resolve(root, "dist");
   if (!existsSync(dist)) {
-    warnings.push("dist/ does not exist; run pnpm run build before the quality audit for HTML checks.");
+    criticalWarnings.push("dist/ does not exist; run pnpm run build before the quality audit for HTML checks.");
     return;
   }
   const files = await walk(dist, ".html");
@@ -80,6 +103,7 @@ async function auditBuiltHtml() {
   let missingStructuredData = 0;
   let missingNoindex = 0;
   let missingEditorialValue = 0;
+  let noindexDynamicPages = 0;
 
   for (const file of files) {
     const html = await readFile(file, "utf8");
@@ -87,6 +111,8 @@ async function auditBuiltHtml() {
     const title = match(html, /<title>(.*?)<\/title>/is);
     const description = html.match(/<meta\s+name=["']description["']\s+content=(["'])(.*?)\1/is)?.[2]?.trim() || "";
     const hasNoindex = /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
+    const isDynamicIndexSurface = /^\/(?:anime|anime-like|watch-order)\//.test(route);
+    if (isDynamicIndexSurface && hasNoindex) noindexDynamicPages += 1;
     if (title) addToMap(titles, title, file);
     if (description) addToMap(descriptions, description, file);
     missingImageDimensions += [...html.matchAll(/<img\s+[^>]*>/g)].filter((item) => !/\swidth=/.test(item[0]) || !/\sheight=/.test(item[0])).length;
@@ -97,13 +123,16 @@ async function auditBuiltHtml() {
 
     const animeLikeSlug = route.match(/^\/anime-like\/([^/]+)\//)?.[1];
     const animeSlug = route.match(/^\/anime\/([^/]+)\//)?.[1];
+    const watchOrderSlug = route.match(/^\/watch-order\/([^/]+)\//)?.[1];
     if (animeLikeSlug) {
       const anime = (catalog.anime || []).find((item) => slugFromAnime(item) === animeLikeSlug);
       if (anime && !publicAnimeLikeGuideIds.has(anime.id) && !hasNoindex) missingNoindex += 1;
     } else if (animeSlug) {
       const anime = animeBySlug.get(animeSlug);
       if (anime && !isPublicAnimeDetail(anime) && !hasNoindex) missingNoindex += 1;
-      if (anime && isPublicAnimeDetail(anime) && !html.includes("anime_editorial_value")) missingEditorialValue += 1;
+      if (anime && !hasNoindex && !html.includes("anime_editorial_value")) missingEditorialValue += 1;
+    } else if (watchOrderSlug) {
+      if (!publicWatchOrderGuideSlugs.has(watchOrderSlug) && !hasNoindex) missingNoindex += 1;
     }
   }
 
@@ -116,18 +145,21 @@ async function auditBuiltHtml() {
   if (missingNoindex) warnings.push(`${missingNoindex} low-value generated pages are missing noindex,follow.`);
   if (missingEditorialValue) warnings.push(`${missingEditorialValue} public anime detail pages are missing Airing Atlas editorial value sections.`);
   info.push(`${files.length} built HTML files scanned.`);
+  info.push(`${noindexDynamicPages} generated dynamic pages carry noindex,follow.`);
 }
 
 async function auditSitemap() {
   const sitemapPath = resolve(root, "dist/sitemap.xml");
   if (!existsSync(sitemapPath)) {
-    warnings.push("dist/sitemap.xml does not exist; sitemap checks skipped.");
+    criticalWarnings.push("dist/sitemap.xml does not exist; sitemap checks skipped.");
     return;
   }
   const sitemap = await readFile(sitemapPath, "utf8");
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((item) => item[1]);
+  const uniqueUrls = new Set(urls);
   const animeDetailUrls = urls.filter((url) => url.includes("/anime/") && !url.includes("/anime-like/"));
   const animeLikeUrls = urls.filter((url) => url.includes("/anime-like/") && !url.endsWith("/anime-like/"));
+  const watchOrderUrls = urls.filter((url) => url.includes("/watch-order/") && !url.endsWith("/watch-order/"));
   const lowValueAnimeDetails = animeDetailUrls.filter((url) => {
     const slug = url.split("/anime/")[1]?.replace(/\/$/, "");
     const anime = animeBySlug.get(slug);
@@ -138,6 +170,10 @@ async function auditSitemap() {
     const anime = (catalog.anime || []).find((item) => slugFromAnime(item) === slug);
     return anime && !publicAnimeLikeGuideIds.has(anime.id);
   });
+  const weakWatchOrderUrls = watchOrderUrls.filter((url) => {
+    const slug = url.split("/watch-order/")[1]?.replace(/\/$/, "");
+    return slug && !publicWatchOrderGuideSlugs.has(slug);
+  });
   const expiredNextEpisodeUrls = urls.filter((url) => {
     if (!url.includes("/next-episode/") || url.endsWith("/next-episode/")) return false;
     const slug = url.split("/next-episode/")[1]?.replace(/\/$/, "");
@@ -145,15 +181,27 @@ async function auditSitemap() {
     return !matches.some((anime) => isPublicNextEpisode(anime));
   });
   const discoverClusterUrls = urls.filter((url) => url.includes("/discover/") && url !== "https://airingatlas.com/discover/");
+  const removedStaticUrls = urls.filter((url) => removedStaticPaths.has(new URL(url).pathname));
+  const sitemapNoindexUrls = [];
+  for (const url of urls) {
+    if (await urlHasNoindex(url)) sitemapNoindexUrls.push(url);
+  }
 
   if (urls.length > SITEMAP_WARNING_CEILING) warnings.push(`${urls.length} sitemap URLs found; target is ${SITEMAP_WARNING_CEILING} or fewer during quality cleanup.`);
+  if (uniqueUrls.size !== urls.length) warnings.push(`${urls.length - uniqueUrls.size} duplicate sitemap URLs found.`);
+  if (animeDetailUrls.length > PUBLIC_ANIME_DETAIL_LIMIT) warnings.push(`${animeDetailUrls.length} anime detail URLs found in sitemap; target is ${PUBLIC_ANIME_DETAIL_LIMIT} or fewer.`);
   if (lowValueAnimeDetails.length) warnings.push(`${lowValueAnimeDetails.length} anime detail URLs fail the public sitemap quality gate.`);
-  if (animeLikeUrls.length > 90) warnings.push(`${animeLikeUrls.length} anime-like URLs found in sitemap; target is 90 or fewer.`);
+  if (animeLikeUrls.length > PUBLIC_ANIME_LIKE_LIMIT) warnings.push(`${animeLikeUrls.length} anime-like URLs found in sitemap; target is ${PUBLIC_ANIME_LIKE_LIMIT} or fewer.`);
   if (weakAnimeLikeUrls.length) warnings.push(`${weakAnimeLikeUrls.length} anime-like sitemap URLs fail recommendation or demand gates.`);
+  if (watchOrderUrls.length > PUBLIC_WATCH_ORDER_LIMIT) warnings.push(`${watchOrderUrls.length} watch-order URLs found in sitemap; target is ${PUBLIC_WATCH_ORDER_LIMIT} or fewer.`);
+  if (weakWatchOrderUrls.length) warnings.push(`${weakWatchOrderUrls.length} watch-order sitemap URLs fail public guide gates.`);
   if (expiredNextEpisodeUrls.length) warnings.push(`${expiredNextEpisodeUrls.length} next-episode sitemap URLs fail freshness or demand gates.`);
+  if (removedStaticUrls.length) warnings.push(`${removedStaticUrls.length} low-intent static URLs remain in sitemap: ${removedStaticUrls.join(", ")}.`);
+  if (sitemapNoindexUrls.length) warnings.push(`${sitemapNoindexUrls.length} sitemap URLs render noindex,follow.`);
   if (discoverClusterUrls.length < 8) warnings.push(`Only ${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected 8.`);
   info.push(`${animeDetailUrls.length} anime detail URLs pass sitemap quality gates.`);
   info.push(`${animeLikeUrls.length} anime-like URLs pass sitemap quality gates.`);
+  info.push(`${watchOrderUrls.length} watch-order URLs pass sitemap quality gates.`);
   info.push(`${urls.length} sitemap URLs scanned.`);
 }
 
@@ -206,7 +254,8 @@ function isQualifiedAnimeLike(anime) {
 }
 
 function publicAnimeLikeGuides() {
-  const seen = new Set();
+  const seenIds = new Set();
+  const seenSlugs = new Set();
   const curated = [...manualFeaturedAnimeIds]
     .map((id) => animeById.get(id))
     .filter(Boolean);
@@ -216,11 +265,40 @@ function publicAnimeLikeGuides() {
 
   return [...curated, ...automatic]
     .filter((anime) => {
-      if (seen.has(anime.id)) return false;
-      seen.add(anime.id);
+      const slug = slugFromAnime(anime);
+      if (seenIds.has(anime.id) || seenSlugs.has(slug)) return false;
+      seenIds.add(anime.id);
+      seenSlugs.add(slug);
       return true;
     })
-    .slice(0, 80);
+    .slice(0, PUBLIC_ANIME_LIKE_LIMIT);
+}
+
+function publicWatchOrderGuides() {
+  const seen = new Set();
+  const coveredAnimeIds = new Set();
+  const selected = [];
+  const guides = watchOrders.items || [];
+  const curated = [...manualFeaturedAnimeIds]
+    .map((id) => guides.find((guide) => guide.rootAnimeId === id || (guide.entries || []).some((entry) => entry.animeId === id)))
+    .filter((guide) => guide && isQualityWatchOrderGuide(guide));
+  const rest = guides.filter(isQualityWatchOrderGuide);
+
+  for (const guide of [...curated, ...rest]) {
+    if (excludedPublicWatchOrderRootIds.has(guide.rootAnimeId)) continue;
+    if (seen.has(guide.slug)) continue;
+    seen.add(guide.slug);
+
+    const coverage = watchOrderGuideCoverageIds(guide);
+    const overlapsExistingGuide = [...coverage].some((id) => coveredAnimeIds.has(id));
+    if (overlapsExistingGuide && !manualFeaturedAnimeIds.has(guide.rootAnimeId)) continue;
+
+    selected.push(guide);
+    for (const id of coverage) coveredAnimeIds.add(id);
+    if (selected.length >= PUBLIC_WATCH_ORDER_LIMIT) break;
+  }
+
+  return selected;
 }
 
 function isQualityWatchOrderGuide(guide) {
@@ -231,6 +309,39 @@ function isQualityWatchOrderGuide(guide) {
   });
   const hasMainStory = entries.some((entry) => !["SUMMARY", "ALTERNATIVE"].includes(String(entry.relationType || "").toUpperCase()));
   return entries.length >= 3 && hasMainStory;
+}
+
+function watchOrderGuideCoverageIds(guide) {
+  return new Set([
+    guide.rootAnimeId,
+    ...(guide.entries || []).map((entry) => entry.animeId)
+  ]);
+}
+
+function slugCollisions(items, slugFor) {
+  const bySlug = new Map();
+  for (const item of items) {
+    const slug = slugFor(item);
+    if (!slug) continue;
+    if (!bySlug.has(slug)) bySlug.set(slug, []);
+    bySlug.get(slug).push(item);
+  }
+  return [...bySlug.entries()].filter(([, values]) => values.length > 1);
+}
+
+function collisionPreview(collisions) {
+  return collisions
+    .slice(0, 3)
+    .map(([slug, items]) => `${slug} (${items.map((item) => item.id || item.rootAnimeId).join(", ")})`)
+    .join("; ");
+}
+
+async function urlHasNoindex(url) {
+  const path = new URL(url).pathname;
+  const htmlPath = resolve(root, "dist", path === "/" ? "index.html" : `${path.replace(/^\/|\/$/g, "")}/index.html`);
+  if (!existsSync(htmlPath)) return false;
+  const html = await readFile(htmlPath, "utf8");
+  return /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
 }
 
 async function readJson(path) {
