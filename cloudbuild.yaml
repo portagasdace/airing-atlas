@@ -2,6 +2,8 @@ substitutions:
   _FIREBASE_PROJECT_ID: airing-atlas
   _PUBLIC_SITE_URL: "https://airingatlas.com"
   _PUBLIC_GA_MEASUREMENT_ID: "G-7LC772Z7PH"
+  _PUBLIC_ADSENSE_CLIENT_ID: "ca-pub-9575844201676716"
+  _PUBLIC_ADSENSE_SLOT_ID: "5983421585"
 
 steps:
   - name: node:22
@@ -13,12 +15,16 @@ steps:
     env:
       - "PUBLIC_SITE_URL=${_PUBLIC_SITE_URL}"
       - "PUBLIC_GA_MEASUREMENT_ID=${_PUBLIC_GA_MEASUREMENT_ID}"
+      - "PUBLIC_ADSENSE_CLIENT_ID=${_PUBLIC_ADSENSE_CLIENT_ID}"
+      - "PUBLIC_ADSENSE_SLOT_ID=${_PUBLIC_ADSENSE_SLOT_ID}"
   - name: node:22
     entrypoint: bash
     args: ["-lc", "corepack enable && pnpm run build"]
     env:
       - "PUBLIC_SITE_URL=${_PUBLIC_SITE_URL}"
       - "PUBLIC_GA_MEASUREMENT_ID=${_PUBLIC_GA_MEASUREMENT_ID}"
+      - "PUBLIC_ADSENSE_CLIENT_ID=${_PUBLIC_ADSENSE_CLIENT_ID}"
+      - "PUBLIC_ADSENSE_SLOT_ID=${_PUBLIC_ADSENSE_SLOT_ID}"
   - name: node:22
     entrypoint: bash
     args:
