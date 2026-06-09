@@ -23,6 +23,7 @@ const airing = animeByIds(genre.airingIds);
   description={`Browse popular ${genre.genre.toLowerCase()} anime, current airing picks, scores, formats, and watchlist-ready detail pages.`}
   canonical={canonicalPath(`/genres/${genre.slug}/`)}
   structuredData={genrePageJsonLd(genre, top)}
+  adsEnabled={true}
 >
   <section class="section">
     <div class="section-header">

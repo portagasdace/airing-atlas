@@ -1,21 +1,24 @@
 ---
 interface Props {
+  enabled?: boolean;
   label?: string;
 }
 
-const { label = "Advertisement" } = Astro.props;
+const { enabled = true, label = "Advertisement" } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 const adsenseSlotId = import.meta.env.PUBLIC_ADSENSE_SLOT_ID;
+const shouldRenderAd = Boolean(enabled && adsenseClientId && adsenseSlotId);
 ---
 
 {
-  adsenseClientId ? (
-    <aside class="ad-slot" aria-label={label}>
+  shouldRenderAd ? (
+    <aside class="ad-slot" aria-label={label} data-ad-slot="manual-content">
+      <span class="ad-slot-label">{label}</span>
       <ins
         class="adsbygoogle"
         style="display:block"
         data-ad-client={adsenseClientId}
-        data-ad-slot={adsenseSlotId || undefined}
+        data-ad-slot={adsenseSlotId}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />

@@ -155,6 +155,7 @@ if (manualGuide?.faq.length) {
   image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
   robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={structuredData}
+  adsEnabled={isIndexable}
 >
   <section class="section">
     <div class="section-header">
@@ -280,6 +281,6 @@ if (manualGuide?.faq.length) {
   )}
 
   <section class="section">
-    <AdSlot />
+    <AdSlot enabled={isIndexable} />
   </section>
 </BaseLayout>

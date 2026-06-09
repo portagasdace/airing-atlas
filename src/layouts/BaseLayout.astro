@@ -9,6 +9,7 @@ interface Props {
   canonical?: string;
   image?: string;
   robots?: string;
+  adsEnabled?: boolean;
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
@@ -18,12 +19,14 @@ const {
   canonical = Astro.url.toString(),
   image = "/og-default.svg",
   robots,
+  adsEnabled = false,
   structuredData
 } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const pageTitle = title.includes("Airing Atlas") ? title : `${title} · Airing Atlas`;
 const structuredDataItems = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
+const shouldLoadAds = Boolean(adsEnabled && adsenseClientId && !robots?.toLowerCase().includes("noindex"));
 ---
 
 <!doctype html>
@@ -77,7 +80,7 @@ const structuredDataItems = Array.isArray(structuredData) ? structuredData : str
     }
     {structuredDataItems.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
     {
-      adsenseClientId && (
+      shouldLoadAds && (
         <script
           is:inline
           async

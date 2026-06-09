@@ -632,12 +632,22 @@ button[aria-pressed="true"],
 .ad-slot {
   display: grid;
   place-items: center;
-  min-height: 92px;
-  border: 2px dashed rgba(17, 18, 22, 0.38);
+  gap: 8px;
+  min-height: 124px;
+  border: 1px solid rgba(17, 18, 22, 0.18);
   background: rgba(255, 253, 248, 0.72);
   color: var(--muted);
   font-size: 0.86rem;
   margin: 26px 0;
+  padding: 12px;
+}
+
+.ad-slot-label {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .freshness-note {

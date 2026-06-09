@@ -24,6 +24,7 @@ const label = `${titleCase(season.season)} ${season.seasonYear}`;
   description={`Browse ${label} anime with popular picks, airing titles, scores, formats, and watchlist-ready detail pages.`}
   canonical={canonicalPath(`/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)}
   structuredData={seasonPageJsonLd(season, label, top)}
+  adsEnabled={true}
 >
   <section class="section">
     <div class="section-header">

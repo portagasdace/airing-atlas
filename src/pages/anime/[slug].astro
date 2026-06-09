@@ -81,6 +81,7 @@ const structuredData = [
   image={cover}
   robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={structuredData}
+  adsEnabled={isIndexable}
 >
   <section class="detail-hero" data-track-section="anime_detail_hero">
     <img class="detail-poster" src={cover} alt="" width="300" height="420" referrerpolicy="no-referrer" />
@@ -225,7 +226,7 @@ const structuredData = [
   )}
 
   <section class="section">
-    <AdSlot />
+    <AdSlot enabled={isIndexable} />
     {officialLinks.length > 0 && (
       <div class="editor-note official-links">
         <p class="eyebrow">Official links</p>

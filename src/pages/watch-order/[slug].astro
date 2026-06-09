@@ -74,6 +74,7 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
   canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
   robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={watchOrderJsonLd(schemaGuide, faqItems)}
+  adsEnabled={isIndexable}
 >
   <section class="section">
     <div class="section-header">
@@ -161,6 +162,6 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
   </section>
 
   <section class="section">
-    <AdSlot />
+    <AdSlot enabled={isIndexable} />
   </section>
 </BaseLayout>
