@@ -111,6 +111,32 @@ const structuredData = [
           <div><span>Weekly pattern</span><strong>{weeklyAiringLabel(next?.airingAt)}</strong></div>
           <div><span>Score</span><strong>{scoreLabel(anime)}</strong></div>
         </div>
+        <div class="result-actions">
+          <button
+            class="button small"
+            type="button"
+            data-watchlist-toggle
+            data-anime-id={anime.id}
+            data-title={title}
+            data-cover={anime.coverImage?.large || anime.coverImage?.extraLarge || ""}
+            data-slug={anime.slug}
+            data-next-airing={next?.airingAt || ""}
+          >
+            Add to watchlist
+          </button>
+          <button
+            class="button small"
+            type="button"
+            data-next-episode-ics
+            data-title={title}
+            data-episode={next?.episode || ""}
+            data-ics-airing-at={next?.airingAt || ""}
+            data-url={canonicalPath(canonical)}
+          >
+            Download calendar reminder
+          </button>
+        </div>
+        <p class="freshness-note" data-next-episode-message aria-live="polite"></p>
         {next && <p class="freshness-note" data-expiry-note data-airing-at-expiry={next.airingAt} hidden>This listed episode has already aired. Airing Atlas will refresh this page after the next scheduled sync.</p>}
       </div>
     </div>
@@ -155,4 +181,5 @@ const structuredData = [
   <section class="section">
     <AdSlot />
   </section>
+  <script is:inline src="/scripts/next-episode.js" defer></script>
 </BaseLayout>

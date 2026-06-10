@@ -8,6 +8,14 @@ import { collectionPageJsonLd } from "@/lib/seo";
 const upcoming = publicNextEpisodeAnime(allAnime);
 const title = "Anime Next Episode Schedule";
 const description = "Track next episode times, local release schedules, weekly airing days, and episode numbers for currently airing anime.";
+const onePiece = upcoming.find((anime) => anime.id === 21);
+const popularNextEpisodes = [
+  onePiece,
+  ...upcoming
+]
+  .filter((anime): anime is (typeof upcoming)[number] => Boolean(anime))
+  .filter((anime, index, items) => items.findIndex((item) => item.id === anime.id) === index)
+  .slice(0, 6);
 ---
 
 <BaseLayout
@@ -35,6 +43,24 @@ const description = "Track next episode times, local release schedules, weekly a
       <a class="button primary" href="/calendar/">Open calendar</a>
     </div>
   </section>
+
+  {popularNextEpisodes.length > 0 && (
+    <section class="section">
+      <div class="keyword-panel" data-track-section="next_episode_popular_shortcuts">
+        <p class="eyebrow">Popular next episode searches</p>
+        <h2>Start with high-demand release trackers</h2>
+        <p>Open a focused next episode page with local time conversion, UTC time, weekly airing pattern, and calendar reminder download.</p>
+        <div class="keyword-list">
+          {popularNextEpisodes.map((anime) => (
+            <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_popular_click" data-track-label={`${displayTitle(anime)} next episode`}>
+              <span>Next episode</span>
+              {displayTitle(anime)}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="section result-grid">
     {upcoming.length ? upcoming.map((anime, index) => {

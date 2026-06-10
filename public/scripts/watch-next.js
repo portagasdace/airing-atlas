@@ -2,6 +2,8 @@
   const mount = document.querySelector("[data-watch-next-results]");
   if (!mount) return;
 
+  const toolMode = mount.dataset.watchNextMode || (window.location.pathname === "/anime-finder/" ? "anime_finder" : "watch_next");
+  const isAnimeFinder = toolMode === "anime_finder";
   const blockedGenres = new Set(["Ecchi"]);
   const blockedFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
   const controls = {
@@ -63,13 +65,17 @@
 
   let catalog = [];
   let lastEventState = "";
+  let hasRendered = false;
 
   const load = async () => {
     const response = await fetch("/data/anime-index.json");
     const data = await response.json();
     catalog = (data.anime || []).filter(isCandidate);
     applyUrlParams();
-    render();
+    render({
+      trackAuto: true,
+      interactionType: window.location.search ? "url_params" : "initial_load"
+    });
   };
 
   const applyUrlParams = () => {
@@ -88,7 +94,7 @@
     if (option) controls[key].value = value;
   };
 
-  const render = () => {
+  const render = ({ trackAuto = false, interactionType = "control_change" } = {}) => {
     const state = currentState();
     const scored = catalog
       .map((anime) => scoreAnime(anime, state))
@@ -105,16 +111,31 @@
       : `<section class="empty-state"><p class="eyebrow">No recommendation</p><h2>Try any length, either status, or a broader mood.</h2></section>`;
 
     const eventState = JSON.stringify(state);
-    if (eventState !== lastEventState && typeof window.airingAtlasTrack === "function") {
-      window.airingAtlasTrack("watch_next_filter_change", {
+    if (trackAuto && !hasRendered) {
+      track("watch_next_auto_render", {
+        tool_mode: toolMode,
         mood: state.mood,
         length: state.length,
         status: state.status,
         priority: state.priority,
+        result_count: results.length,
+        interaction_type: interactionType,
+        has_reference: Boolean(state.query)
+      });
+    } else if (hasRendered && eventState !== lastEventState) {
+      track(isAnimeFinder ? "anime_finder_filter_change" : "watch_next_filter_change", {
+        tool_mode: toolMode,
+        mood: state.mood,
+        length: state.length,
+        status: state.status,
+        priority: state.priority,
+        result_count: results.length,
+        interaction_type: interactionType,
         has_reference: Boolean(state.query)
       });
     }
     lastEventState = eventState;
+    hasRendered = true;
   };
 
   const currentState = () => ({
@@ -209,14 +230,16 @@
     const title = titleFor(anime);
     const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg";
     const next = anime.nextAiringEpisode?.airingAt || "";
+    const resultEvent = isAnimeFinder ? "anime_finder_result_click" : "watch_next_result_click";
+    const detailEvent = isAnimeFinder ? "anime_finder_result_click" : "watch_next_detail_click";
     return `
       <article class="result-card decision-result">
-        <a class="result-poster" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="watch_next_result_click" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">
+        <a class="result-poster" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="${resultEvent}" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">
           <img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
         </a>
         <div>
           <p class="eyebrow">${escapeHtml(seasonLabel(anime))}</p>
-          <h3><a href="/anime/${escapeHtml(anime.slug)}/" data-track-event="watch_next_result_click" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">${escapeHtml(title)}</a></h3>
+          <h3><a href="/anime/${escapeHtml(anime.slug)}/" data-track-event="${resultEvent}" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">${escapeHtml(title)}</a></h3>
           <p>${escapeHtml(cleanText(anime.description || "", 145))}</p>
           <div class="meta-grid">
             <span>${Math.round(score)} match</span>
@@ -226,7 +249,7 @@
           <div class="tag-row">${reasons.map((reason) => `<span>${escapeHtml(reason)}</span>`).join("")}</div>
           <div class="result-actions">
             <button class="button small" type="button" data-watchlist-toggle data-anime-id="${anime.id}" data-title="${escapeHtml(title)}" data-cover="${escapeHtml(cover)}" data-slug="${escapeHtml(anime.slug)}" data-next-airing="${next}">Add</button>
-            <a class="button small" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="watch_next_detail_click" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">Details</a>
+            <a class="button small" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="${detailEvent}" data-track-label="${escapeHtml(title)}" data-result-position="${index + 1}">Details</a>
           </div>
         </div>
       </article>
@@ -249,6 +272,11 @@
     return cleaned.length > max ? `${cleaned.slice(0, max - 1).trim()}...` : cleaned;
   };
   const unique = (items) => [...new Set(items)];
+  const track = (eventName, params = {}) => {
+    if (typeof window.airingAtlasTrack === "function") {
+      window.airingAtlasTrack(eventName, params);
+    }
+  };
   const escapeHtml = (value = "") =>
     String(value)
       .replaceAll("&", "&amp;")
@@ -258,8 +286,8 @@
       .replaceAll("'", "&#039;");
 
   Object.values(controls).forEach((control) => {
-    control?.addEventListener("input", render);
-    control?.addEventListener("change", render);
+    control?.addEventListener("input", () => render({ interactionType: "input" }));
+    control?.addEventListener("change", () => render({ interactionType: "control_change" }));
   });
 
   document.querySelectorAll("[data-watch-next-preset]").forEach((link) => {
@@ -270,7 +298,7 @@
       setControl("length", params.get("length"));
       setControl("status", params.get("status"));
       setControl("priority", params.get("priority"));
-      render();
+      render({ interactionType: "preset" });
     });
   });
 

@@ -27,8 +27,8 @@ const description = "Choose a mood, length, and release status to get anime reco
       <p class="freshness-note">Using {animeCatalog.anime.length} indexed titles from the latest build.</p>
       </div>
       <div class="button-row compact-actions">
-        <a class="button primary" href="/binge-planner/" data-track-event="watch_next_binge_planner_shortcut" data-track-label="Binge planner">Build a plan</a>
-        <a class="button" href="/finished-anime/" data-track-event="watch_next_finished_shortcut" data-track-label="Finished anime finder">Finished anime</a>
+        <a class="button primary" href="/anime-finder/" data-track-event="watch_next_anime_finder_shortcut" data-track-label="Anime finder">Anime Finder</a>
+        <a class="button" href="/binge-planner/" data-track-event="watch_next_binge_planner_shortcut" data-track-label="Binge planner">Build a plan</a>
       </div>
     </div>
   </section>
@@ -83,6 +83,8 @@ const description = "Choose a mood, length, and release status to get anime reco
     <p class="tool-summary" data-watch-next-summary>Loading recommendations...</p>
   </section>
 
+  <section class="section result-grid" data-watch-next-results data-track-section="watch_next_results"></section>
+
   <section class="section">
     <div class="keyword-panel">
       <p class="eyebrow">Fast starts</p>
@@ -129,8 +131,6 @@ const description = "Choose a mood, length, and release status to get anime reco
       </p>
     </div>
   </section>
-
-  <section class="section result-grid" data-watch-next-results></section>
 
   <section class="section">
     <AdSlot />

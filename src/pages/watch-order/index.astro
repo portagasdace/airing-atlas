@@ -7,11 +7,17 @@ import { publicWatchOrderGuides } from "@/lib/quality";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
 const guides = publicWatchOrderGuides(watchOrderIndex.items);
+const title = "Anime Watch Order Guides: Demon Slayer, Attack on Titan & More";
+const description = "Browse anime watch order guides for Demon Slayer, Attack on Titan, Jujutsu Kaisen, Naruto, One Piece, movies, OVAs, specials, and sequels.";
+const featuredRootIds = [101922, 16498, 113415, 20, 21];
+const featuredGuides = featuredRootIds
+  .map((id) => guides.find((guide) => guide.rootAnimeId === id))
+  .filter((guide): guide is (typeof guides)[number] => Boolean(guide));
 ---
 
 <BaseLayout
-  title="Anime Watch Order Guides"
-  description="Browse compact anime watch order guides for connected franchises, sequels, prequels, movies, OVAs, and specials."
+  title={title}
+  description={description}
   canonical={canonicalPath("/watch-order/")}
   structuredData={[
     breadcrumbJsonLd([
@@ -21,8 +27,8 @@ const guides = publicWatchOrderGuides(watchOrderIndex.items);
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "Anime Watch Order Guides",
-      description: "Browse compact anime watch order guides for connected franchises, sequels, prequels, movies, OVAs, and specials.",
+      name: title,
+      description,
       url: canonicalPath("/watch-order/"),
       mainEntity: {
         "@type": "ItemList",
@@ -43,13 +49,31 @@ const guides = publicWatchOrderGuides(watchOrderIndex.items);
         <p class="eyebrow">Franchise map</p>
         <h1>Anime Watch Order</h1>
         <p>
-          Start with high-signal franchises and see their connected seasons, sequels,
-          prequels, side stories, movies, OVAs, and specials in one crawlable guide.
+          Start with high-signal watch order guides for Demon Slayer, Attack on Titan,
+          Jujutsu Kaisen, Naruto, One Piece, connected seasons, movies, OVAs, and specials.
         </p>
       </div>
       <a class="button primary" href="/discover/">Find a title</a>
     </div>
   </section>
+
+  {featuredGuides.length > 0 && (
+    <section class="section">
+      <div class="keyword-panel" data-track-section="watch_order_popular_shortcuts">
+        <p class="eyebrow">Popular searches</p>
+        <h2>Start with a high-demand watch order</h2>
+        <p>These routes match the most common franchise questions and keep main story paths separate from optional movies, OVAs, and specials.</p>
+        <div class="keyword-list">
+          {featuredGuides.map((guide) => (
+            <a href={`/watch-order/${guide.slug}/`} data-track-event="watch_order_popular_click" data-track-label={guide.title}>
+              <span>Watch order</span>
+              {guide.title}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="section guide-grid">
     {guides.map((guide) => (

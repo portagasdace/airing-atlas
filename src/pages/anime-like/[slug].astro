@@ -102,8 +102,10 @@ const relatedGuides = manualGuide
   : [];
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
 const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
-const description = manualGuide?.intro.slice(0, 155) || `Find anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
+const pageTitle = `Best Anime Like ${title}: Similar Shows to Watch Next`;
+const description = manualGuide?.intro.slice(0, 155) || `Find the best anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
 const bestOverall = recommendations.find((item) => item.animeId === manualGuide?.bestOverallPick) || recommendations[0];
+const plannerHref = `/binge-planner/?time=weekend&mood=balanced&length=any&finished=true&q=${encodeURIComponent(title)}&source=anime_like_cta`;
 const matchAngles = (manualGuide?.matchAngles || []).map((angle) => ({
   ...angle,
   anime: animeByIds(angle.animeIds)
@@ -149,7 +151,7 @@ if (manualGuide?.faq.length) {
 ---
 
 <BaseLayout
-  title={`Anime like ${title}`}
+  title={pageTitle}
   description={description}
   canonical={canonicalPath(canonical)}
   image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
@@ -161,10 +163,39 @@ if (manualGuide?.faq.length) {
     <div class="section-header">
       <div>
         <p class="eyebrow">Similarity guide</p>
-        <h1>Anime like {title}</h1>
-        <p>{manualGuide?.intro || `A crawlable recommendation page for fans searching for shows similar to ${title}. Matches are based on AniList recommendation signals, shared genres, tags, format, score, and audience popularity.`}</p>
+        <h1>Best anime like {title}</h1>
+        <p>{manualGuide?.intro || `A crawlable recommendation page for fans searching for anime like ${title}. Matches are based on AniList recommendation signals, shared genres, tags, format, score, and audience popularity.`}</p>
       </div>
       <a class="button primary" href={`/similar/?anime=${anime.id}`} data-track-event="anime_like_open_tool" data-track-label={title}>Open finder</a>
+    </div>
+  </section>
+
+  <section class="section" data-track-section="anime_like_decision_routes">
+    <div class="decision-route-panel">
+      <div>
+        <p class="eyebrow">Start here</p>
+        <h2>Choose your next step from {title}</h2>
+        <p>
+          Use the guide for readable picks, open the finder for a broader match,
+          or turn this title into a shareable weekend watch plan.
+        </p>
+      </div>
+      <div class="decision-route-grid">
+        {bestOverall && (
+          <a class="decision-route primary-route" href={`/anime/${bestOverall.slug}/`} data-track-event="anime_like_best_pick_click" data-track-label={bestOverall.title}>
+            <strong>Best overall: {bestOverall.title}</strong>
+            <span>{bestOverall.reason}</span>
+          </a>
+        )}
+        <a class="decision-route" href={`/similar/?anime=${anime.id}`} data-track-event="anime_like_open_tool" data-track-label={title}>
+          <strong>Open the live finder</strong>
+          <span>Compare more recommendations by shared genres, tags, score, and format.</span>
+        </a>
+        <a class="decision-route" href={plannerHref} data-track-event="anime_like_build_plan_click" data-track-label={title}>
+          <strong>Build a plan around {title}</strong>
+          <span>Create a stable binge route using this title as the reference signal.</span>
+        </a>
+      </div>
     </div>
   </section>
 

@@ -46,6 +46,7 @@ const plannerPresets = [
   }
 ];
 const keywordPaths = [
+  { label: "anime finder by mood", href: "/anime-finder/", intent: "Anime finder" },
   { label: "anime binge planner", href: "/binge-planner/", intent: "Shareable planner" },
   { label: "what anime should I watch next", href: "/watch-next/", intent: "Decision tool" },
   { label: "finished anime to watch", href: "/finished-anime/", intent: "Binge finder" },
@@ -98,8 +99,8 @@ const keywordPaths = [
         ))}
       </div>
       <div class="hero-actions hero-secondary-actions">
-        <a class="button primary" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Open planner</a>
-        <a class="button" href="/watch-next/" data-track-event="home_primary_watch_next" data-track-label="Watch next finder">Pick one anime</a>
+        <a class="button primary" href="/anime-finder/" data-track-event="home_primary_anime_finder" data-track-label="Anime finder">Find anime by mood</a>
+        <a class="button" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Build a plan</a>
         <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Track airing times</a>
       </div>
     </div>
@@ -133,7 +134,12 @@ const keywordPaths = [
   </section>
 
   <section class="section quick-entry-grid" aria-label="Start with a tool" data-track-section="home_tool_grid">
-    <a class="quick-entry primary-entry" href="/binge-planner/" data-track-event="home_tool_binge_planner" data-track-label="Binge planner">
+    <a class="quick-entry primary-entry" href="/anime-finder/" data-track-event="home_tool_anime_finder" data-track-label="Anime finder">
+      <span class="eyebrow">Pick now</span>
+      <strong>Find anime by mood</strong>
+      <small>Choose mood, length, and status to get instant recommendations.</small>
+    </a>
+    <a class="quick-entry" href="/binge-planner/" data-track-event="home_tool_binge_planner" data-track-label="Binge planner">
       <span class="eyebrow">Share</span>
       <strong>Build a binge plan</strong>
       <small>Create a 3-6 title route and copy a stable share link.</small>

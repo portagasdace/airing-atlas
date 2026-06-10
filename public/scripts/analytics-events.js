@@ -42,6 +42,7 @@
   const contentType = () => {
     const current = path();
     if (current === "/") return "home";
+    if (current === "/anime-finder/") return "anime_finder";
     if (current === "/binge-planner/") return "binge_planner";
     if (current === "/watch-next/") return "watch_next";
     if (current === "/finished-anime/") return "finished_anime";
@@ -68,7 +69,7 @@
   };
 
   const audienceTypeForContent = (type = contentType()) => {
-    if (["binge_planner", "watch_next", "finished_anime"].includes(type)) return "planner";
+    if (["anime_finder", "binge_planner", "watch_next", "finished_anime"].includes(type)) return "planner";
     if (type === "watchlist") return "watchlist";
     if (["discover", "discover_cluster", "anime_like", "anime_like_hub", "similar"].includes(type)) return "discovery";
     if (["next_episode", "next_episode_hub", "calendar"].includes(type)) return "schedule";
@@ -78,6 +79,7 @@
 
   const audienceTypeForEvent = (eventName, payload = {}) => {
     const target = payload.target_path || "";
+    if (eventName.includes("anime_finder") || target.startsWith("/anime-finder")) return "planner";
     if (eventName.includes("binge") || target.startsWith("/binge-planner")) return "planner";
     if (eventName.startsWith("watchlist") || eventName.includes("saved_plan") || target.startsWith("/watchlist")) return "watchlist";
     if (eventName.includes("discover") || eventName.includes("similar") || eventName.includes("anime_like") || target.startsWith("/anime-like")) return "discovery";

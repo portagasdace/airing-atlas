@@ -15,6 +15,8 @@ export function getStaticPaths() {
 }
 
 const { guide } = Astro.props as { guide: WatchOrderGuide };
+const franchiseTitle = guide.title.replace(/\s+watch order$/i, "").trim();
+const pageTitle = `${franchiseTitle} Watch Order: Story, Release, Movies & OVAs`;
 const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
 const isIndexable = publicGuideSlugs.has(guide.slug);
 const manual = manualWatchOrderFor(guide.rootAnimeId);
@@ -33,7 +35,7 @@ const releaseOrder = manualReleaseOrder.length
 const optionalEntries = (manualOptionalEntries.length ? manualOptionalEntries : qualityEntries.filter((entry) => optionalRelations.has(String(entry.relationType || "").toUpperCase())))
   .filter((entry) => !recommendedOrder.some((mainEntry) => mainEntry.animeId === entry.animeId));
 const schemaEntries = uniqueEntries([...recommendedOrder, ...releaseOrder, ...optionalEntries]).slice(0, 14);
-const schemaGuide = { ...guide, entries: schemaEntries.length >= 3 ? schemaEntries : qualityEntries };
+const schemaGuide = { ...guide, title: pageTitle, entries: schemaEntries.length >= 3 ? schemaEntries : qualityEntries };
 const faqItems = manual?.faq || [
   {
     question: "What is the best order?",
@@ -69,8 +71,8 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
 ---
 
 <BaseLayout
-  title={guide.title}
-  description={guide.description}
+  title={pageTitle}
+  description={`Follow the ${franchiseTitle} watch order by story path, release order, movies, OVAs, specials, and optional entries.`}
   canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
   robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={watchOrderJsonLd(schemaGuide, faqItems)}
@@ -80,7 +82,7 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
     <div class="section-header">
       <div>
         <p class="eyebrow">Suggested viewing order</p>
-        <h1>{guide.title}</h1>
+        <h1>{pageTitle}</h1>
         <p>{manual?.intro || guide.description} Use this as a franchise map, not a replacement for official release information.</p>
       </div>
       <a class="button primary" href="/watch-order/">All guides</a>

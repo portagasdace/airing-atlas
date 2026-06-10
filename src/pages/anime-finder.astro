@@ -1,0 +1,178 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import { animeCatalog, canonicalPath } from "@/lib/anime";
+import { webAppJsonLd } from "@/lib/seo";
+
+const title = "Anime Finder by Mood, Length, and Status";
+const description = "Find anime to watch by mood, episode length, release status, and reference titles with instant Airing Atlas recommendations.";
+const faqItems = [
+  {
+    question: "How does the Anime Finder choose recommendations?",
+    answer: "Airing Atlas ranks anime by mood, genre, tags, episode length, release status, audience score, popularity, and optional reference text."
+  },
+  {
+    question: "Can I use the Anime Finder without an account?",
+    answer: "Yes. The tool runs in your browser and does not require an account, login, or server-side watchlist."
+  },
+  {
+    question: "What is the difference between Anime Finder and Binge Planner?",
+    answer: "Anime Finder helps you pick one title now. Binge Planner builds a shareable route with several titles for a night, weekend, month, or long watch."
+  }
+];
+const structuredData = webAppJsonLd(title, description, "/anime-finder/").concat({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer
+    }
+  }))
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/anime-finder/")}
+  structuredData={structuredData}
+  adsEnabled={true}
+>
+  <section class="section" data-track-section="anime_finder_hero">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Mood-based anime picker</p>
+        <h1>Anime Finder</h1>
+        <p>
+          Choose the mood, length, and release status you want, then get instant
+          anime recommendations with match reasons from the latest Airing Atlas catalog.
+        </p>
+        <p class="freshness-note">Finding picks from {animeCatalog.anime.length} indexed titles in the latest build.</p>
+      </div>
+      <div class="button-row compact-actions">
+        <a class="button primary" href="/binge-planner/" data-track-event="anime_finder_binge_planner_shortcut" data-track-label="Binge planner">Build a plan</a>
+        <a class="button" href="/anime-like/" data-track-event="anime_finder_anime_like_shortcut" data-track-label="Anime like guides">Anime like X</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-track-section="anime_finder_controls">
+    <div class="tool-panel decision-tool">
+      <label>
+        <span>Mood</span>
+        <select data-watch-next-mood>
+          <option value="balanced">Balanced</option>
+          <option value="action">Action and battles</option>
+          <option value="dark">Dark fantasy</option>
+          <option value="funny">Funny and light</option>
+          <option value="emotional">Emotional drama</option>
+          <option value="romance">Romance drama</option>
+          <option value="mind">Mind games</option>
+          <option value="adventure">Long adventure</option>
+          <option value="cozy">Cozy slice of life</option>
+        </select>
+      </label>
+      <label>
+        <span>Length</span>
+        <select data-watch-next-length>
+          <option value="any">Any length</option>
+          <option value="short">Short: 13 episodes or less</option>
+          <option value="weekend">Weekend: 14-26 episodes</option>
+          <option value="long">Long project: 50+ episodes</option>
+        </select>
+      </label>
+      <label>
+        <span>Status</span>
+        <select data-watch-next-status>
+          <option value="either">Either</option>
+          <option value="finished">Finished only</option>
+          <option value="airing">Currently airing</option>
+        </select>
+      </label>
+      <label>
+        <span>Reference</span>
+        <input data-watch-next-query type="search" placeholder="Try Titan, romance, detective..." />
+      </label>
+      <label>
+        <span>Priority</span>
+        <select data-watch-next-priority>
+          <option value="balanced">Balanced</option>
+          <option value="score">Higher score</option>
+          <option value="popular">More popular</option>
+          <option value="fresh">Airing soon</option>
+        </select>
+      </label>
+    </div>
+    <p class="tool-summary" data-watch-next-summary>Loading anime matches...</p>
+  </section>
+
+  <section class="section result-grid" data-watch-next-results data-watch-next-mode="anime_finder" data-track-section="anime_finder_results"></section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">Fast starts</p>
+      <h2>Common anime finder searches</h2>
+      <div class="keyword-list">
+        <a href="/anime-finder/?mood=dark&length=short&status=finished" data-watch-next-preset data-track-event="anime_finder_preset_click" data-track-label="Dark short finished anime">
+          <span>Tonight</span>
+          dark anime under 13 episodes
+        </a>
+        <a href="/anime-finder/?mood=romance&length=weekend&status=finished" data-watch-next-preset data-track-event="anime_finder_preset_click" data-track-label="Weekend romance anime">
+          <span>Weekend</span>
+          romance anime to finish
+        </a>
+        <a href="/anime-finder/?mood=mind&status=finished&priority=score" data-watch-next-preset data-track-event="anime_finder_preset_click" data-track-label="Smart main character anime">
+          <span>Smart leads</span>
+          anime with clever characters
+        </a>
+        <a href="/anime-finder/?mood=cozy&length=short&status=either" data-watch-next-preset data-track-event="anime_finder_preset_click" data-track-label="Cozy short anime">
+          <span>Cozy</span>
+          relaxing anime for tonight
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section split-feature" data-track-section="anime_finder_method">
+    <div class="editor-note">
+      <p class="eyebrow">Best use</p>
+      <h2>Pick one anime now</h2>
+      <p>
+        Use Anime Finder when you know the kind of viewing session you want,
+        but not the title. Use Binge Planner when you want a multi-title route.
+      </p>
+    </div>
+    <div class="editor-note">
+      <p class="eyebrow">No account</p>
+      <h2>Save only what you choose</h2>
+      <p>
+        Add any result to the private browser watchlist, then return later from
+        the same device without creating an account or syncing personal data.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">FAQ</p>
+      <h2>Anime Finder questions</h2>
+      <div class="faq-grid">
+        {faqItems.map((item) => (
+          <article>
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <AdSlot />
+  </section>
+
+  <script is:inline src="/scripts/watch-next.js" defer></script>
+</BaseLayout>
