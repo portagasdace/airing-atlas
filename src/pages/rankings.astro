@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { animeByRanking, animeCatalog, canonicalPath } from "@/lib/anime";
 
 const blocks = [
@@ -16,7 +15,8 @@ const blocks = [
   title="Anime Rankings"
   description="Compare trending, popular, top rated, and current-season anime rankings."
   canonical={canonicalPath("/rankings/")}
-  adsEnabled={true}
+  robots="noindex,follow"
+  adsEnabled={false}
 >
   <section class="section">
     <div class="section-header">
@@ -33,7 +33,7 @@ const blocks = [
   </section>
 
   <section class="section ranking-layout">
-    {blocks.map((block, blockIndex) => (
+    {blocks.map((block) => (
       <div class="ranking-block">
         <p class="eyebrow">{block.label}</p>
         <h2>{block.label}</h2>
@@ -43,7 +43,6 @@ const blocks = [
             <AnimeCard anime={anime} rank={index + 1} compact />
           ))}
         </div>
-        {blockIndex === 1 && <AdSlot />}
       </div>
     ))}
   </section>

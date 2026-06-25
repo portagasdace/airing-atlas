@@ -1,5 +1,5 @@
 import { displayTitle, recommendationsFor, watchOrderFor } from "@/lib/anime";
-import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
+import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualSimilarGuideFor, manualWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
 import type { AnimeSummary, CalendarEntry, WatchOrderGuide } from "@/types/anime";
 
 export const NEXT_EPISODE_POPULARITY_FLOOR = 10000;
@@ -9,9 +9,9 @@ export const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
 export const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
 export const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 export const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
-export const PUBLIC_ANIME_DETAIL_LIMIT = 90;
-export const PUBLIC_ANIME_LIKE_LIMIT = 30;
-export const PUBLIC_WATCH_ORDER_LIMIT = 24;
+export const PUBLIC_ANIME_DETAIL_LIMIT = 10;
+export const PUBLIC_ANIME_LIKE_LIMIT = 10;
+export const PUBLIC_WATCH_ORDER_LIMIT = 10;
 export const PUBLIC_WATCH_ORDER_EXCLUDED_ROOT_IDS = [100166, 161645];
 export const ANIME_LIKE_SITEMAP_LIMIT = PUBLIC_ANIME_LIKE_LIMIT;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
@@ -74,14 +74,8 @@ export function hasExtremeDetailDemand(anime: AnimeSummary): boolean {
   );
 }
 
-export function isPublicAnimeDetail(anime: AnimeSummary, nowUnix = currentUnix()): boolean {
-  return (
-    hasManualEditorialValue(anime) ||
-    isQualityNextEpisodeAnime(anime, nowUnix) ||
-    hasStrongWatchOrderRoot(anime) ||
-    isQualifiedAnimeLikeAnime(anime) ||
-    hasExtremeDetailDemand(anime)
-  );
+export function isPublicAnimeDetail(anime: AnimeSummary, _nowUnix = currentUnix()): boolean {
+  return hasManualEditorialValue(anime);
 }
 
 export function publicAnimeDetailPages(items: AnimeSummary[], nowUnix = currentUnix(), limit = PUBLIC_ANIME_DETAIL_LIMIT): AnimeSummary[] {
@@ -100,7 +94,7 @@ export function publicAnimeDetailPages(items: AnimeSummary[], nowUnix = currentU
 export function isQualifiedAnimeLikeAnime(anime: AnimeSummary): boolean {
   const format = String(anime.format || "").toUpperCase();
   return (
-    manualFeaturedAnimeIds.includes(anime.id) ||
+    Boolean(manualSimilarGuideFor(anime.id)) &&
     (
       !blockedAnimeLikeFormats.has(format) &&
       recommendationsFor(anime.id).length >= ANIME_LIKE_MIN_RECOMMENDATIONS &&
@@ -114,9 +108,9 @@ export function publicAnimeLikePages(items: AnimeSummary[], limit = PUBLIC_ANIME
   const seenSlugs = new Set<string>();
   const curated = manualFeaturedAnimeIds
     .map((id) => items.find((anime) => anime.id === id))
-    .filter((anime): anime is AnimeSummary => Boolean(anime));
+    .filter((anime): anime is AnimeSummary => Boolean(anime && manualSimilarGuideFor(anime.id)));
   const automatic = items
-    .filter(isQualifiedAnimeLikeAnime)
+    .filter((anime) => isQualifiedAnimeLikeAnime(anime) && !manualFeaturedAnimeIds.includes(anime.id))
     .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
   return [...curated, ...automatic]
@@ -138,7 +132,10 @@ export function publicWatchOrderGuides(guides: WatchOrderGuide[], limit = PUBLIC
   const selected: WatchOrderGuide[] = [];
   const coveredAnimeIds = new Set<number>();
 
-  for (const guide of qualityWatchOrderGuides(guides)) {
+  const manualGuides = qualityWatchOrderGuides(guides)
+    .filter((guide) => Boolean(manualWatchOrderFor(guide.rootAnimeId)));
+
+  for (const guide of manualGuides) {
     if (PUBLIC_WATCH_ORDER_EXCLUDED_ROOT_IDS.includes(guide.rootAnimeId)) continue;
     const coverage = watchOrderGuideCoverageIds(guide);
     const overlapsExistingGuide = [...coverage].some((id) => coveredAnimeIds.has(id));

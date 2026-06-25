@@ -1,0 +1,86 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+import { guides } from "@/lib/guides";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const title = "Anime Watching Guides";
+const description = "Original Airing Atlas guides for choosing anime by mood, watch order, release status, beginner routes, and similar-anime recommendations.";
+const structuredData = [
+  breadcrumbJsonLd([
+    { name: "Airing Atlas", path: "/" },
+    { name: "Guides", path: "/guides/" }
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: canonicalPath("/guides/"),
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: guides.map((guide, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: guide.title,
+        url: canonicalPath(`/guides/${guide.slug}/`)
+      }))
+    }
+  }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath("/guides/")}
+  structuredData={structuredData}
+  adsEnabled={true}
+>
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Editorial guides</p>
+        <h1>Anime watching guides</h1>
+        <p>
+          Original Airing Atlas explanations for the decisions that sit between
+          a database result and a real watch choice: mood, status, watch order,
+          beginner routes, and similar-anime fit.
+        </p>
+      </div>
+      <a class="button primary" href="/anime-finder/">Open Anime Finder</a>
+    </div>
+  </section>
+
+  <section class="section guide-grid">
+    {guides.map((guide) => (
+      <article class="guide-card">
+        <p class="eyebrow">Updated {guide.updated}</p>
+        <h2><a href={`/guides/${guide.slug}/`}>{guide.shortTitle}</a></h2>
+        <p>{guide.description}</p>
+        <a class="button small" href={`/guides/${guide.slug}/`}>Read guide</a>
+      </article>
+    ))}
+  </section>
+
+  <section class="section split-feature">
+    <div class="editor-note">
+      <p class="eyebrow">Review focus</p>
+      <h2>Why these pages exist</h2>
+      <p>
+        These guides add original decision-making context around the tools and
+        generated anime data. They explain how Airing Atlas thinks about a
+        recommendation instead of only listing titles.
+      </p>
+    </div>
+    <div class="editor-note">
+      <p class="eyebrow">No playback bait</p>
+      <h2>Planning, not streaming</h2>
+      <p>
+        Airing Atlas does not host episodes, downloads, manga scans, or unofficial
+        streams. The guides point users toward legal discovery, schedules,
+        watch orders, and private browser-side planning.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

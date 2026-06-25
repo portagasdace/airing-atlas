@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { animeByIds, canonicalPath, genreIndex } from "@/lib/anime";
 import { genrePageJsonLd } from "@/lib/seo";
 import type { GenreIndexItem } from "@/types/anime";
@@ -22,8 +21,9 @@ const airing = animeByIds(genre.airingIds);
   title={`${genre.genre} Anime`}
   description={`Browse popular ${genre.genre.toLowerCase()} anime, current airing picks, scores, formats, and watchlist-ready detail pages.`}
   canonical={canonicalPath(`/genres/${genre.slug}/`)}
+  robots="noindex,follow"
   structuredData={genrePageJsonLd(genre, top)}
-  adsEnabled={true}
+  adsEnabled={false}
 >
   <section class="section">
     <div class="section-header">
@@ -52,10 +52,6 @@ const airing = animeByIds(genre.airingIds);
       </div>
     </section>
   )}
-
-  <section class="section">
-    <AdSlot />
-  </section>
 
   <section class="section">
     <div class="section-header">

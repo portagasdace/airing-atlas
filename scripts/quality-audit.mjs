@@ -5,19 +5,17 @@ import { resolve } from "node:path";
 const root = resolve(new URL("..", import.meta.url).pathname);
 const manualFeaturedAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
 const manualEditorialAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
-const ANIME_DETAIL_POPULARITY_FLOOR = 100000;
-const ANIME_DETAIL_FAVOURITES_FLOOR = 8000;
-const ANIME_DETAIL_EXTREME_POPULARITY_FLOOR = 250000;
-const ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR = 15000;
+const manualSimilarGuideIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
+const manualWatchOrderRootIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
 const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
-const PUBLIC_ANIME_DETAIL_LIMIT = 90;
-const PUBLIC_ANIME_LIKE_LIMIT = 30;
-const PUBLIC_WATCH_ORDER_LIMIT = 24;
+const PUBLIC_ANIME_DETAIL_LIMIT = 10;
+const PUBLIC_ANIME_LIKE_LIMIT = 10;
+const PUBLIC_WATCH_ORDER_LIMIT = 10;
 const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
-const SITEMAP_WARNING_CEILING = 220;
+const SITEMAP_WARNING_CEILING = 80;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
-const removedStaticPaths = new Set(["/about/", "/contact/", "/privacy/", "/terms/", "/affiliate-disclosure/", "/watchlist/"]);
+const removedStaticPaths = new Set(["/contact/", "/privacy/", "/terms/", "/affiliate-disclosure/", "/watchlist/", "/rankings/"]);
 const warnings = [];
 const criticalWarnings = [];
 const info = [];
@@ -31,7 +29,6 @@ const nowUnix = Math.floor(Date.now() / 1000);
 const animeById = new Map((catalog.anime || []).map((anime) => [anime.id, anime]));
 const animeBySlug = new Map((catalog.anime || []).map((anime) => [anime.slug, anime]));
 const recommendationMap = new Map((recommendations.items || []).map((item) => [item.animeId, item.recommendations || []]));
-const qualityWatchOrderRoots = new Set((watchOrders.items || []).filter(isQualityWatchOrderGuide).map((guide) => guide.rootAnimeId));
 const publicAnimeLikeGuideIds = new Set(publicAnimeLikeGuides().map((anime) => anime.id));
 const publicWatchOrderGuideSlugs = new Set(publicWatchOrderGuides().map((guide) => guide.slug));
 
@@ -103,6 +100,7 @@ async function auditBuiltHtml() {
   let missingStructuredData = 0;
   let missingNoindex = 0;
   let missingEditorialValue = 0;
+  let noindexWithAds = 0;
   let noindexDynamicPages = 0;
 
   for (const file of files) {
@@ -111,6 +109,7 @@ async function auditBuiltHtml() {
     const title = match(html, /<title>(.*?)<\/title>/is);
     const description = html.match(/<meta\s+name=["']description["']\s+content=(["'])(.*?)\1/is)?.[2]?.trim() || "";
     const hasNoindex = /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
+    if (hasNoindex && html.includes('data-ad-slot="manual-content"')) noindexWithAds += 1;
     const isDynamicIndexSurface = /^\/(?:anime|anime-like|watch-order)\//.test(route);
     if (isDynamicIndexSurface && hasNoindex) noindexDynamicPages += 1;
     if (title) addToMap(titles, title, file);
@@ -134,6 +133,11 @@ async function auditBuiltHtml() {
     } else if (watchOrderSlug) {
       if (!publicWatchOrderGuideSlugs.has(watchOrderSlug) && !hasNoindex) missingNoindex += 1;
     }
+
+    if (/^\/next-episode\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
+    if (/^\/genres\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
+    if (/^\/seasons\/[^/]+\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
+    if (route === "/rankings/" && !hasNoindex) missingNoindex += 1;
   }
 
   const duplicateTitles = duplicates(titles);
@@ -143,6 +147,7 @@ async function auditBuiltHtml() {
   if (missingImageDimensions) warnings.push(`${missingImageDimensions} built image tags are missing width or height.`);
   if (missingStructuredData) warnings.push(`${missingStructuredData} key guide pages are missing ItemList structured data.`);
   if (missingNoindex) warnings.push(`${missingNoindex} low-value generated pages are missing noindex,follow.`);
+  if (noindexWithAds) warnings.push(`${noindexWithAds} noindex pages still render manual AdSense slots.`);
   if (missingEditorialValue) warnings.push(`${missingEditorialValue} public anime detail pages are missing Airing Atlas editorial value sections.`);
   info.push(`${files.length} built HTML files scanned.`);
   info.push(`${noindexDynamicPages} generated dynamic pages carry noindex,follow.`);
@@ -160,6 +165,9 @@ async function auditSitemap() {
   const animeDetailUrls = urls.filter((url) => url.includes("/anime/") && !url.includes("/anime-like/"));
   const animeLikeUrls = urls.filter((url) => url.includes("/anime-like/") && !url.endsWith("/anime-like/"));
   const watchOrderUrls = urls.filter((url) => url.includes("/watch-order/") && !url.endsWith("/watch-order/"));
+  const nextEpisodeUrls = urls.filter((url) => url.includes("/next-episode/") && !url.endsWith("/next-episode/"));
+  const genreUrls = urls.filter((url) => url.includes("/genres/"));
+  const seasonUrls = urls.filter((url) => url.includes("/seasons/"));
   const lowValueAnimeDetails = animeDetailUrls.filter((url) => {
     const slug = url.split("/anime/")[1]?.replace(/\/$/, "");
     const anime = animeBySlug.get(slug);
@@ -173,12 +181,6 @@ async function auditSitemap() {
   const weakWatchOrderUrls = watchOrderUrls.filter((url) => {
     const slug = url.split("/watch-order/")[1]?.replace(/\/$/, "");
     return slug && !publicWatchOrderGuideSlugs.has(slug);
-  });
-  const expiredNextEpisodeUrls = urls.filter((url) => {
-    if (!url.includes("/next-episode/") || url.endsWith("/next-episode/")) return false;
-    const slug = url.split("/next-episode/")[1]?.replace(/\/$/, "");
-    const matches = (catalog.anime || []).filter((item) => slugFromAnime(item) === slug);
-    return !matches.some((anime) => isPublicNextEpisode(anime));
   });
   const discoverClusterUrls = urls.filter((url) => url.includes("/discover/") && url !== "https://airingatlas.com/discover/");
   const removedStaticUrls = urls.filter((url) => removedStaticPaths.has(new URL(url).pathname));
@@ -195,7 +197,9 @@ async function auditSitemap() {
   if (weakAnimeLikeUrls.length) warnings.push(`${weakAnimeLikeUrls.length} anime-like sitemap URLs fail recommendation or demand gates.`);
   if (watchOrderUrls.length > PUBLIC_WATCH_ORDER_LIMIT) warnings.push(`${watchOrderUrls.length} watch-order URLs found in sitemap; target is ${PUBLIC_WATCH_ORDER_LIMIT} or fewer.`);
   if (weakWatchOrderUrls.length) warnings.push(`${weakWatchOrderUrls.length} watch-order sitemap URLs fail public guide gates.`);
-  if (expiredNextEpisodeUrls.length) warnings.push(`${expiredNextEpisodeUrls.length} next-episode sitemap URLs fail freshness or demand gates.`);
+  if (nextEpisodeUrls.length) warnings.push(`${nextEpisodeUrls.length} next-episode detail URLs remain in the AdSense review sitemap.`);
+  if (genreUrls.length) warnings.push(`${genreUrls.length} genre URLs remain in the AdSense review sitemap.`);
+  if (seasonUrls.length) warnings.push(`${seasonUrls.length} season URLs remain in the AdSense review sitemap.`);
   if (removedStaticUrls.length) warnings.push(`${removedStaticUrls.length} low-intent static URLs remain in sitemap: ${removedStaticUrls.join(", ")}.`);
   if (sitemapNoindexUrls.length) warnings.push(`${sitemapNoindexUrls.length} sitemap URLs render noindex,follow.`);
   if (discoverClusterUrls.length < 8) warnings.push(`Only ${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected 8.`);
@@ -214,37 +218,13 @@ function isPublicNextEpisode(anime) {
 }
 
 function isPublicAnimeDetail(anime) {
-  return Boolean(
-    manualEditorialAnimeIds.has(anime.id) ||
-    isPublicNextEpisode(anime) ||
-    isStrongWatchOrderRoot(anime) ||
-    isQualifiedAnimeLike(anime) ||
-    hasExtremeDetailDemand(anime)
-  );
-}
-
-function isStrongWatchOrderRoot(anime) {
-  return Boolean(
-    qualityWatchOrderRoots.has(anime.id) &&
-    (
-      manualFeaturedAnimeIds.has(anime.id) ||
-      (anime.popularity || 0) >= ANIME_DETAIL_POPULARITY_FLOOR ||
-      (anime.favourites || 0) >= ANIME_DETAIL_FAVOURITES_FLOOR
-    )
-  );
-}
-
-function hasExtremeDetailDemand(anime) {
-  return Boolean(
-    (anime.popularity || 0) >= ANIME_DETAIL_EXTREME_POPULARITY_FLOOR ||
-    (anime.favourites || 0) >= ANIME_DETAIL_EXTREME_FAVOURITES_FLOOR
-  );
+  return manualEditorialAnimeIds.has(anime.id);
 }
 
 function isQualifiedAnimeLike(anime) {
   const format = String(anime.format || "").toUpperCase();
   return Boolean(
-    manualFeaturedAnimeIds.has(anime.id) ||
+    manualSimilarGuideIds.has(anime.id) &&
     (
       !blockedAnimeLikeFormats.has(format) &&
       (recommendationMap.get(anime.id) || []).length >= ANIME_LIKE_MIN_RECOMMENDATIONS &&
@@ -258,9 +238,9 @@ function publicAnimeLikeGuides() {
   const seenSlugs = new Set();
   const curated = [...manualFeaturedAnimeIds]
     .map((id) => animeById.get(id))
-    .filter(Boolean);
+    .filter((anime) => anime && manualSimilarGuideIds.has(anime.id));
   const automatic = (catalog.anime || [])
-    .filter(isQualifiedAnimeLike)
+    .filter((anime) => isQualifiedAnimeLike(anime) && !manualFeaturedAnimeIds.has(anime.id))
     .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
   return [...curated, ...automatic]
@@ -281,8 +261,8 @@ function publicWatchOrderGuides() {
   const guides = watchOrders.items || [];
   const curated = [...manualFeaturedAnimeIds]
     .map((id) => guides.find((guide) => guide.rootAnimeId === id || (guide.entries || []).some((entry) => entry.animeId === id)))
-    .filter((guide) => guide && isQualityWatchOrderGuide(guide));
-  const rest = guides.filter(isQualityWatchOrderGuide);
+    .filter((guide) => guide && manualWatchOrderRootIds.has(guide.rootAnimeId) && isQualityWatchOrderGuide(guide));
+  const rest = guides.filter((guide) => manualWatchOrderRootIds.has(guide.rootAnimeId) && isQualityWatchOrderGuide(guide));
 
   for (const guide of [...curated, ...rest]) {
     if (excludedPublicWatchOrderRootIds.has(guide.rootAnimeId)) continue;

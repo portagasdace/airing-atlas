@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, animeById, animeByIds, canonicalPath, cleanText, displayTitle, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
-import { manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
+import { manualEditorialFor, manualSimilarGuideFor, qualityWatchOrderFor } from "@/lib/manual-content";
 import { publicAnimeLikePages, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeGuideHref, animeLikeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
@@ -28,6 +28,7 @@ const title = displayTitle(anime);
 const indexableAnimeLikeIds = new Set(publicAnimeLikePages(allAnime).map((item) => item.id));
 const isIndexable = indexableAnimeLikeIds.has(anime.id);
 const manualGuide = manualSimilarGuideFor(anime.id);
+const manualEditorial = manualEditorialFor(anime.id);
 const guide = qualityWatchOrderFor(anime.id);
 const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
 const publicGuide = guide && publicGuideSlugs.has(guide.slug) ? guide : undefined;
@@ -230,6 +231,41 @@ if (manualGuide?.faq.length) {
           <a class="button small" href={`/anime/${bestOverall.slug}/`} data-track-event="anime_like_result_click" data-track-label={bestOverall.title}>Open anime</a>
         </div>
       )}
+    </section>
+  )}
+
+  {manualGuide && (
+    <section class="section guide-grid">
+      <article class="guide-card">
+        <p class="eyebrow">Best fit</p>
+        <h2>Use this guide if you liked the decision pressure</h2>
+        <p>
+          {manualEditorial?.whoShouldWatch || `Use this page when ${title} is the reference point but you need a clearer next step by tone, stakes, character dynamics, and watch commitment.`}
+        </p>
+      </article>
+      <article class="guide-card">
+        <p class="eyebrow">Not ideal if</p>
+        <h2>You only want an identical setup</h2>
+        <p>
+          Similar anime rarely copy the exact premise. The recommendations here
+          prioritize shared viewing reasons such as pressure, pacing, conflict,
+          mystery, or team dynamics rather than clones of {title}.
+        </p>
+      </article>
+      <article class="guide-card">
+        <p class="eyebrow">Before starting</p>
+        <h2>Check length and status first</h2>
+        <p>
+          {manualEditorial?.beforeStarting || "Open a title detail page before committing so you can check status, episode count, score, related guides, and whether a watch order is needed."}
+        </p>
+      </article>
+      <article class="guide-card">
+        <p class="eyebrow">Legal watching note</p>
+        <h2>Discovery only</h2>
+        <p>
+          {manualEditorial?.legalWatchingNote || "Airing Atlas does not host episodes or link to unauthorized streams. Use official streaming, broadcaster, or publisher links where they are available in your region."}
+        </p>
+      </article>
     </section>
   )}
 

@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
 import { isQualityNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
@@ -80,8 +79,9 @@ const structuredData = [
   description={description}
   canonical={canonicalPath(canonical)}
   image={anime.coverImage?.extraLarge || anime.coverImage?.large || "/og-default.svg"}
+  robots="noindex,follow"
   structuredData={structuredData}
-  adsEnabled={true}
+  adsEnabled={false}
 >
   <section class="section">
     <div class="section-header">
@@ -178,8 +178,5 @@ const structuredData = [
     </div>
   </section>
 
-  <section class="section">
-    <AdSlot />
-  </section>
   <script is:inline src="/scripts/next-episode.js" defer></script>
 </BaseLayout>

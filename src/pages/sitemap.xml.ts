@@ -1,10 +1,13 @@
-import { allAnime, canonicalPath, genreIndex, seasonIndex, watchOrderIndex } from "@/lib/anime";
+import { allAnime, canonicalPath, watchOrderIndex } from "@/lib/anime";
 import { discoveryClusters } from "@/lib/discovery-clusters";
-import { publicAnimeDetailPages, publicAnimeLikePages, publicNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
-import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
+import { guides } from "@/lib/guides";
+import { publicAnimeDetailPages, publicAnimeLikePages, publicWatchOrderGuides } from "@/lib/quality";
+import { animeLikeSlug } from "@/lib/search-intents";
 
 const staticPages = [
   "/",
+  "/about/",
+  "/guides/",
   "/anime-finder/",
   "/calendar/",
   "/binge-planner/",
@@ -14,8 +17,7 @@ const staticPages = [
   "/similar/",
   "/anime-like/",
   "/next-episode/",
-  "/watch-order/",
-  "/rankings/"
+  "/watch-order/"
 ];
 
 export function GET() {
@@ -29,23 +31,13 @@ export function GET() {
       return true;
     })
     .map((slug) => `/anime-like/${slug}/`);
-  const seenNextEpisode = new Set<string>();
-  const nextEpisodeUrls = publicNextEpisodeAnime(allAnime)
-    .flatMap((anime) => {
-      const slug = nextEpisodeSlug(anime);
-      if (!slug || seenNextEpisode.has(slug)) return [];
-      seenNextEpisode.add(slug);
-      return [`/next-episode/${slug}/`];
-    });
   const urls = [
     ...staticPages,
+    ...guides.map((guide) => `/guides/${guide.slug}/`),
     ...discoveryClusters.map((cluster) => `/discover/${cluster.slug}/`),
     ...publicAnimeDetailPages(allAnime).map((anime) => `/anime/${anime.slug}/`),
     ...animeLikeUrls,
-    ...nextEpisodeUrls,
-    ...publicWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`),
-    ...genreIndex.items.map((genre) => `/genres/${genre.slug}/`),
-    ...seasonIndex.items.map((season) => `/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)
+    ...publicWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`)
   ].filter(uniquePath);
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { animeByIds, canonicalPath, seasonIndex, titleCase } from "@/lib/anime";
 import { seasonPageJsonLd } from "@/lib/seo";
 import type { SeasonIndexItem } from "@/types/anime";
@@ -23,8 +22,9 @@ const label = `${titleCase(season.season)} ${season.seasonYear}`;
   title={`${label} Anime`}
   description={`Browse ${label} anime with popular picks, airing titles, scores, formats, and watchlist-ready detail pages.`}
   canonical={canonicalPath(`/seasons/${season.seasonYear}/${season.season.toLowerCase()}/`)}
+  robots="noindex,follow"
   structuredData={seasonPageJsonLd(season, label, top)}
-  adsEnabled={true}
+  adsEnabled={false}
 >
   <section class="section">
     <div class="section-header">
@@ -53,10 +53,6 @@ const label = `${titleCase(season.season)} ${season.seasonYear}`;
       </div>
     </section>
   )}
-
-  <section class="section">
-    <AdSlot />
-  </section>
 
   <section class="section">
     <div class="section-header">

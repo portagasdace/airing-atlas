@@ -1,0 +1,127 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+import { guides, type EditorialGuide } from "@/lib/guides";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide }
+  }));
+}
+
+const { guide } = Astro.props as { guide: EditorialGuide };
+const canonical = `/guides/${guide.slug}/`;
+const structuredData = [
+  breadcrumbJsonLd([
+    { name: "Airing Atlas", path: "/" },
+    { name: "Guides", path: "/guides/" },
+    { name: guide.title, path: canonical }
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    dateModified: guide.updated,
+    datePublished: guide.updated,
+    author: {
+      "@type": "Organization",
+      name: "Airing Atlas"
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Airing Atlas",
+      logo: {
+        "@type": "ImageObject",
+        url: canonicalPath("/og-default.svg")
+      }
+    },
+    mainEntityOfPage: canonicalPath(canonical)
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: guide.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title={guide.title}
+  description={guide.description}
+  canonical={canonicalPath(canonical)}
+  structuredData={structuredData}
+  adsEnabled={true}
+>
+  <article class="article-page">
+    <section class="article-hero">
+      <p class="eyebrow">Airing Atlas guide · Updated {guide.updated}</p>
+      <h1>{guide.title}</h1>
+      <p class="lede">{guide.lede}</p>
+    </section>
+
+    <section class="section">
+      <div class="editor-note">
+        <p class="eyebrow">Main idea</p>
+        <h2>The useful rule</h2>
+        <p>{guide.thesis}</p>
+      </div>
+    </section>
+
+    <section class="section article-body">
+      {guide.sections.map((section) => (
+        <section class="article-section">
+          <p class="eyebrow">{section.eyebrow}</p>
+          <h2>{section.heading}</h2>
+          {section.body.map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+      ))}
+    </section>
+
+    <section class="section split-feature">
+      <div class="editor-note">
+        <p class="eyebrow">Checklist</p>
+        <h2>Use this before choosing</h2>
+        <ul class="plain-list">
+          {guide.checklist.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="keyword-panel">
+        <p class="eyebrow">Next routes</p>
+        <h2>Apply the guide</h2>
+        <div class="keyword-list">
+          {guide.internalLinks.map((link) => (
+            <a href={link.href} data-track-event="editorial_guide_internal_click" data-track-label={link.label}>
+              <span>{link.note}</span>
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="keyword-panel">
+        <p class="eyebrow">FAQ</p>
+        <h2>Common questions</h2>
+        <div class="faq-grid">
+          {guide.faq.map((item) => (
+            <article>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
