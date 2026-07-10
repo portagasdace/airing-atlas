@@ -314,6 +314,7 @@ button[aria-pressed="true"],
   align-items: center;
   padding: 12px;
   background: var(--panel);
+  color: var(--ink);
   border: 2px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
 }
@@ -328,6 +329,10 @@ button[aria-pressed="true"],
 .airing-row h3 {
   font-size: 1rem;
   line-height: 1.1;
+}
+
+.airing-row h3 a {
+  color: var(--ink);
 }
 
 .airing-row time,
@@ -641,6 +646,13 @@ button[aria-pressed="true"],
   font-size: 0.86rem;
   margin: 26px 0;
   padding: 12px;
+  width: 100%;
+}
+
+.ad-slot .adsbygoogle {
+  display: block;
+  width: 100%;
+  min-height: 90px;
 }
 
 .ad-slot-label {
@@ -1246,6 +1258,36 @@ button[aria-pressed="true"],
   margin-bottom: 0;
 }
 
+.guide-comparison-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.guide-comparison {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  background: var(--panel);
+}
+
+.guide-comparison th,
+.guide-comparison td {
+  border: 2px solid var(--ink);
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide-comparison thead th {
+  background: var(--gold);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.guide-comparison tbody th {
+  color: var(--coral);
+  white-space: nowrap;
+}
+
 .legal-page h1 {
   max-width: none;
   font-size: clamp(2.4rem, 7vw, 5rem);
@@ -1333,6 +1375,36 @@ button[aria-pressed="true"],
     text-align: center;
   }
 
+  .site-header {
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+
+  .site-header nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 4px 6px;
+    scrollbar-width: none;
+  }
+
+  .site-header nav::-webkit-scrollbar,
+  .hero-preset-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-header nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .hero-copy,
+  .hero-actions,
+  .hero-preset-grid {
+    min-width: 0;
+    max-width: 100%;
+  }
+
   h1 {
     font-size: clamp(2.15rem, 10vw, 3.15rem);
   }
@@ -1376,5 +1448,29 @@ button[aria-pressed="true"],
 
   .airing-row .button {
     grid-column: 1 / -1;
+  }
+
+  .hero-secondary-actions {
+    margin-top: 18px;
+  }
+
+  .hero-secondary-actions .button.primary {
+    flex: 1 0 100%;
+  }
+
+  .hero-preset-grid {
+    display: flex;
+    grid-template-columns: none;
+    width: 100%;
+    overflow-x: auto;
+    padding: 2px 5px 8px 0;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .hero-preset {
+    flex: 0 0 min(78vw, 300px);
+    min-height: 112px;
+    scroll-snap-align: start;
   }
 }

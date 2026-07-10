@@ -17,6 +17,9 @@ export interface ManualEditorialEntry {
 
 export interface ManualWatchOrderEntry {
   animeId: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  quickAnswer?: string;
   intro: string;
   recommendedOrder: number[];
   releaseOrder: number[];
@@ -28,6 +31,10 @@ export interface ManualWatchOrderEntry {
 
 export interface ManualSimilarGuide {
   animeId: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  whoShouldWatch?: string;
+  beforeStarting?: string;
   intro: string;
   whySimilar: string;
   bestOverallPick: number;
@@ -41,7 +48,7 @@ export interface ManualSimilarGuide {
   relatedGuideIds: number[];
 }
 
-export const manualFeaturedAnimeIds = [16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061];
+export const manualFeaturedAnimeIds = [16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061, 20954, 13601];
 
 const legalWatchingNote =
   "Airing Atlas does not host episodes or link to unauthorized streams. Use official streaming, broadcaster, or publisher links where they are available in your region.";
@@ -178,11 +185,14 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   113415: {
     animeId: 113415,
+    seoTitle: "Jujutsu Kaisen Watch Order: JJK 0 & Seasons",
+    seoDescription: "Watch Jujutsu Kaisen in order: Season 1, JJK 0, Season 2, then the Season 3 continuation. See which movies and recap entries are optional.",
+    quickAnswer: "Start with Season 1, watch Jujutsu Kaisen 0 before Season 2, then continue through Season 2 and the Season 3 Culling Game route. Compilation material is optional and does not replace the main seasons.",
     intro: "Jujutsu Kaisen works in both release order and story order. New viewers can watch Season 1 first, then Jujutsu Kaisen 0, then Season 2.",
     recommendedOrder: [113415, 131573, 145064, 172463],
     releaseOrder: [113415, 131573, 145064, 172463],
     optionalEntries: [147463],
-    skipNotes: "Jujutsu Kaisen 0 is important background for later character context, but the original Season 1 remains the cleanest entry point for most viewers.",
+    skipNotes: "Jujutsu Kaisen 0 is important background for later character context. Recap and compilation releases are optional if you watched the matching season; they do not replace the main story route.",
     legalWatchingNote,
     faq: [
       {
@@ -289,6 +299,9 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   127230: {
     animeId: 127230,
+    seoTitle: "Chainsaw Man Watch Order (2026): Season 1, Reze Arc",
+    seoDescription: "Start Chainsaw Man with Season 1, continue to the Reze Arc movie, then follow direct sequel material. Music videos and promotional shorts are optional.",
+    quickAnswer: "Watch Chainsaw Man Season 1 first, continue with The Movie: Reze Arc, then follow the direct sequel entry listed in the current catalog. Ending videos, music clips, and promotional shorts are not required.",
     intro: "Chainsaw Man currently has a short main path: Season 1, then Reze Arc movie-era material as it becomes available.",
     recommendedOrder: [127230, 171627, 204429],
     releaseOrder: [127230, 171627, 198726, 204429],
@@ -593,6 +606,68 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
       { question: "What should I watch after Hunter x Hunter?", answer: "Fullmetal Alchemist: Brotherhood is the best complete adventure pick; One Piece is the larger long-form route." },
       { question: "Is Yu Yu Hakusho similar to Hunter x Hunter?", answer: "Yes. It is from the same creator and shares spirit battles, tournaments, and strong character chemistry." },
       { question: "Is One Piece similar to Hunter x Hunter?", answer: "Yes in adventure and arc variety, though One Piece is more comedic and much longer." }
+    ]
+  },
+  20954: {
+    animeId: 20954,
+    seoTitle: "Anime Like A Silent Voice: Emotional Stories",
+    seoDescription: "Find anime like A Silent Voice about healing, disability, guilt, communication, school trauma, and learning how to reconnect with other people.",
+    intro: "The best anime like A Silent Voice are not simply sad romances. They are stories about damaged communication, guilt that lingers after school, disability or isolation, and the difficult work of becoming reachable again.",
+    whySimilar: "Viewers usually remember A Silent Voice for its restraint: apologies do not erase harm, loneliness changes how people read a room, and healing happens through awkward choices rather than a single dramatic speech. These picks preserve that emotional patience even when their plots are different.",
+    whoShouldWatch: "Use this guide if you want emotionally grounded anime about regret, social anxiety, disability, grief, or young people rebuilding trust. The strongest matches value small changes in behavior as much as major plot turns.",
+    beforeStarting: "Several recommendations deal with bullying, illness, grief, or self-harm. Check the tone and content notes before choosing a casual watch, and prefer a finished movie or series when you want a complete emotional arc.",
+    bestOverallPick: 113596,
+    relatedGuideIds: [21519, 21827, 20665],
+    matchAngles: [
+      { label: "Closest healing romance", description: "Josee, the Tiger and the Fish combines disability, independence, friction, and affection without treating personal growth as instant or tidy.", animeIds: [113596] },
+      { label: "Best emotional movie route", description: "I Want to Eat Your Pancreas and Your Name use a compact film format to turn connection, absence, and missed chances into a complete emotional payoff.", animeIds: [99750, 21519] },
+      { label: "Best for learning to communicate", description: "Violet Evergarden and Your lie in April focus on people who struggle to express grief, love, fear, and responsibility directly.", animeIds: [21827, 20665] }
+    ],
+    recommendationNotes: {
+      113596: "Closest overall match for disability, guarded independence, difficult first impressions, and a relationship that changes how both leads face the world.",
+      99750: "A compact emotional film about connection under a deadline, with grief and vulnerability at the center rather than melodrama alone.",
+      21519: "Best if you want another visually expressive movie about distance, missed communication, memory, and trying to reach one specific person.",
+      21827: "A slower healing route about trauma, emotional literacy, and learning what other people mean when words are not enough.",
+      20665: "Useful for viewers who responded to school-age pain, guilt, music, and characters who hide distress behind ordinary routines.",
+      4181: "A longer and heavier family-drama route where emotional consequences continue after the initial romance has formed.",
+      1689: "A quiet choice for viewers who prefer distance, regret, and realism over a reassuring romantic resolution."
+    },
+    faq: [
+      { question: "What anime is most like A Silent Voice?", answer: "Josee, the Tiger and the Fish is the closest overall match for disability, guarded communication, and a relationship that supports difficult personal growth." },
+      { question: "Is Your Name similar to A Silent Voice?", answer: "Both are emotional anime films about reaching another person, but Your Name is more fantastical while A Silent Voice is more grounded in guilt and social harm." },
+      { question: "What should I watch after A Silent Voice if I want another sad movie?", answer: "Try I Want to Eat Your Pancreas for a direct emotional film, or 5 Centimeters per Second for a quieter and less comforting story about distance." },
+      { question: "Are these recommendations only romance anime?", answer: "No. The guide prioritizes healing, communication, grief, and isolation. Romance is present in several picks, but it is not the only matching reason." }
+    ]
+  },
+  13601: {
+    animeId: 13601,
+    seoTitle: "Anime Like Psycho-Pass: Dystopian Crime Thrillers",
+    seoDescription: "Find anime like Psycho-Pass with dystopian policing, crime investigations, psychological pressure, surveillance, and moral conflict about who controls justice.",
+    intro: "Anime like Psycho-Pass should make justice feel unstable. The strongest matches combine investigation, institutional power, surveillance or advanced technology, and characters forced to decide whether a safe system can still be morally wrong.",
+    whySimilar: "Psycho-Pass works because the Sibyl System is not just background worldbuilding; it changes every arrest, career, and definition of guilt. These recommendations keep that pressure by turning crime, technology, or authority into a problem the cast cannot solve with action alone.",
+    whoShouldWatch: "Use this guide if you want adult crime stories, ideological conflict, investigators under pressure, and science fiction that asks who gets measured, judged, or sacrificed by a supposedly rational system.",
+    beforeStarting: "These picks range from procedural mystery to slow psychological drama. Choose PLUTO for the closest balanced route, Monster for grounded pursuit, or Steins;Gate when technological consequences matter more than police procedure.",
+    bestOverallPick: 99088,
+    relatedGuideIds: [1535, 19, 9253],
+    matchAngles: [
+      { label: "Closest systemic crime mystery", description: "PLUTO pairs a mature investigation with artificial intelligence, prejudice, political violence, and detectives trying to understand crimes larger than one suspect.", animeIds: [99088] },
+      { label: "Best moral pursuit thrillers", description: "Monster and Death Note remove most futuristic machinery but keep the pursuit, ethical compromise, and dangerous certainty of people deciding who deserves judgment.", animeIds: [19, 1535] },
+      { label: "Best technology-and-identity route", description: "Steins;Gate and The Ghost in the Shell move the match toward technological consequences, altered identity, and institutions that cannot fully control what they created.", animeIds: [9253, 177699] }
+    ],
+    recommendationNotes: {
+      99088: "Closest overall pick for an adult science-fiction investigation shaped by artificial intelligence, political power, prejudice, and the cost of defining a person.",
+      9253: "Best when you want technology to create the moral trap, with psychological pressure increasing as the lead understands the consequences.",
+      21127: "Continue here after Steins;Gate if the damaged-lead and consequence-heavy side of the comparison matters most.",
+      1535: "A faster cat-and-mouse route about judgment, secret power, and the corruption that follows when one person believes the system is unnecessary.",
+      19: "A grounded and patient crime thriller about pursuit, responsibility, and whether saving one life can create an unbearable moral debt.",
+      177699: "A direct cybernetic identity pick for viewers interested in surveillance, personhood, public security, and the boundary between human and system.",
+      21803: "A more stylized closed-circle mystery for viewers who want deduction, eccentric dialogue, and psychological games over dystopian policing."
+    },
+    faq: [
+      { question: "What anime is most like Psycho-Pass?", answer: "PLUTO is the strongest overall match in this catalog because it combines mature crime investigation, advanced technology, political violence, and questions about personhood." },
+      { question: "Is Death Note similar to Psycho-Pass?", answer: "Yes in moral judgment and psychological pursuit, but Death Note centers on an individual secret power while Psycho-Pass centers on an institutional system." },
+      { question: "Is Monster good for Psycho-Pass fans?", answer: "Yes if you can trade futuristic policing for a slower, grounded pursuit story with equally serious questions about guilt and responsibility." },
+      { question: "Are all Psycho-Pass alternatives cyberpunk?", answer: "No. This guide prioritizes investigation, authority, moral pressure, and systems of judgment. Some matches are cyberpunk; others reach the same tension through crime drama." }
     ]
   }
 };

@@ -71,8 +71,8 @@ const keywordPaths = [
 ---
 
 <BaseLayout
-  title="Anime Binge Planner, Airing Schedule & Watch Next Finder"
-  description="Build shareable anime binge plans, decide what to watch next, track airing times, next episodes, watch orders, and a private browser watchlist."
+  title="Airing Atlas: Anime Schedule, Watch Orders & Finder"
+  description="Use free anime tools to find what to watch, check local airing times, build binge plans, and follow clear watch orders without unofficial streams."
   canonical={canonicalPath("/")}
   structuredData={websiteJsonLd()}
   adsEnabled={true}
@@ -85,6 +85,11 @@ const keywordPaths = [
         Build a shareable anime binge plan, decide what to watch next, track airing schedules,
         and map watch orders without unauthorized streams.
       </p>
+      <div class="hero-actions hero-secondary-actions">
+        <a class="button primary" href="/anime-finder/" data-track-event="home_primary_anime_finder" data-track-label="Anime finder">Find anime by mood</a>
+        <a class="button" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Build a plan</a>
+        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Track airing times</a>
+      </div>
       <div class="hero-preset-grid" aria-label="Start with a binge plan preset">
         {plannerPresets.map((preset) => (
           <a
@@ -97,11 +102,6 @@ const keywordPaths = [
             <span>{preset.detail}</span>
           </a>
         ))}
-      </div>
-      <div class="hero-actions hero-secondary-actions">
-        <a class="button primary" href="/anime-finder/" data-track-event="home_primary_anime_finder" data-track-label="Anime finder">Find anime by mood</a>
-        <a class="button" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Build a plan</a>
-        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Track airing times</a>
       </div>
     </div>
     <div class="ticker-panel">

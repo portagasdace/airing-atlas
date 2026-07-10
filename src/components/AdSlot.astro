@@ -23,12 +23,36 @@ const shouldRenderAd = Boolean(enabled && adsenseClientId && adsenseSlotId);
         data-full-width-responsive="true"
       />
       <script is:inline>
-        try {
-          window.adsbygoogle = window.adsbygoogle || [];
-          window.adsbygoogle.push({});
-        } catch {
-          /* Ad blockers or preview environments can reject the ad request. */
-        }
+        (() => {
+          const currentScript = document.currentScript;
+          const container = currentScript?.closest("[data-ad-slot]");
+          const slot = container?.querySelector(".adsbygoogle");
+          if (!(slot instanceof HTMLElement)) return;
+
+          let frames = 0;
+          const requestAd = () => {
+            if (slot.dataset.adRequested === "true") return;
+            if (slot.getBoundingClientRect().width < 1) {
+              frames += 1;
+              if (frames < 120) window.requestAnimationFrame(requestAd);
+              return;
+            }
+
+            slot.dataset.adRequested = "true";
+            try {
+              window.adsbygoogle = window.adsbygoogle || [];
+              window.adsbygoogle.push({});
+            } catch {
+              /* Ad blockers or preview environments can reject the ad request. */
+            }
+          };
+
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => window.requestAnimationFrame(requestAd), { once: true });
+          } else {
+            window.requestAnimationFrame(requestAd);
+          }
+        })();
       </script>
     </aside>
   ) : (

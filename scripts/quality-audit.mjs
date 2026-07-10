@@ -3,14 +3,14 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
-const manualFeaturedAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
+const manualFeaturedAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061, 20954, 13601]);
 const manualEditorialAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
-const manualSimilarGuideIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
+const manualSimilarGuideIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061, 20954, 13601]);
 const manualWatchOrderRootIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
 const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
 const PUBLIC_ANIME_DETAIL_LIMIT = 10;
-const PUBLIC_ANIME_LIKE_LIMIT = 10;
+const PUBLIC_ANIME_LIKE_LIMIT = 12;
 const PUBLIC_WATCH_ORDER_LIMIT = 10;
 const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
 const SITEMAP_WARNING_CEILING = 80;
@@ -25,6 +25,7 @@ const catalog = await readJson("src/data/generated/anime-catalog.json");
 const calendar = await readJson("src/data/generated/airing-calendar.json");
 const recommendations = await readJson("src/data/generated/recommendation-index.json");
 const watchOrders = await readJson("src/data/generated/watch-order-index.json");
+const firebaseConfig = await readJson("firebase.json");
 const nowUnix = Math.floor(Date.now() / 1000);
 const animeById = new Map((catalog.anime || []).map((anime) => [anime.id, anime]));
 const animeBySlug = new Map((catalog.anime || []).map((anime) => [anime.slug, anime]));
@@ -33,6 +34,7 @@ const publicAnimeLikeGuideIds = new Set(publicAnimeLikeGuides().map((anime) => a
 const publicWatchOrderGuideSlugs = new Set(publicWatchOrderGuides().map((guide) => guide.slug));
 
 auditDataFreshness();
+auditHostingConfig();
 auditRecommendationDepth();
 auditWatchOrders();
 auditSlugCollisions();
@@ -64,6 +66,27 @@ function auditDataFreshness() {
   const stalePublicNext = publicNextEpisode.filter((anime) => (anime.nextAiringEpisode?.airingAt || 0) <= nowUnix);
   if (stalePublicNext.length) criticalWarnings.push(`${stalePublicNext.length} public next-episode candidates are stale.`);
   info.push(`${publicNextEpisode.length} public next-episode candidates pass freshness and demand gates.`);
+}
+
+function auditHostingConfig() {
+  const hosting = firebaseConfig.hosting || {};
+  const catchAllHomeRewrite = (hosting.rewrites || []).some((rewrite) => rewrite.source === "**" && rewrite.destination === "/index.html");
+  if (catchAllHomeRewrite) criticalWarnings.push("Firebase still rewrites every unknown URL to the homepage, creating soft 404 pages.");
+
+  const requiredRedirects = new Map([
+    ["/anime-like/jujutsu-kaisen-season-3/", "/anime-like/jujutsu-kaisen/"],
+    ["/watch-order/100166-my-hero-academia-season-3/", "/watch-order/21459-my-hero-academia/"],
+    ["/watch-order/161645-the-apothecary-diaries/", "/watch-order/"],
+    ["/next-episode/mononoke/", "/next-episode/"]
+  ]);
+  const redirects = hosting.redirects || [];
+  for (const [source, destination] of requiredRedirects) {
+    const match = redirects.find((redirect) => redirect.source === source);
+    if (!match || match.destination !== destination || Number(match.type) !== 301) {
+      warnings.push(`Firebase redirect ${source} must permanently redirect to ${destination}.`);
+    }
+  }
+  info.push(`${redirects.length} explicit Firebase legacy redirects audited; unknown routes are allowed to return 404.`);
 }
 
 function auditRecommendationDepth() {

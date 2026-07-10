@@ -16,10 +16,11 @@ export function getStaticPaths() {
 
 const { guide } = Astro.props as { guide: WatchOrderGuide };
 const franchiseTitle = guide.title.replace(/\s+watch order$/i, "").trim();
-const pageTitle = `${franchiseTitle} Watch Order: Story, Release, Movies & OVAs`;
+const manual = manualWatchOrderFor(guide.rootAnimeId);
+const pageTitle = manual?.seoTitle || `${franchiseTitle} Watch Order: Story, Release, Movies & OVAs`;
+const pageDescription = manual?.seoDescription || `Follow the ${franchiseTitle} watch order by story path, release order, movies, OVAs, specials, and optional entries.`;
 const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
 const isIndexable = publicGuideSlugs.has(guide.slug);
-const manual = manualWatchOrderFor(guide.rootAnimeId);
 const qualityEntries = watchOrderQualityEntries(guide);
 const mainRelations = new Set(["MAIN", "PREQUEL", "SEQUEL"]);
 const optionalRelations = new Set(["OVA", "ONA", "SPECIAL", "SPIN_OFF", "SIDE_STORY", "SUMMARY", "ALTERNATIVE"]);
@@ -34,6 +35,7 @@ const releaseOrder = manualReleaseOrder.length
   : [...qualityEntries].sort((a, b) => dateRank(a.startDate) - dateRank(b.startDate));
 const optionalEntries = (manualOptionalEntries.length ? manualOptionalEntries : qualityEntries.filter((entry) => optionalRelations.has(String(entry.relationType || "").toUpperCase())))
   .filter((entry) => !recommendedOrder.some((mainEntry) => mainEntry.animeId === entry.animeId));
+const coreMovieCount = recommendedOrder.filter((entry) => String(entry.format || "").toUpperCase() === "MOVIE").length;
 const schemaEntries = uniqueEntries([...recommendedOrder, ...releaseOrder, ...optionalEntries]).slice(0, 14);
 const schemaGuide = { ...guide, title: pageTitle, entries: schemaEntries.length >= 3 ? schemaEntries : qualityEntries };
 const faqItems = manual?.faq || [
@@ -72,7 +74,7 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
 
 <BaseLayout
   title={pageTitle}
-  description={`Follow the ${franchiseTitle} watch order by story path, release order, movies, OVAs, specials, and optional entries.`}
+  description={pageDescription}
   canonical={canonicalPath(`/watch-order/${guide.slug}/`)}
   robots={isIndexable ? undefined : "noindex,follow"}
   structuredData={watchOrderJsonLd(schemaGuide, faqItems)}
@@ -94,12 +96,17 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
       <p class="eyebrow">Recommended order</p>
       <h2>Start here</h2>
       <p>
-        {manual?.intro || "Follow the main path first, then add side stories, OVAs, specials, and recap movies after the closest related season."}
+        {manual?.quickAnswer || manual?.intro || "Follow the main path first, then add side stories, OVAs, specials, and recap movies after the closest related season."}
       </p>
       <div class="chip-grid">
         {recommendedOrder.slice(0, 10).map((entry, index) => (
           <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}><span>{index + 1}</span>{entry.title}</a>
         ))}
+      </div>
+      <div class="compact-facts watch-order-facts" aria-label={`${franchiseTitle} route facts`}>
+        <div><span>Main route</span><strong>{recommendedOrder.length} entries</strong></div>
+        <div><span>Core movies</span><strong>{coreMovieCount}</strong></div>
+        <div><span>Optional extras</span><strong>{optionalEntries.length}</strong></div>
       </div>
     </div>
   </section>

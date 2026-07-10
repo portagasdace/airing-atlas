@@ -87,6 +87,28 @@ const structuredData = [
       ))}
     </section>
 
+    {guide.comparisonRows?.length && (
+      <section class="section">
+        <div class="keyword-panel">
+          <p class="eyebrow">Status reference</p>
+          <h2>Anime release status compared</h2>
+          <div class="guide-comparison-wrap">
+            <table class="guide-comparison">
+              <caption class="sr-only">Anime release status meanings and viewer impact</caption>
+              <thead>
+                <tr><th>Status</th><th>What it means</th><th>What it means for viewers</th></tr>
+              </thead>
+              <tbody>
+                {guide.comparisonRows.map((row) => (
+                  <tr><th scope="row">{row.status}</th><td>{row.meaning}</td><td>{row.viewerImpact}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    )}
+
     <section class="section split-feature">
       <div class="editor-note">
         <p class="eyebrow">Checklist</p>

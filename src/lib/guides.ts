@@ -11,6 +11,11 @@ export interface EditorialGuide {
     heading: string;
     body: string[];
   }>;
+  comparisonRows?: Array<{
+    status: string;
+    meaning: string;
+    viewerImpact: string;
+  }>;
   checklist: string[];
   internalLinks: Array<{
     label: string;
@@ -327,6 +332,74 @@ export const guides: EditorialGuide[] = [
         question: "Can two different genres still be similar?",
         answer: "Yes. Similarity can come from structure, pressure, character dynamics, or moral stakes rather than genre labels alone."
       }
+    ]
+  },
+  {
+    slug: "what-does-finished-airing-mean-in-anime",
+    title: "What Does Finished Airing Mean in Anime?",
+    shortTitle: "Finished airing meaning",
+    description: "Learn what finished airing means in anime, how it differs from a completed story, and what releasing, hiatus, cancelled, and not yet released statuses mean.",
+    updated: "2026-07-10",
+    lede: "Finished airing means the listed broadcast run has released its final scheduled episode. It does not automatically mean the adaptation covered the entire source story or that another season will never happen.",
+    thesis: "Treat finished airing as a release-status fact, not a promise of total story completion. It tells you the current episode run is available to finish; the franchise may still continue later.",
+    sections: [
+      {
+        eyebrow: "Plain answer",
+        heading: "The broadcast run has ended",
+        body: [
+          "When a catalog labels an anime as finished airing, the episodes assigned to that season, series, OVA, or movie release have finished coming out. A 12-episode season marked finished should no longer require a weekly wait for episode 13 unless a separate continuation is announced.",
+          "The label describes distribution, not narrative completeness. A season can stop at the end of one arc while the manga, light novel, or larger anime franchise continues. That is why Airing Atlas separates release status from watch order and sequel information."
+        ]
+      },
+      {
+        eyebrow: "Story completion",
+        heading: "Finished airing is not the same as finished story",
+        body: [
+          "Some finished anime adapt a complete story and reach a deliberate ending. Others finish only their current cour or season. Both can carry the same status because the scheduled broadcast itself is over.",
+          "Before starting a binge, check whether the page lists sequels, related movies, or a watch-order guide. A finished first season can be safe to watch in one sitting while still ending on a continuation point."
+        ]
+      },
+      {
+        eyebrow: "Viewer decision",
+        heading: "Use status to remove weekly waiting",
+        body: [
+          "Finished status is useful when your priority is availability. Every listed episode in that run should already be released, so you can estimate the total time and build a weekend or one-night plan without depending on a future broadcast date.",
+          "If closure matters more than availability, add a second check: look for a complete adaptation, an anime-original ending, or a final season. Status alone cannot answer whether every character or plot thread is resolved."
+        ]
+      },
+      {
+        eyebrow: "Catalog language",
+        heading: "Other statuses answer different questions",
+        body: [
+          "Releasing means new episodes are still expected. Not yet released means the title has an announced or recorded entry but has not started. Hiatus means publication or broadcast is paused without being treated as complete. Cancelled means the planned run stopped and should not be assumed to resume.",
+          "These labels can change when distributors announce delays, sequels, or revised schedules. Airing Atlas refreshes public catalog data regularly, while editorial guides explain how to use the label when choosing what to watch."
+        ]
+      }
+    ],
+    comparisonRows: [
+      { status: "Finished", meaning: "The scheduled release run has ended.", viewerImpact: "All episodes in that run should be available, but the wider story may continue." },
+      { status: "Releasing", meaning: "New episodes are still being released.", viewerImpact: "Expect weekly waiting, schedule changes, or an incomplete current arc." },
+      { status: "Not yet released", meaning: "The title is announced but has not started.", viewerImpact: "There is no complete episode run to watch yet." },
+      { status: "Hiatus", meaning: "The release is paused without being complete.", viewerImpact: "A return date may be uncertain, so closure cannot be assumed." },
+      { status: "Cancelled", meaning: "The planned release stopped.", viewerImpact: "The available material may remain incomplete with no continuation." }
+    ],
+    checklist: [
+      "Use finished status when you want every episode in the current run available.",
+      "Check sequels before assuming the complete franchise is over.",
+      "Check episode count before building a one-night or weekend plan.",
+      "Use a watch-order guide when seasons, movies, or OVAs continue the story.",
+      "Treat status as current catalog information that may change after new announcements."
+    ],
+    internalLinks: [
+      { label: "Finished Anime Finder", href: "/finished-anime/", note: "Browse completed release runs by length and mood." },
+      { label: "Finished vs airing anime", href: "/guides/finished-anime-vs-airing-anime/", note: "Compare closure and weekly viewing." },
+      { label: "Binge Planner", href: "/binge-planner/?finished=true", note: "Build a route from finished titles." }
+    ],
+    faq: [
+      { question: "Does finished airing mean the anime story is complete?", answer: "No. It means the current scheduled broadcast run ended. The source story or anime franchise may continue in another season, movie, or adaptation." },
+      { question: "Can I binge an anime marked finished airing?", answer: "Usually yes for that listed run, because its scheduled episodes should already be available. Check the episode count and sequel list before assuming the whole franchise is complete." },
+      { question: "Can a finished anime get another season?", answer: "Yes. A finished status can describe one completed season. A later sequel is normally recorded as a separate entry or changes the franchise route." },
+      { question: "What is the difference between finished and cancelled?", answer: "Finished means the scheduled run reached its end. Cancelled means the planned release stopped and may remain incomplete." }
     ]
   }
 ];

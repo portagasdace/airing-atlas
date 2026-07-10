@@ -103,8 +103,8 @@ const relatedGuides = manualGuide
   : [];
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
 const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
-const pageTitle = `Best Anime Like ${title}: Similar Shows to Watch Next`;
-const description = manualGuide?.intro.slice(0, 155) || `Find the best anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
+const pageTitle = manualGuide?.seoTitle || `Best Anime Like ${title}: Similar Shows to Watch Next`;
+const description = manualGuide?.seoDescription || manualGuide?.intro.slice(0, 155) || `Find the best anime like ${title}, with similar recommendations, shared genres${primaryGenres ? ` like ${primaryGenres}` : ""}, audience signals, and legal discovery links.`;
 const bestOverall = recommendations.find((item) => item.animeId === manualGuide?.bestOverallPick) || recommendations[0];
 const plannerHref = `/binge-planner/?time=weekend&mood=balanced&length=any&finished=true&q=${encodeURIComponent(title)}&source=anime_like_cta`;
 const matchAngles = (manualGuide?.matchAngles || []).map((angle) => ({
@@ -240,7 +240,7 @@ if (manualGuide?.faq.length) {
         <p class="eyebrow">Best fit</p>
         <h2>Use this guide if you liked the decision pressure</h2>
         <p>
-          {manualEditorial?.whoShouldWatch || `Use this page when ${title} is the reference point but you need a clearer next step by tone, stakes, character dynamics, and watch commitment.`}
+          {manualGuide.whoShouldWatch || manualEditorial?.whoShouldWatch || `Use this page when ${title} is the reference point but you need a clearer next step by tone, stakes, character dynamics, and watch commitment.`}
         </p>
       </article>
       <article class="guide-card">
@@ -256,7 +256,7 @@ if (manualGuide?.faq.length) {
         <p class="eyebrow">Before starting</p>
         <h2>Check length and status first</h2>
         <p>
-          {manualEditorial?.beforeStarting || "Open a title detail page before committing so you can check status, episode count, score, related guides, and whether a watch order is needed."}
+          {manualGuide.beforeStarting || manualEditorial?.beforeStarting || "Open a title detail page before committing so you can check status, episode count, score, related guides, and whether a watch order is needed."}
         </p>
       </article>
       <article class="guide-card">
