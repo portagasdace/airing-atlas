@@ -17,7 +17,8 @@ const PUBLIC_WATCH_ORDER_LIMIT = 10;
 const REVIEW_ANIME_LIKE_LIMIT = 6;
 const REVIEW_WATCH_ORDER_LIMIT = 6;
 const REVIEW_DISCOVER_LIMIT = 4;
-const REVIEW_SITEMAP_TARGET = 35;
+const REVIEW_GUIDE_ARTICLE_LIMIT = 11;
+const REVIEW_SITEMAP_TARGET = 36;
 const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
 const SITEMAP_WARNING_CEILING = 40;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
@@ -193,7 +194,7 @@ async function auditBuiltHtml() {
   if (missingGuideDisclosure) warnings.push(`${missingGuideDisclosure} editorial guides are missing author, source, or correction disclosures.`);
   const invalidAdRoutes = adRoutes.filter((route) => !/^\/guides\/[^/]+\//.test(route));
   if (invalidAdRoutes.length) warnings.push(`${invalidAdRoutes.length} non-editorial routes still render manual AdSense slots: ${invalidAdRoutes.slice(0, 5).join(", ")}.`);
-  if (adRoutes.length !== 10) warnings.push(`${adRoutes.length} editorial pages render ads; expected exactly 10 during AdSense review.`);
+  if (adRoutes.length !== REVIEW_GUIDE_ARTICLE_LIMIT) warnings.push(`${adRoutes.length} editorial pages render ads; expected exactly ${REVIEW_GUIDE_ARTICLE_LIMIT} during AdSense review.`);
   if (retiredDataRoutes.length) warnings.push(`${retiredDataRoutes.length} retired thin data routes were still built during AdSense review.`);
   if (files.length > 60) warnings.push(`${files.length} HTML files were built; review mode should stay at 60 or fewer.`);
   info.push(`${files.length} built HTML files scanned.`);
@@ -254,7 +255,7 @@ async function auditSitemap() {
   if (sitemapNoindexUrls.length) warnings.push(`${sitemapNoindexUrls.length} sitemap URLs render noindex,follow.`);
   if (discoverClusterUrls.length !== REVIEW_DISCOVER_LIMIT) warnings.push(`${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected ${REVIEW_DISCOVER_LIMIT}.`);
   if (discoverClusterUrls.some((url) => !adsenseReviewDiscoverSlugs.has(new URL(url).pathname.split("/")[2]))) warnings.push("A non-review Discover cluster remains in the sitemap.");
-  if (guideArticleUrls.length !== 10) warnings.push(`${guideArticleUrls.length} long-form guide URLs found in sitemap; expected 10.`);
+  if (guideArticleUrls.length !== REVIEW_GUIDE_ARTICLE_LIMIT) warnings.push(`${guideArticleUrls.length} long-form guide URLs found in sitemap; expected ${REVIEW_GUIDE_ARTICLE_LIMIT}.`);
   if (!urls.includes("https://airingatlas.com/editorial-policy/")) warnings.push("Editorial policy page is missing from sitemap.");
   info.push(`${animeDetailUrls.length} anime detail URLs pass sitemap quality gates.`);
   info.push(`${animeLikeUrls.length} anime-like URLs pass sitemap quality gates.`);

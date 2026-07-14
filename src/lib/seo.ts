@@ -4,6 +4,12 @@ import type { AnimeSummary, GenreIndexItem, SeasonIndexItem, WatchOrderGuide } f
 
 type JsonLd = Record<string, unknown>;
 
+export interface WatchOrderArticleMetadata {
+  headline: string;
+  description: string;
+  updated?: string;
+}
+
 export function websiteJsonLd(): JsonLd[] {
   return [
     {
@@ -71,9 +77,11 @@ function uniqueValues(values: string[]): string[] {
 
 export function watchOrderJsonLd(
   guide: WatchOrderGuide,
-  faqItems: Array<{ question: string; answer: string }> = defaultWatchOrderFaq(guide)
+  faqItems: Array<{ question: string; answer: string }> = defaultWatchOrderFaq(guide),
+  article?: WatchOrderArticleMetadata
 ): JsonLd[] {
-  return [
+  const canonical = canonicalPath(`/watch-order/${guide.slug}/`);
+  const structuredData: JsonLd[] = [
     breadcrumbJsonLd([
       { name: "Airing Atlas", path: "/" },
       { name: "Watch Order", path: "/watch-order/" },
@@ -84,7 +92,7 @@ export function watchOrderJsonLd(
       "@type": "ItemList",
       name: guide.title,
       description: guide.description,
-      url: canonicalPath(`/watch-order/${guide.slug}/`),
+      url: canonical,
       itemListElement: guide.entries.map((entry, index) => ({
         "@type": "ListItem",
         position: index + 1,
@@ -105,6 +113,34 @@ export function watchOrderJsonLd(
         }))
     }
   ];
+
+  if (article) {
+    structuredData.splice(1, 0, compactJsonLd({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.headline,
+      description: article.description,
+      datePublished: article.updated,
+      dateModified: article.updated,
+      author: {
+        "@type": "Organization",
+        name: "Airing Atlas Editorial Desk"
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Airing Atlas",
+        logo: {
+          "@type": "ImageObject",
+          url: canonicalPath("/og-default.svg")
+        }
+      },
+      mainEntityOfPage: canonical,
+      publishingPrinciples: canonicalPath("/editorial-policy/"),
+      isAccessibleForFree: true
+    }));
+  }
+
+  return structuredData;
 }
 
 export function collectionPageJsonLd(options: {

@@ -17,6 +17,7 @@ export interface ManualEditorialEntry {
 
 export interface ManualWatchOrderEntry {
   animeId: number;
+  updated?: string;
   seoTitle?: string;
   seoDescription?: string;
   quickAnswer?: string;
@@ -139,6 +140,7 @@ export const manualEditorialByAnimeId: Record<number, ManualEditorialEntry> = {
 export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = {
   16498: {
     animeId: 16498,
+    updated: "2026-07-14",
     intro: "For story flow, watch the TV seasons in sequence and treat OVAs as optional background material after the season they sit closest to.",
     recommendedOrder: [16498, 20811, 18397, 20958, 99634, 99147, 104578, 110277, 131681],
     releaseOrder: [16498, 18397, 20811, 20691, 20692, 21281, 20958, 99634, 99147, 104578, 110277, 131681],
@@ -162,6 +164,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   101922: {
     animeId: 101922,
+    updated: "2026-07-14",
     intro: "Demon Slayer is easiest if you watch Season 1, then either the Mugen Train movie or the TV version of that arc before later seasons.",
     recommendedOrder: [101922, 112151, 129874],
     releaseOrder: [101922, 112151, 129874],
@@ -185,6 +188,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   113415: {
     animeId: 113415,
+    updated: "2026-07-14",
     seoTitle: "Jujutsu Kaisen Watch Order: JJK 0 & Seasons",
     seoDescription: "Watch Jujutsu Kaisen in order: Season 1, JJK 0, Season 2, then the Season 3 continuation. See which movies and recap entries are optional.",
     quickAnswer: "Start with Season 1, watch Jujutsu Kaisen 0 before Season 2, then continue through Season 2 and the Season 3 Culling Game route. Compilation material is optional and does not replace the main seasons.",
@@ -211,6 +215,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   21: {
     animeId: 21,
+    updated: "2026-07-14",
     intro: "For One Piece, the main TV series is the required path. Movies, recap specials, and event specials are best treated as optional side trips.",
     recommendedOrder: [21],
     releaseOrder: [466, 21, 459, 460, 461, 462, 1237, 1238, 4155, 12859, 21335, 105143, 141902],
@@ -234,6 +239,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   20: {
     animeId: 20,
+    updated: "2026-07-14",
     intro: "The clean Naruto path is Naruto, Naruto: Shippuden, then later sequel material. Movies and specials are optional unless you are doing a completionist run.",
     recommendedOrder: [20, 1735, 16870, 97938],
     releaseOrder: [20, 442, 936, 2144, 1735, 2472, 4437, 6325, 8246, 10589, 16870, 97938],
@@ -257,6 +263,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   1535: {
     animeId: 1535,
+    updated: "2026-07-14",
     intro: "Death Note is mostly a single complete TV route. Relight specials are recaps, not a required alternate order.",
     recommendedOrder: [1535],
     releaseOrder: [1535, 2994],
@@ -276,6 +283,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   21459: {
     animeId: 21459,
+    updated: "2026-07-14",
     intro: "My Hero Academia is best watched by TV season order. OVAs and movies are extras around the school and hero-work arcs.",
     recommendedOrder: [21459, 21856, 100166, 104276, 185736],
     releaseOrder: [21459, 21856, 87486, 100166, 104276, 185736],
@@ -299,6 +307,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   127230: {
     animeId: 127230,
+    updated: "2026-07-14",
     seoTitle: "Chainsaw Man Watch Order (2026): Season 1, Reze Arc",
     seoDescription: "Start Chainsaw Man with Season 1, continue to the Reze Arc movie, then follow direct sequel material. Music videos and promotional shorts are optional.",
     quickAnswer: "Watch Chainsaw Man Season 1 first, continue with The Movie: Reze Arc, then follow the direct sequel entry listed in the current catalog. Ending videos, music clips, and promotional shorts are not required.",
@@ -321,6 +330,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   5114: {
     animeId: 5114,
+    updated: "2026-07-14",
     intro: "Brotherhood is the recommended main route for most viewers. The 2003 Fullmetal Alchemist series is an alternate adaptation, not required before Brotherhood.",
     recommendedOrder: [5114],
     releaseOrder: [121, 5114, 6421, 7902, 9135],
@@ -344,6 +354,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   11061: {
     animeId: 11061,
+    updated: "2026-07-14",
     intro: "Hunter x Hunter (2011) is the cleanest modern route. The 1999 version and OVAs are alternate adaptation material, while the movies are optional.",
     recommendedOrder: [11061],
     releaseOrder: [136, 137, 138, 139, 11061, 13271, 19951],

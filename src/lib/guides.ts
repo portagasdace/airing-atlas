@@ -645,6 +645,93 @@ export const guides: EditorialGuide[] = [
       { question: "Can I finish 12 episodes in one day?", answer: "Yes, but two comfortable sessions are usually more realistic than five uninterrupted hours. Add meal and attention breaks to the calendar plan." },
       { question: "Do anime movies count as episodes?", answer: "No. Add each required movie by its own runtime. Recap and optional films should be counted only if you choose to include them." }
     ]
+  },
+  {
+    slug: "a-silent-voice-watch-order",
+    title: "A Silent Voice Watch Order: Movie, Episodes & Extras",
+    shortTitle: "A Silent Voice watch order",
+    description: "Get the simple A Silent Voice watch order, learn whether it has episodes or an anime sequel, and separate the movie from manga and optional extras.",
+    updated: "2026-07-14",
+    lede: "A Silent Voice is a standalone anime feature film, not a television season. You can watch the movie directly without a prequel, recap, OVA, or required sequel, so the practical watch order contains one main entry.",
+    thesis: "Watch A Silent Voice as one complete film. Treat the original manga as a deeper version of the same core story rather than a prerequisite, and do not turn trailers, music videos, fan-made episode lists, or similarly named works into required steps.",
+    sections: [
+      {
+        eyebrow: "Quick answer",
+        heading: "The watch order is one movie",
+        body: [
+          "Start with A Silent Voice, the animated feature film directed by Naoko Yamada and produced by Kyoto Animation. It introduces Shoya Ishida, Shoko Nishimiya, their school history, and the later attempt to reconnect. The film is designed to stand on its own, so there is no earlier anime entry needed to understand the characters or central conflict.",
+          "There is also no required anime follow-up after the credits. If a platform or database places promotional videos, trailers, interviews, soundtrack clips, or recommendation lists beside the film, those items are discovery material rather than story chapters. A first-time viewer can therefore make a very simple plan: watch the film, take time with its ending, and only then decide whether to read or explore related works."
+        ]
+      },
+      {
+        eyebrow: "Episodes question",
+        heading: "A Silent Voice does not have TV episodes",
+        body: [
+          "Searches for how many episodes A Silent Voice has usually come from the way streaming catalogs group animation. Some services use an episode-shaped interface for every video, while search snippets can combine the film with unrelated series metadata. The anime itself is a movie, so it has zero television episodes and does not require an episode-by-episode order.",
+          "Do not divide the film into unofficial chapters and treat those sections as episodes. Chapter markers may help you resume playback, but they do not create a series. This distinction matters when estimating commitment: plan for one feature-length viewing session rather than a twelve-episode season, and use the official runtime shown by the legal service available in your region."
+        ]
+      },
+      {
+        eyebrow: "Before and after",
+        heading: "There is no anime prequel or required sequel",
+        body: [
+          "The film begins with the childhood events needed to understand the later relationship, so a separate prequel is unnecessary. Its structure moves between past harm and present consequences within the same movie. Starting with a recap, explanation video, or character summary would remove discoveries that the film is meant to reveal through Shoya's limited point of view.",
+          "After the film, there is no mandatory sequel movie or television season that completes the plot. Recommendation pages may place other emotional school dramas next to it, but similarity is not continuity. Your Name, I Want to Eat Your Pancreas, Josee, the Tiger and the Fish, and 5 Centimeters per Second are separate stories, not later entries in an A Silent Voice franchise."
+        ]
+      },
+      {
+        eyebrow: "Manga context",
+        heading: "The manga adds depth but is not required first",
+        body: [
+          "A Silent Voice adapts Yoshitoki Oima's manga. The film preserves the central relationship and major emotional route while compressing material to fit a feature. The manga has more room for supporting classmates, family context, changing group loyalties, and the long consequences of choices that the movie must communicate more quickly.",
+          "That difference does not make the manga a prequel or sequel. Both versions begin from the same core premise and develop overlapping events in different amounts of detail. New viewers can watch the film first for the focused cinematic experience, then read the manga if they want more time with the supporting cast. Readers can also watch the movie afterward to compare direction, sound, visual perspective, and pacing."
+        ]
+      },
+      {
+        eyebrow: "Optional material",
+        heading: "Keep promotion and commentary outside the main order",
+        body: [
+          "Trailers, theme-song uploads, music videos, production interviews, and behind-the-scenes features can be valuable after watching, but none is a required story entry. The same rule applies to plot summaries and ending explanations. They may help discussion, yet seeing them first can flatten the film's careful use of silence, visual barriers, and incomplete information.",
+          "Unofficial clips can also make the story look like a sequence of dramatic scenes without the quiet transitions that give those scenes meaning. Use an official regional service or licensed physical release for the complete film. Airing Atlas does not host playback or downloads; this page only clarifies the viewing route and links readers toward legal discovery resources."
+        ]
+      },
+      {
+        eyebrow: "Viewing readiness",
+        heading: "Prepare for bullying, disability, isolation, and self-harm themes",
+        body: [
+          "The movie is emotionally demanding even though its watch order is simple. It deals with childhood bullying, ableism, social exclusion, shame, depression, and suicidal thoughts. Viewers looking for a light school romance may find the experience much heavier than the poster or recommendation label suggests. Choose a time when you can give the film attention rather than using it as casual background viewing.",
+          "Its interest is not in presenting one apology as a complete repair. The film watches people misunderstand each other, protect themselves badly, and struggle to accept contact. Some viewers find that process hopeful; others may find particular scenes upsetting. Pausing, stopping, or returning later is a reasonable response, and anyone personally affected by the themes should prioritize their wellbeing over finishing a recommendation."
+        ]
+      },
+      {
+        eyebrow: "What to watch next",
+        heading: "Choose the next title by the feeling you want to continue",
+        body: [
+          "After A Silent Voice, decide which part mattered most. Josee, the Tiger and the Fish is a useful next film for disability, guarded independence, friction, and affection. I Want to Eat Your Pancreas is a more direct emotional drama about connection and limited time. 5 Centimeters per Second is quieter and less reassuring, with distance and missed communication at its center.",
+          "If the school setting mattered more than the film format, use the Anime Finder to choose by mood and commitment. If guilt, repair, and patient communication were the main appeal, use the curated anime-like guide, where each recommendation explains the shared emotional angle instead of treating every sad romance as interchangeable."
+        ]
+      }
+    ],
+    checklist: [
+      "Watch the standalone A Silent Voice movie first.",
+      "Do not look for television episodes; the anime is a feature film.",
+      "Treat the manga as a deeper alternate version, not required setup.",
+      "Leave trailers, music videos, summaries, and explanation videos outside the main order.",
+      "Check the content themes before choosing it as a casual group watch.",
+      "Use the anime-like guide after the film to continue a specific emotional angle."
+    ],
+    internalLinks: [
+      { label: "Anime like A Silent Voice", href: "/anime-like/a-silent-voice/", note: "Continue with explained recommendations about healing and communication." },
+      { label: "Anime Finder", href: "/anime-finder/", note: "Choose another film or series by mood, length, and status." },
+      { label: "How long does it take to watch an anime?", href: "/guides/how-long-does-it-take-to-watch-an-anime/", note: "Estimate movies and episodic series correctly." }
+    ],
+    faq: [
+      { question: "What is the A Silent Voice watch order?", answer: "Watch the standalone A Silent Voice animated movie. There is no required anime prequel, recap, OVA, television season, or sequel." },
+      { question: "How many episodes does A Silent Voice have?", answer: "It has no television episodes. A Silent Voice is one feature-length anime movie, although a streaming interface may display the film in an episode-like player." },
+      { question: "Should I read the A Silent Voice manga before the movie?", answer: "No. The movie stands on its own. Read the manga before or after if you want more supporting-character detail and a longer version of the same core story." },
+      { question: "Is there an A Silent Voice 2?", answer: "There is no required anime sequel that continues the film. Other emotional anime movies shown beside it are recommendations, not part of the same story." },
+      { question: "What should I watch after A Silent Voice?", answer: "Try Josee, the Tiger and the Fish for disability and guarded connection, I Want to Eat Your Pancreas for a direct emotional drama, or 5 Centimeters per Second for a quieter story about distance." }
+    ]
   }
 ];
 

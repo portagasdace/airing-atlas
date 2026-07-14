@@ -943,6 +943,19 @@ button[aria-pressed="true"],
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.watch-order-facts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.watch-order-route-answer {
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  border-left: 6px solid var(--coral);
+  background: rgba(241, 93, 74, 0.08);
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
 .faq-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

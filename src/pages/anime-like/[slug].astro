@@ -102,6 +102,13 @@ const relatedGuides = manualGuide
     intent: indexableAnimeLikeIds.has(item.id) ? "Similar guide" : "Similarity tool"
   }))
   : [];
+const relatedEditorialGuides = anime.id === 20954
+  ? [{
+      label: "A Silent Voice watch order and episodes",
+      href: "/guides/a-silent-voice-watch-order/",
+      intent: "Standalone movie guide"
+    }]
+  : [];
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
 const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
 const pageTitle = manualGuide?.seoTitle || `Best Anime Like ${title}: Similar Shows to Watch Next`;
@@ -323,7 +330,7 @@ if (manualGuide?.faq.length) {
       <h2>More useful routes from {title}</h2>
       <p>These are readable guide paths around similar anime, release timing, genre discovery, and franchise order.</p>
       <div class="keyword-list">
-        {[...relatedGuides, ...searchIntents].slice(0, 10).map((item) => (
+        {[...relatedEditorialGuides, ...relatedGuides, ...searchIntents].slice(0, 10).map((item) => (
           <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label}>
             <span>{item.intent}</span>
             {item.label}
