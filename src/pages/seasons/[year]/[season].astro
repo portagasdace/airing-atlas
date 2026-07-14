@@ -1,15 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import { animeByIds, canonicalPath, seasonIndex, titleCase } from "@/lib/anime";
+import { animeByIds, canonicalPath, titleCase } from "@/lib/anime";
 import { seasonPageJsonLd } from "@/lib/seo";
 import type { SeasonIndexItem } from "@/types/anime";
 
 export function getStaticPaths() {
-  return seasonIndex.items.map((season) => ({
-    params: { year: String(season.seasonYear), season: season.season.toLowerCase() },
-    props: { season }
-  }));
+  return [];
 }
 
 const { season } = Astro.props as { season: SeasonIndexItem };

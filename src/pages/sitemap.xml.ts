@@ -1,29 +1,26 @@
 import { allAnime, canonicalPath, watchOrderIndex } from "@/lib/anime";
 import { discoveryClusters } from "@/lib/discovery-clusters";
 import { guides } from "@/lib/guides";
-import { publicAnimeDetailPages, publicAnimeLikePages, publicWatchOrderGuides } from "@/lib/quality";
+import { adsenseReviewAnimeLikePages, adsenseReviewWatchOrderGuides } from "@/lib/quality";
+import { ADSENSE_REVIEW_DISCOVER_SLUGS } from "@/lib/review-mode";
 import { animeLikeSlug } from "@/lib/search-intents";
 
 const staticPages = [
   "/",
   "/about/",
+  "/editorial-policy/",
   "/guides/",
   "/anime-finder/",
-  "/calendar/",
   "/binge-planner/",
   "/watch-next/",
-  "/finished-anime/",
-  "/discover/",
-  "/similar/",
   "/anime-like/",
-  "/next-episode/",
   "/watch-order/"
 ];
 
 export function GET() {
   const today = new Date().toISOString().slice(0, 10);
   const seenAnimeLike = new Set<string>();
-  const animeLikeUrls = publicAnimeLikePages(allAnime)
+  const animeLikeUrls = adsenseReviewAnimeLikePages(allAnime)
     .map((anime) => animeLikeSlug(anime))
     .filter((slug): slug is string => {
       if (!slug || seenAnimeLike.has(slug)) return false;
@@ -34,10 +31,11 @@ export function GET() {
   const urls = [
     ...staticPages,
     ...guides.map((guide) => `/guides/${guide.slug}/`),
-    ...discoveryClusters.map((cluster) => `/discover/${cluster.slug}/`),
-    ...publicAnimeDetailPages(allAnime).map((anime) => `/anime/${anime.slug}/`),
+    ...discoveryClusters
+      .filter((cluster) => ADSENSE_REVIEW_DISCOVER_SLUGS.includes(cluster.slug as (typeof ADSENSE_REVIEW_DISCOVER_SLUGS)[number]))
+      .map((cluster) => `/discover/${cluster.slug}/`),
     ...animeLikeUrls,
-    ...publicWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`)
+    ...adsenseReviewWatchOrderGuides(watchOrderIndex.items).map((guide) => `/watch-order/${guide.slug}/`)
   ].filter(uniquePath);
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

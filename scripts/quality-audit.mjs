@@ -4,18 +4,24 @@ import { resolve } from "node:path";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
 const manualFeaturedAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061, 20954, 13601]);
-const manualEditorialAnimeIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
 const manualSimilarGuideIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061, 20954, 13601]);
 const manualWatchOrderRootIds = new Set([16498, 101922, 113415, 21, 20, 1535, 21459, 127230, 5114, 11061]);
+const adsenseReviewAnimeLikeIds = new Set([16498, 101922, 113415, 1535, 20954, 13601]);
+const adsenseReviewWatchOrderIds = new Set([16498, 101922, 113415, 21, 20, 127230]);
+const adsenseReviewDiscoverSlugs = new Set(["dark-fantasy-anime", "mind-game-anime", "romance-drama-anime", "anime-with-smart-main-character"]);
 const ANIME_LIKE_POPULARITY_FLOOR = 125000;
 const ANIME_LIKE_MIN_RECOMMENDATIONS = 5;
-const PUBLIC_ANIME_DETAIL_LIMIT = 10;
+const REVIEW_ANIME_DETAIL_LIMIT = 0;
 const PUBLIC_ANIME_LIKE_LIMIT = 12;
 const PUBLIC_WATCH_ORDER_LIMIT = 10;
+const REVIEW_ANIME_LIKE_LIMIT = 6;
+const REVIEW_WATCH_ORDER_LIMIT = 6;
+const REVIEW_DISCOVER_LIMIT = 4;
+const REVIEW_SITEMAP_TARGET = 35;
 const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
-const SITEMAP_WARNING_CEILING = 80;
+const SITEMAP_WARNING_CEILING = 40;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
-const removedStaticPaths = new Set(["/contact/", "/privacy/", "/terms/", "/affiliate-disclosure/", "/watchlist/", "/rankings/"]);
+const removedStaticPaths = new Set(["/calendar/", "/contact/", "/discover/", "/finished-anime/", "/next-episode/", "/privacy/", "/similar/", "/terms/", "/affiliate-disclosure/", "/watchlist/", "/rankings/"]);
 const warnings = [];
 const criticalWarnings = [];
 const info = [];
@@ -30,8 +36,8 @@ const nowUnix = Math.floor(Date.now() / 1000);
 const animeById = new Map((catalog.anime || []).map((anime) => [anime.id, anime]));
 const animeBySlug = new Map((catalog.anime || []).map((anime) => [anime.slug, anime]));
 const recommendationMap = new Map((recommendations.items || []).map((item) => [item.animeId, item.recommendations || []]));
-const publicAnimeLikeGuideIds = new Set(publicAnimeLikeGuides().map((anime) => anime.id));
-const publicWatchOrderGuideSlugs = new Set(publicWatchOrderGuides().map((guide) => guide.slug));
+const publicAnimeLikeGuideIds = new Set(reviewAnimeLikeGuides().map((anime) => anime.id));
+const publicWatchOrderGuideSlugs = new Set(reviewWatchOrderGuides().map((guide) => guide.slug));
 
 auditDataFreshness();
 auditHostingConfig();
@@ -104,7 +110,7 @@ function auditWatchOrders() {
 }
 
 function auditSlugCollisions() {
-  const animeLikeCollisions = slugCollisions(publicAnimeLikeGuides(), slugFromAnime);
+  const animeLikeCollisions = slugCollisions(reviewAnimeLikeGuides(), slugFromAnime);
   const nextEpisodeCollisions = slugCollisions((catalog.anime || []).filter(isPublicNextEpisode), slugFromAnime);
   if (animeLikeCollisions.length) warnings.push(`${animeLikeCollisions.length} public anime-like slug collisions found: ${collisionPreview(animeLikeCollisions)}.`);
   if (nextEpisodeCollisions.length) warnings.push(`${nextEpisodeCollisions.length} public next-episode slug collisions found: ${collisionPreview(nextEpisodeCollisions)}.`);
@@ -125,6 +131,9 @@ async function auditBuiltHtml() {
   let missingEditorialValue = 0;
   let noindexWithAds = 0;
   let noindexDynamicPages = 0;
+  const adRoutes = [];
+  const retiredDataRoutes = [];
+  let missingGuideDisclosure = 0;
 
   for (const file of files) {
     const html = await readFile(file, "utf8");
@@ -132,7 +141,10 @@ async function auditBuiltHtml() {
     const title = match(html, /<title>(.*?)<\/title>/is);
     const description = html.match(/<meta\s+name=["']description["']\s+content=(["'])(.*?)\1/is)?.[2]?.trim() || "";
     const hasNoindex = /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
-    if (hasNoindex && html.includes('data-ad-slot="manual-content"')) noindexWithAds += 1;
+    const hasManualAd = html.includes('data-ad-slot="manual-content"');
+    if (hasNoindex && hasManualAd) noindexWithAds += 1;
+    if (hasManualAd) adRoutes.push(route);
+    if (/^\/(?:anime|genres|seasons)\//.test(route) || /^\/next-episode\/[^/]+\//.test(route)) retiredDataRoutes.push(route);
     const isDynamicIndexSurface = /^\/(?:anime|anime-like|watch-order)\//.test(route);
     if (isDynamicIndexSurface && hasNoindex) noindexDynamicPages += 1;
     if (title) addToMap(titles, title, file);
@@ -141,26 +153,32 @@ async function auditBuiltHtml() {
 
     const isWatchOrder = file.includes("/watch-order/") && !file.endsWith("/watch-order/index.html");
     const isAnimeLike = file.includes("/anime-like/") && !file.endsWith("/anime-like/index.html");
+    const isEditorialGuide = /^\/guides\/[^/]+\//.test(route);
     if ((isWatchOrder || isAnimeLike) && !html.includes("ItemList")) missingStructuredData += 1;
+    if (isEditorialGuide && (!html.includes("Written and reviewed by") || !html.includes("editorial-policy"))) missingGuideDisclosure += 1;
 
     const animeLikeSlug = route.match(/^\/anime-like\/([^/]+)\//)?.[1];
     const animeSlug = route.match(/^\/anime\/([^/]+)\//)?.[1];
     const watchOrderSlug = route.match(/^\/watch-order\/([^/]+)\//)?.[1];
+    const discoverSlug = route.match(/^\/discover\/([^/]+)\//)?.[1];
     if (animeLikeSlug) {
       const anime = (catalog.anime || []).find((item) => slugFromAnime(item) === animeLikeSlug);
       if (anime && !publicAnimeLikeGuideIds.has(anime.id) && !hasNoindex) missingNoindex += 1;
     } else if (animeSlug) {
       const anime = animeBySlug.get(animeSlug);
-      if (anime && !isPublicAnimeDetail(anime) && !hasNoindex) missingNoindex += 1;
+      if (anime && !hasNoindex) missingNoindex += 1;
       if (anime && !hasNoindex && !html.includes("anime_editorial_value")) missingEditorialValue += 1;
     } else if (watchOrderSlug) {
       if (!publicWatchOrderGuideSlugs.has(watchOrderSlug) && !hasNoindex) missingNoindex += 1;
     }
 
+    if (discoverSlug && !adsenseReviewDiscoverSlugs.has(discoverSlug) && !hasNoindex) missingNoindex += 1;
+
     if (/^\/next-episode\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
     if (/^\/genres\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
     if (/^\/seasons\/[^/]+\/[^/]+\//.test(route) && !hasNoindex) missingNoindex += 1;
     if (route === "/rankings/" && !hasNoindex) missingNoindex += 1;
+    if (["/calendar/", "/discover/", "/finished-anime/", "/next-episode/", "/similar/"].includes(route) && !hasNoindex) missingNoindex += 1;
   }
 
   const duplicateTitles = duplicates(titles);
@@ -172,8 +190,15 @@ async function auditBuiltHtml() {
   if (missingNoindex) warnings.push(`${missingNoindex} low-value generated pages are missing noindex,follow.`);
   if (noindexWithAds) warnings.push(`${noindexWithAds} noindex pages still render manual AdSense slots.`);
   if (missingEditorialValue) warnings.push(`${missingEditorialValue} public anime detail pages are missing Airing Atlas editorial value sections.`);
+  if (missingGuideDisclosure) warnings.push(`${missingGuideDisclosure} editorial guides are missing author, source, or correction disclosures.`);
+  const invalidAdRoutes = adRoutes.filter((route) => !/^\/guides\/[^/]+\//.test(route));
+  if (invalidAdRoutes.length) warnings.push(`${invalidAdRoutes.length} non-editorial routes still render manual AdSense slots: ${invalidAdRoutes.slice(0, 5).join(", ")}.`);
+  if (adRoutes.length !== 10) warnings.push(`${adRoutes.length} editorial pages render ads; expected exactly 10 during AdSense review.`);
+  if (retiredDataRoutes.length) warnings.push(`${retiredDataRoutes.length} retired thin data routes were still built during AdSense review.`);
+  if (files.length > 60) warnings.push(`${files.length} HTML files were built; review mode should stay at 60 or fewer.`);
   info.push(`${files.length} built HTML files scanned.`);
   info.push(`${noindexDynamicPages} generated dynamic pages carry noindex,follow.`);
+  info.push(`${adRoutes.length} long-form editorial pages carry the only manual ad slots.`);
 }
 
 async function auditSitemap() {
@@ -206,6 +231,7 @@ async function auditSitemap() {
     return slug && !publicWatchOrderGuideSlugs.has(slug);
   });
   const discoverClusterUrls = urls.filter((url) => url.includes("/discover/") && url !== "https://airingatlas.com/discover/");
+  const guideArticleUrls = urls.filter((url) => /\/guides\/[^/]+\/$/.test(new URL(url).pathname));
   const removedStaticUrls = urls.filter((url) => removedStaticPaths.has(new URL(url).pathname));
   const sitemapNoindexUrls = [];
   for (const url of urls) {
@@ -213,19 +239,23 @@ async function auditSitemap() {
   }
 
   if (urls.length > SITEMAP_WARNING_CEILING) warnings.push(`${urls.length} sitemap URLs found; target is ${SITEMAP_WARNING_CEILING} or fewer during quality cleanup.`);
+  if (urls.length !== REVIEW_SITEMAP_TARGET) warnings.push(`${urls.length} sitemap URLs found; expected the ${REVIEW_SITEMAP_TARGET}-URL review set.`);
   if (uniqueUrls.size !== urls.length) warnings.push(`${urls.length - uniqueUrls.size} duplicate sitemap URLs found.`);
-  if (animeDetailUrls.length > PUBLIC_ANIME_DETAIL_LIMIT) warnings.push(`${animeDetailUrls.length} anime detail URLs found in sitemap; target is ${PUBLIC_ANIME_DETAIL_LIMIT} or fewer.`);
+  if (animeDetailUrls.length > REVIEW_ANIME_DETAIL_LIMIT) warnings.push(`${animeDetailUrls.length} anime detail URLs found in sitemap; target is ${REVIEW_ANIME_DETAIL_LIMIT} during AdSense review.`);
   if (lowValueAnimeDetails.length) warnings.push(`${lowValueAnimeDetails.length} anime detail URLs fail the public sitemap quality gate.`);
-  if (animeLikeUrls.length > PUBLIC_ANIME_LIKE_LIMIT) warnings.push(`${animeLikeUrls.length} anime-like URLs found in sitemap; target is ${PUBLIC_ANIME_LIKE_LIMIT} or fewer.`);
+  if (animeLikeUrls.length > REVIEW_ANIME_LIKE_LIMIT) warnings.push(`${animeLikeUrls.length} anime-like URLs found in sitemap; target is ${REVIEW_ANIME_LIKE_LIMIT} or fewer during AdSense review.`);
   if (weakAnimeLikeUrls.length) warnings.push(`${weakAnimeLikeUrls.length} anime-like sitemap URLs fail recommendation or demand gates.`);
-  if (watchOrderUrls.length > PUBLIC_WATCH_ORDER_LIMIT) warnings.push(`${watchOrderUrls.length} watch-order URLs found in sitemap; target is ${PUBLIC_WATCH_ORDER_LIMIT} or fewer.`);
+  if (watchOrderUrls.length > REVIEW_WATCH_ORDER_LIMIT) warnings.push(`${watchOrderUrls.length} watch-order URLs found in sitemap; target is ${REVIEW_WATCH_ORDER_LIMIT} or fewer during AdSense review.`);
   if (weakWatchOrderUrls.length) warnings.push(`${weakWatchOrderUrls.length} watch-order sitemap URLs fail public guide gates.`);
   if (nextEpisodeUrls.length) warnings.push(`${nextEpisodeUrls.length} next-episode detail URLs remain in the AdSense review sitemap.`);
   if (genreUrls.length) warnings.push(`${genreUrls.length} genre URLs remain in the AdSense review sitemap.`);
   if (seasonUrls.length) warnings.push(`${seasonUrls.length} season URLs remain in the AdSense review sitemap.`);
   if (removedStaticUrls.length) warnings.push(`${removedStaticUrls.length} low-intent static URLs remain in sitemap: ${removedStaticUrls.join(", ")}.`);
   if (sitemapNoindexUrls.length) warnings.push(`${sitemapNoindexUrls.length} sitemap URLs render noindex,follow.`);
-  if (discoverClusterUrls.length < 8) warnings.push(`Only ${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected 8.`);
+  if (discoverClusterUrls.length !== REVIEW_DISCOVER_LIMIT) warnings.push(`${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected ${REVIEW_DISCOVER_LIMIT}.`);
+  if (discoverClusterUrls.some((url) => !adsenseReviewDiscoverSlugs.has(new URL(url).pathname.split("/")[2]))) warnings.push("A non-review Discover cluster remains in the sitemap.");
+  if (guideArticleUrls.length !== 10) warnings.push(`${guideArticleUrls.length} long-form guide URLs found in sitemap; expected 10.`);
+  if (!urls.includes("https://airingatlas.com/editorial-policy/")) warnings.push("Editorial policy page is missing from sitemap.");
   info.push(`${animeDetailUrls.length} anime detail URLs pass sitemap quality gates.`);
   info.push(`${animeLikeUrls.length} anime-like URLs pass sitemap quality gates.`);
   info.push(`${watchOrderUrls.length} watch-order URLs pass sitemap quality gates.`);
@@ -240,8 +270,8 @@ function isPublicNextEpisode(anime) {
   );
 }
 
-function isPublicAnimeDetail(anime) {
-  return manualEditorialAnimeIds.has(anime.id);
+function isPublicAnimeDetail() {
+  return false;
 }
 
 function isQualifiedAnimeLike(anime) {
@@ -277,6 +307,10 @@ function publicAnimeLikeGuides() {
     .slice(0, PUBLIC_ANIME_LIKE_LIMIT);
 }
 
+function reviewAnimeLikeGuides() {
+  return publicAnimeLikeGuides().filter((anime) => adsenseReviewAnimeLikeIds.has(anime.id));
+}
+
 function publicWatchOrderGuides() {
   const seen = new Set();
   const coveredAnimeIds = new Set();
@@ -302,6 +336,10 @@ function publicWatchOrderGuides() {
   }
 
   return selected;
+}
+
+function reviewWatchOrderGuides() {
+  return publicWatchOrderGuides().filter((guide) => adsenseReviewWatchOrderIds.has(guide.rootAnimeId));
 }
 
 function isQualityWatchOrderGuide(guide) {

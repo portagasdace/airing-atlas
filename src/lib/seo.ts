@@ -89,7 +89,7 @@ export function watchOrderJsonLd(
         "@type": "ListItem",
         position: index + 1,
         name: entry.title,
-        url: canonicalPath(`/anime/${entry.slug}/`)
+        url: entry.siteUrl || undefined
       }))
     },
     {
@@ -129,8 +129,7 @@ export function collectionPageJsonLd(options: {
         itemListElement: options.items.slice(0, 12).map((item, index) => ({
           "@type": "ListItem",
           position: index + 1,
-          name: item.title.english || item.title.romaji || item.title.native || "Untitled Anime",
-          url: canonicalPath(`/anime/${item.slug}/`)
+          name: item.title.english || item.title.romaji || item.title.native || "Untitled Anime"
         }))
       }
     }

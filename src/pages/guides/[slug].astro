@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath } from "@/lib/anime";
 import { guides, type EditorialGuide } from "@/lib/guides";
 import { breadcrumbJsonLd } from "@/lib/seo";
@@ -67,6 +68,11 @@ const structuredData = [
       <p class="eyebrow">Airing Atlas guide · Updated {guide.updated}</p>
       <h1>{guide.title}</h1>
       <p class="lede">{guide.lede}</p>
+      <div class="article-byline" aria-label="Article information">
+        <div><span>Written and reviewed by</span><strong>Airing Atlas Editorial Desk</strong></div>
+        <div><span>Evidence layer</span><strong>AniList data + manual editorial judgment</strong></div>
+        <div><span>Commercial policy</span><strong>Recommendations are not paid placements</strong></div>
+      </div>
     </section>
 
     <section class="section">
@@ -144,6 +150,27 @@ const structuredData = [
           ))}
         </div>
       </div>
+    </section>
+
+    <section class="section editorial-disclosure">
+      <div>
+        <p class="eyebrow">How this guide was made</p>
+        <h2>Editorial notes and corrections</h2>
+        <p>
+          This article is original Airing Atlas editorial content. Catalog facts
+          use AniList as the structured source; recommendations and viewing rules
+          are written and reviewed by the Airing Atlas Editorial Desk. Advertising
+          does not determine the conclusions or linked titles.
+        </p>
+      </div>
+      <div class="button-row">
+        <a class="button small" href="/editorial-policy/">Editorial policy</a>
+        <a class="button small" href="/contact/">Report a correction</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <AdSlot />
     </section>
   </article>
 </BaseLayout>

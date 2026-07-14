@@ -14,15 +14,15 @@ const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-de
 ---
 
 <article class:list={["anime-card", compact && "compact"]}>
-  <a class="poster-link" href={`/anime/${anime.slug}/`} aria-label={`Open ${title}`}>
-    <img src={cover} alt="" width="180" height="252" loading="lazy" referrerpolicy="no-referrer" />
-  </a>
+  {anime.siteUrl
+    ? <a class="poster-link" href={anime.siteUrl} target="_blank" rel="nofollow noopener" aria-label={`View ${title} on AniList`}><img src={cover} alt="" width="180" height="252" loading="lazy" referrerpolicy="no-referrer" /></a>
+    : <div class="poster-link"><img src={cover} alt="" width="180" height="252" loading="lazy" referrerpolicy="no-referrer" /></div>}
   <div class="anime-card-body">
     <div class="card-topline">
       {rank && <span class="rank">#{rank}</span>}
       <span>{seasonLabel(anime)}</span>
     </div>
-    <h3><a href={`/anime/${anime.slug}/`}>{title}</a></h3>
+    <h3>{anime.siteUrl ? <a href={anime.siteUrl} target="_blank" rel="nofollow noopener">{title}</a> : title}</h3>
     <p>{cleanText(anime.description, compact ? 110 : 150)}</p>
     <div class="meta-grid" aria-label={`${title} facts`}>
       <span>{scoreLabel(anime)}</span>
@@ -40,6 +40,7 @@ const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-de
       data-title={title}
       data-cover={cover}
       data-slug={anime.slug}
+      data-site-url={anime.siteUrl || ""}
       data-next-airing={anime.nextAiringEpisode?.airingAt || ""}
     >
       Add

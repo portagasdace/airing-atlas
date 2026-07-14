@@ -138,14 +138,19 @@
   const cardHtml = (anime, index) => {
     const title = titleFor(anime);
     const cover = anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg";
+    const siteUrl = safeAniListUrl(anime.siteUrl);
+    const poster = siteUrl
+      ? `<a class="result-poster" href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener" aria-label="View ${escapeHtml(title)} on AniList" data-result-position="${index + 1}"><img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" /></a>`
+      : `<div class="result-poster"><img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" /></div>`;
+    const titleMarkup = siteUrl
+      ? `<a href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener" data-result-position="${index + 1}">${escapeHtml(title)}</a>`
+      : escapeHtml(title);
     return `
       <article class="result-card">
-        <a class="result-poster" href="/anime/${escapeHtml(anime.slug)}/" aria-label="Open ${escapeHtml(title)}" data-result-position="${index + 1}">
-          <img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
-        </a>
+        ${poster}
         <div>
           <p class="eyebrow">${escapeHtml(seasonLabel(anime))}</p>
-          <h3><a href="/anime/${escapeHtml(anime.slug)}/" data-result-position="${index + 1}">${escapeHtml(title)}</a></h3>
+          <h3>${titleMarkup}</h3>
           <p>${escapeHtml(cleanText(anime.description || "", 150))}</p>
           <div class="meta-grid">
             <span>${scoreFor(anime) ? `${scoreFor(anime)}%` : "TBD"}</span>
@@ -172,6 +177,7 @@
   });
   const seasonLabel = (anime) => anime.season && anime.seasonYear ? `${formatLabel(anime.season)} ${anime.seasonYear}` : "Season TBA";
   const formatLabel = (value) => String(value || "").replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  const safeAniListUrl = (value) => /^https:\/\/anilist\.co\/anime\/\d+\/?$/i.test(String(value || "")) ? String(value) : "";
   const cleanText = (value, max) => {
     const cleaned = String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     return cleaned.length > max ? `${cleaned.slice(0, max - 1).trim()}...` : cleaned;

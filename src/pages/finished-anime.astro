@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { allAnime, canonicalPath, displayTitle } from "@/lib/anime";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
@@ -27,13 +26,14 @@ const description = "Find completed anime to binge by length, mood, score, and g
   title={title}
   description={description}
   canonical={canonicalPath("/finished-anime/")}
+  robots="noindex,follow"
   structuredData={collectionPageJsonLd({
     name: title,
     description,
     path: "/finished-anime/",
     items: safeFinished.slice(0, 24)
   })}
-  adsEnabled={true}
+  adsEnabled={false}
 >
   <section class="section" data-track-section="finished_anime_hero">
     <div class="section-header">
@@ -135,7 +135,9 @@ const description = "Find completed anime to binge by length, mood, score, and g
       </div>
       <div class="link-stack">
         {actionPicks.map((anime) => (
-          <a href={`/anime/${anime.slug}/`} data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+          anime.siteUrl
+            ? <a href={anime.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+            : <span>{displayTitle(anime)}</span>
         ))}
       </div>
     </div>
@@ -148,13 +150,12 @@ const description = "Find completed anime to binge by length, mood, score, and g
       </div>
       <div class="link-stack">
         {dramaPicks.map((anime) => (
-          <a href={`/anime/${anime.slug}/`} data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+          anime.siteUrl
+            ? <a href={anime.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="finished_anime_click" data-track-label={displayTitle(anime)}>{displayTitle(anime)}</a>
+            : <span>{displayTitle(anime)}</span>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <AdSlot />
-  </section>
 </BaseLayout>

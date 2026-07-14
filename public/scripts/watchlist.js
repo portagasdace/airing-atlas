@@ -44,6 +44,7 @@
     title: element.dataset.title || "Untitled Anime",
     coverImage: element.dataset.cover || "",
     slug: element.dataset.slug || "",
+    siteUrl: element.dataset.siteUrl || "",
     status,
     nextEpisodeAt: element.dataset.nextAiring ? Number(element.dataset.nextAiring) : null
   });
@@ -127,13 +128,13 @@
   `;
 
   const nextUpHtml = (item, index) => {
-    const href = item.slug ? `/anime/${escapeHtml(item.slug)}/` : "#";
-    return `
-      <a href="${href}" data-watchlist-next-up data-anime-id="${item.animeId}" data-result-position="${index + 1}">
+    const href = safeAniListUrl(item.siteUrl);
+    return href ? `
+      <a href="${escapeHtml(href)}" target="_blank" rel="nofollow noopener" data-watchlist-next-up data-anime-id="${item.animeId}" data-result-position="${index + 1}">
         ${escapeHtml(item.title)}
         <span>${escapeHtml(formatNext(item.nextEpisodeAt).replace(/^Next episode: /, ""))}</span>
       </a>
-    `;
+    ` : `<span>${escapeHtml(item.title)} · ${escapeHtml(formatNext(item.nextEpisodeAt).replace(/^Next episode: /, ""))}</span>`;
   };
 
   const savedPlansHtml = (plans) => {
@@ -172,8 +173,9 @@
   };
 
   const rowHtml = (item) => {
-    const titleHtml = item.slug
-      ? `<a href="/anime/${escapeHtml(item.slug)}/">${escapeHtml(item.title)}</a>`
+    const siteUrl = safeAniListUrl(item.siteUrl);
+    const titleHtml = siteUrl
+      ? `<a href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener">${escapeHtml(item.title)}</a>`
       : escapeHtml(item.title);
     return `
       <article class="watchlist-row">
@@ -282,6 +284,7 @@
       title: String(item.title),
       coverImage: String(item.coverImage || ""),
       slug: String(item.slug || ""),
+      siteUrl: safeAniListUrl(item.siteUrl),
       status: statuses.includes(item.status) ? item.status : "planned",
       nextEpisodeAt: Number(item.nextEpisodeAt) > 0 ? Number(item.nextEpisodeAt) : null,
       updatedAt: item.updatedAt || new Date().toISOString()
@@ -296,6 +299,8 @@
       const bTime = b.nextEpisodeAt || Number.MAX_SAFE_INTEGER;
       return aTime - bTime || a.title.localeCompare(b.title);
     });
+
+  const safeAniListUrl = (value) => /^https:\/\/anilist\.co\/anime\/\d+\/?$/i.test(String(value || "")) ? String(value) : "";
 
   const isFuture = (timestamp) => Boolean(timestamp && timestamp * 1000 > Date.now());
 

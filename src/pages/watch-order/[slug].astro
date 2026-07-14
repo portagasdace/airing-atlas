@@ -1,14 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, fuzzyDateLabel, titleCase, watchOrderIndex } from "@/lib/anime";
-import { entriesForManualOrder, manualWatchOrderFor, qualityWatchOrderGuides, watchOrderQualityEntries } from "@/lib/manual-content";
-import { publicWatchOrderGuides } from "@/lib/quality";
+import { entriesForManualOrder, manualWatchOrderFor, watchOrderQualityEntries } from "@/lib/manual-content";
+import { adsenseReviewWatchOrderGuides } from "@/lib/quality";
 import { watchOrderJsonLd } from "@/lib/seo";
 import type { WatchOrderGuide } from "@/types/anime";
 
 export function getStaticPaths() {
-  return qualityWatchOrderGuides(watchOrderIndex.items).map((guide) => ({
+  return adsenseReviewWatchOrderGuides(watchOrderIndex.items).map((guide) => ({
     params: { slug: guide.slug },
     props: { guide }
   }));
@@ -19,7 +18,7 @@ const franchiseTitle = guide.title.replace(/\s+watch order$/i, "").trim();
 const manual = manualWatchOrderFor(guide.rootAnimeId);
 const pageTitle = manual?.seoTitle || `${franchiseTitle} Watch Order: Story, Release, Movies & OVAs`;
 const pageDescription = manual?.seoDescription || `Follow the ${franchiseTitle} watch order by story path, release order, movies, OVAs, specials, and optional entries.`;
-const publicGuideSlugs = new Set(publicWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const publicGuideSlugs = new Set(adsenseReviewWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
 const isIndexable = publicGuideSlugs.has(guide.slug);
 const qualityEntries = watchOrderQualityEntries(guide);
 const mainRelations = new Set(["MAIN", "PREQUEL", "SEQUEL"]);
@@ -100,7 +99,9 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
       </p>
       <div class="chip-grid">
         {recommendedOrder.slice(0, 10).map((entry, index) => (
-          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}><span>{index + 1}</span>{entry.title}</a>
+          entry.siteUrl
+            ? <a href={entry.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="watch_order_entry_click" data-track-label={entry.title}><span>{index + 1}</span>{entry.title}</a>
+            : <span><b>{index + 1}</b>{entry.title}</span>
         ))}
       </div>
       <div class="compact-facts watch-order-facts" aria-label={`${franchiseTitle} route facts`}>
@@ -154,7 +155,7 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
         <img src={entry.coverImage || "/og-default.svg"} alt="" width="96" height="134" loading="lazy" referrerpolicy="no-referrer" />
         <div>
           <p class="eyebrow">{titleCase(entry.relationType || "Related")}</p>
-          <h2><a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{entry.title}</a></h2>
+          <h2>{entry.siteUrl ? <a href={entry.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="watch_order_entry_click" data-track-label={entry.title}>{entry.title}</a> : entry.title}</h2>
           <p>{titleCase(entry.format || "Anime")} · {fuzzyDateLabel(entry.startDate)} · {entry.episodes ? `${entry.episodes} episodes` : "Episodes TBA"}</p>
         </div>
       </article>
@@ -168,7 +169,9 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
       <p>Use this if you prefer to watch the franchise as audiences encountered it over time.</p>
       <div class="link-stack">
         {releaseOrder.slice(0, 12).map((entry) => (
-          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{fuzzyDateLabel(entry.startDate)} · {entry.title}</a>
+          entry.siteUrl
+            ? <a href={entry.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="watch_order_entry_click" data-track-label={entry.title}>{fuzzyDateLabel(entry.startDate)} · {entry.title}</a>
+            : <span>{fuzzyDateLabel(entry.startDate)} · {entry.title}</span>
         ))}
       </div>
     </div>
@@ -178,7 +181,9 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
       <p>{manual?.skipNotes || "Recap movies and alternative versions are usually optional if you already watched the corresponding TV season. OVAs, specials, side stories, and spin-offs are best treated as bonus material unless they are labeled prequel or sequel."}</p>
       <div class="link-stack">
         {optionalEntries.slice(0, 10).map((entry) => (
-          <a href={`/anime/${entry.slug}/`} data-track-event="watch_order_entry_click" data-track-label={entry.title}>{titleCase(entry.relationType || "Related")} · {entry.title}</a>
+          entry.siteUrl
+            ? <a href={entry.siteUrl} target="_blank" rel="nofollow noopener" data-track-event="watch_order_entry_click" data-track-label={entry.title}>{titleCase(entry.relationType || "Related")} · {entry.title}</a>
+            : <span>{titleCase(entry.relationType || "Related")} · {entry.title}</span>
         ))}
       </div>
     </div>
@@ -206,7 +211,4 @@ function uniqueEntries(entries: WatchOrderGuide["entries"]) {
     </div>
   </section>
 
-  <section class="section">
-    <AdSlot enabled={isIndexable} />
-  </section>
 </BaseLayout>

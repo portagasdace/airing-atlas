@@ -1,15 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AnimeCard from "@/components/AnimeCard.astro";
-import { animeByIds, canonicalPath, genreIndex } from "@/lib/anime";
+import { animeByIds, canonicalPath } from "@/lib/anime";
 import { genrePageJsonLd } from "@/lib/seo";
 import type { GenreIndexItem } from "@/types/anime";
 
 export function getStaticPaths() {
-  return genreIndex.items.map((genre) => ({
-    params: { genre: genre.slug },
-    props: { genre }
-  }));
+  return [];
 }
 
 const { genre } = Astro.props as { genre: GenreIndexItem };

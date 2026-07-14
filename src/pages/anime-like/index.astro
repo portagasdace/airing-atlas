@@ -1,19 +1,18 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AnimeCard from "@/components/AnimeCard.astro";
 import { allAnime, animeById, canonicalPath, displayTitle } from "@/lib/anime";
 import { manualFeaturedAnimeIds, manualSimilarGuideFor } from "@/lib/manual-content";
-import { publicAnimeLikePages } from "@/lib/quality";
+import { adsenseReviewAnimeLikePages } from "@/lib/quality";
 import { animeLikeSlug } from "@/lib/search-intents";
 import { collectionPageJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
-const curated = manualFeaturedAnimeIds.map((id) => animeById(id)).filter(Boolean) as AnimeSummary[];
-const automatic = publicAnimeLikePages(allAnime)
-  .filter((anime) => !curated.some((item) => item.id === anime.id))
-  .slice(0, 18);
+const publicGuides = adsenseReviewAnimeLikePages(allAnime);
+const curated = manualFeaturedAnimeIds
+  .map((id) => animeById(id))
+  .filter((anime): anime is AnimeSummary => Boolean(anime && publicGuides.some((item) => item.id === anime.id)));
 const title = "Anime Like Guides";
-const description = "Find anime like Attack on Titan, Demon Slayer, Jujutsu Kaisen, One Piece, Naruto, Death Note, and other popular series.";
+const description = "Read six manually edited anime recommendation guides covering Attack on Titan, Demon Slayer, Jujutsu Kaisen, Death Note, A Silent Voice, and Psycho-Pass.";
 ---
 
 <BaseLayout
@@ -56,23 +55,17 @@ const description = "Find anime like Attack on Titan, Demon Slayer, Jujutsu Kais
     })}
   </section>
 
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Popular matches</p>
-        <h2>More anime recommendation pages</h2>
-        <p>These selected pages have stronger demand and recommendation depth. Use the finder for the wider catalog.</p>
-      </div>
+  <section class="section split-feature">
+    <div class="editor-note">
+      <p class="eyebrow">Review standard</p>
+      <h2>Why only six guides are public</h2>
+      <p>Each public guide has a manual thesis, named match angles, title-specific recommendation notes, a reader-fit section, and an FAQ. The wider catalog remains available through the finder without creating hundreds of repetitive pages.</p>
     </div>
-    <div class="anime-grid">
-      {automatic.slice(0, 6).map((anime, index) => <AnimeCard anime={anime} rank={index + 1} compact />)}
-    </div>
-    <div class="link-stack">
-      {automatic.slice(6, 18).map((anime) => (
-        <a href={`/anime-like/${animeLikeSlug(anime)}/`} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(anime)}`}>
-          Anime like {displayTitle(anime)}
-        </a>
-      ))}
+    <div class="editor-note">
+      <p class="eyebrow">Editorial method</p>
+      <h2>Data proposes; an editor explains</h2>
+      <p>AniList recommendation and catalog signals create a candidate pool. Airing Atlas then explains the actual viewing reason: tone, structure, character pressure, moral conflict, or emotional payoff.</p>
+      <a class="button small" href="/editorial-policy/">Read the editorial policy</a>
     </div>
   </section>
 </BaseLayout>

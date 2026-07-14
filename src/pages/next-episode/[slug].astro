@@ -1,23 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { allAnime, canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
+import { canonicalPath, cleanText, displayTitle, genreIndex, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { isQualityNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
+import { publicWatchOrderGuides } from "@/lib/quality";
 import { nextEpisodeSlug, relatedSearchIntents, weeklyAiringLabel } from "@/lib/search-intents";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
 export function getStaticPaths() {
-  const seen = new Set<string>();
-  return allAnime
-    .filter((anime) => isQualityNextEpisodeAnime(anime))
-    .sort((a, b) => (a.nextAiringEpisode?.airingAt || 0) - (b.nextAiringEpisode?.airingAt || 0))
-    .flatMap((anime) => {
-      const slug = nextEpisodeSlug(anime);
-      if (!slug || seen.has(slug)) return [];
-      seen.add(slug);
-      return [{ params: { slug }, props: { anime } }];
-    });
+  return [];
 }
 
 const { anime } = Astro.props as { anime: AnimeSummary };

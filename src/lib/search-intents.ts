@@ -1,5 +1,5 @@
 import { allAnime, displayTitle, titleCase } from "@/lib/anime";
-import { isQualityNextEpisodeAnime, publicAnimeLikePages } from "@/lib/quality";
+import { adsenseReviewAnimeLikePages } from "@/lib/quality";
 import type { AnimeRecommendation, AnimeSummary, WatchOrderGuide } from "@/types/anime";
 
 export interface SearchIntentLink {
@@ -59,7 +59,7 @@ export function relatedSearchIntents(options: {
   const secondGenre = anime.genres?.[1];
   const studio = anime.studios?.[0]?.name;
   const topRecommendation = recommendations[0]?.title;
-  const hasPublicNextEpisode = isQualityNextEpisodeAnime(anime);
+  const hasPublicNextEpisode = false;
   const animeLikeHref = animeLikeGuideHref(anime);
   const hasAnimeLikeGuide = hasPublicAnimeLikeGuide(anime);
 
@@ -123,7 +123,7 @@ export function relatedSearchIntents(options: {
 let cachedPublicAnimeLikeGuideIds: Set<number> | undefined;
 
 function publicAnimeLikeGuideIds(): Set<number> {
-  cachedPublicAnimeLikeGuideIds ??= new Set(publicAnimeLikePages(allAnime).map((anime) => anime.id));
+  cachedPublicAnimeLikeGuideIds ??= new Set(adsenseReviewAnimeLikePages(allAnime).map((anime) => anime.id));
   return cachedPublicAnimeLikeGuideIds;
 }
 

@@ -2,19 +2,16 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AffiliatePanel from "@/components/AffiliatePanel.astro";
 import AdSlot from "@/components/AdSlot.astro";
-import { allAnime, animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
+import { animeSeoDescription, animeSeoTitle, canonicalPath, cleanText, dateTimeLabel, displayTitle, episodeLabel, formatNumber, genreIndex, recommendationsFor, scoreLabel, seasonLabel, titleCase, watchOrderIndex } from "@/lib/anime";
 import { dedupeExternalLinks } from "@/lib/external-links";
 import { manualEditorialFor, qualityWatchOrderFor } from "@/lib/manual-content";
-import { isQualityNextEpisodeAnime, publicAnimeDetailPages, publicWatchOrderGuides } from "@/lib/quality";
+import { isQualityNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
 import { animeLikeGuideHref, nextEpisodeSlug, relatedSearchIntents } from "@/lib/search-intents";
 import { animeJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import type { AnimeSummary } from "@/types/anime";
 
 export function getStaticPaths() {
-  return allAnime.map((anime) => ({
-    params: { slug: anime.slug },
-    props: { anime }
-  }));
+  return [];
 }
 
 const { anime } = Astro.props as { anime: AnimeSummary };
@@ -36,8 +33,7 @@ const genreLinks = (anime.genres || []).map((genre) => ({
   slug: genreIndex.items.find((item) => item.genre === genre)?.slug
 }));
 const searchIntents = relatedSearchIntents({ anime, recommendations, guide: publicGuide, genreLinks });
-const publicAnimeDetailIds = new Set(publicAnimeDetailPages(allAnime).map((item) => item.id));
-const isIndexable = publicAnimeDetailIds.has(anime.id);
+const isIndexable = false;
 const primaryGenres = (anime.genres || []).slice(0, 3);
 const editorialCards = manualEditorial
   ? [

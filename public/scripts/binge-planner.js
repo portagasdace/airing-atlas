@@ -276,14 +276,22 @@
     const stage = timeProfile.stageLabels[index] || `Pick ${index + 1}`;
     const reason = reasonFor(anime, state);
     const next = anime.nextAiringEpisode?.airingAt || "";
+    const siteUrl = safeAniListUrl(anime.siteUrl);
+    const poster = siteUrl
+      ? `<a class="result-poster" href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}"><img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" /></a>`
+      : `<div class="result-poster"><img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" /></div>`;
+    const titleMarkup = siteUrl
+      ? `<a href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}">${escapeHtml(title)}</a>`
+      : escapeHtml(title);
+    const externalAction = siteUrl
+      ? `<a class="button small" href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}">AniList</a>`
+      : "";
     return `
       <article class="result-card binge-result" data-result-position="${index + 1}">
-        <a class="result-poster" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}">
-          <img src="${escapeHtml(cover)}" alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
-        </a>
+        ${poster}
         <div>
           <p class="eyebrow">${escapeHtml(stage)}</p>
-          <h3><a href="/anime/${escapeHtml(anime.slug)}/" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}">${escapeHtml(title)}</a></h3>
+          <h3>${titleMarkup}</h3>
           <p>${escapeHtml(reason)}</p>
           <div class="meta-grid">
             <span>${escapeHtml(episodeLabel(anime))}</span>
@@ -292,8 +300,8 @@
           </div>
           <div class="tag-row">${(anime.genres || []).slice(0, 3).map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</div>
           <div class="result-actions">
-            <button class="button small" type="button" data-watchlist-toggle data-track-event="binge_plan_add_watchlist" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-title="${escapeHtml(title)}" data-cover="${escapeHtml(cover)}" data-slug="${escapeHtml(anime.slug)}" data-next-airing="${next}" data-result-position="${index + 1}">Add</button>
-            <a class="button small" href="/anime/${escapeHtml(anime.slug)}/" data-track-event="binge_plan_result_click" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-result-position="${index + 1}">Details</a>
+            <button class="button small" type="button" data-watchlist-toggle data-track-event="binge_plan_add_watchlist" data-track-label="${escapeHtml(title)}" data-anime-id="${anime.id}" data-title="${escapeHtml(title)}" data-cover="${escapeHtml(cover)}" data-slug="${escapeHtml(anime.slug)}" data-site-url="${escapeHtml(siteUrl)}" data-next-airing="${next}" data-result-position="${index + 1}">Add</button>
+            ${externalAction}
           </div>
         </div>
       </article>
@@ -492,6 +500,7 @@
   const scoreFor = (anime) => anime.averageScore || anime.meanScore || 0;
   const episodeLabel = (anime) => anime.episodes ? `${anime.episodes} eps` : anime.status === "RELEASING" ? "Ongoing" : "Episodes TBA";
   const formatLabel = (value) => String(value || "").replaceAll("_", " ").replaceAll("-", " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  const safeAniListUrl = (value) => /^https:\/\/anilist\.co\/anime\/\d+\/?$/i.test(String(value || "")) ? String(value) : "";
   const normalize = (value) =>
     String(value)
       .toLowerCase()

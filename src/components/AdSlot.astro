@@ -1,4 +1,6 @@
 ---
+import { isAdsenseReviewAdPath } from "@/lib/review-mode";
+
 interface Props {
   enabled?: boolean;
   label?: string;
@@ -7,7 +9,12 @@ interface Props {
 const { enabled = true, label = "Advertisement" } = Astro.props;
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 const adsenseSlotId = import.meta.env.PUBLIC_ADSENSE_SLOT_ID;
-const shouldRenderAd = Boolean(enabled && adsenseClientId && adsenseSlotId);
+const shouldRenderAd = Boolean(
+  enabled &&
+  adsenseClientId &&
+  adsenseSlotId &&
+  isAdsenseReviewAdPath(Astro.url.pathname)
+);
 ---
 
 {

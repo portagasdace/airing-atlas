@@ -1,24 +1,41 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AnimeCard from "@/components/AnimeCard.astro";
-import AiringRow from "@/components/AiringRow.astro";
-import AdSlot from "@/components/AdSlot.astro";
-import { allAiringEntries, allAnime, animeById, animeByRanking, animeCatalog, canonicalPath, formatNumber, genreIndex, watchOrderIndex } from "@/lib/anime";
+import { allAnime, animeById, canonicalPath, displayTitle, watchOrderIndex } from "@/lib/anime";
 import { discoveryClusters } from "@/lib/discovery-clusters";
-import { futureAiringEntries, isQualityNextEpisodeAnime, publicNextEpisodeAnime, publicWatchOrderGuides } from "@/lib/quality";
-import { animeLikeSlug, nextEpisodeSlug } from "@/lib/search-intents";
+import { guides } from "@/lib/guides";
+import { manualSimilarGuideFor } from "@/lib/manual-content";
+import { adsenseReviewAnimeLikePages, adsenseReviewWatchOrderGuides } from "@/lib/quality";
+import { ADSENSE_REVIEW_DISCOVER_SLUGS } from "@/lib/review-mode";
+import { animeLikeSlug } from "@/lib/search-intents";
 import { websiteJsonLd } from "@/lib/seo";
 
-const upcoming = futureAiringEntries(allAiringEntries).slice(0, 5);
-const publicNextEpisodes = publicNextEpisodeAnime(allAnime).slice(0, 4);
-const topAiring = animeByRanking("current").slice(0, 3);
-const topGenres = genreIndex.items.slice(0, 6);
-const featuredClusters = discoveryClusters.slice(0, 4);
-const watchGuides = publicWatchOrderGuides(watchOrderIndex.items).slice(0, 4);
+const featuredGuideSlugs = [
+  "how-many-episodes-before-dropping-an-anime",
+  "how-long-does-it-take-to-watch-an-anime",
+  "are-anime-recap-movies-worth-watching",
+  "how-to-build-an-anime-watchlist"
+];
+const featuredEditorialGuides = featuredGuideSlugs
+  .map((slug) => guides.find((guide) => guide.slug === slug))
+  .filter((guide): guide is (typeof guides)[number] => Boolean(guide));
+const guideShelfSlugs = [
+  "how-to-choose-anime-by-mood",
+  "watch-order-vs-release-order",
+  "best-anime-for-beginners",
+  "what-does-finished-airing-mean-in-anime"
+];
+const guideShelf = guideShelfSlugs
+  .map((slug) => guides.find((guide) => guide.slug === slug))
+  .filter((guide): guide is (typeof guides)[number] => Boolean(guide));
+const featuredClusters = discoveryClusters.filter((cluster) =>
+  ADSENSE_REVIEW_DISCOVER_SLUGS.includes(cluster.slug as (typeof ADSENSE_REVIEW_DISCOVER_SLUGS)[number])
+);
+const watchGuides = adsenseReviewWatchOrderGuides(watchOrderIndex.items);
+const allSimilarGuides = adsenseReviewAnimeLikePages(allAnime);
+const similarGuides = allSimilarGuides.slice(0, 3);
 const jujutsuGuide = watchGuides.find((guide) => guide.rootAnimeId === 113415) || watchGuides[0];
 const attackOnTitan = animeById(16498);
 const demonSlayer = animeById(101922);
-const onePiece = animeById(21);
 const plannerPresets = [
   {
     label: "One-night dark anime",
@@ -46,49 +63,42 @@ const plannerPresets = [
   }
 ];
 const keywordPaths = [
+  { label: "original anime watching guides", href: "/guides/", intent: "Editorial library" },
   { label: "anime finder by mood", href: "/anime-finder/", intent: "Anime finder" },
   { label: "anime binge planner", href: "/binge-planner/", intent: "Shareable planner" },
   { label: "what anime should I watch next", href: "/watch-next/", intent: "Decision tool" },
   { label: "finished anime to watch", href: "/finished-anime/", intent: "Binge finder" },
-  { label: "anime airing schedule", href: "/calendar/", intent: "Calendar" },
-  { label: "anime next episode schedule", href: "/next-episode/", intent: "Next episode" },
   { label: "anime watch order", href: "/watch-order/", intent: "Watch order" },
   attackOnTitan && { label: "anime like Attack on Titan", href: `/anime-like/${animeLikeSlug(attackOnTitan)}/`, intent: "Similar guide" },
   demonSlayer && { label: "anime like Demon Slayer", href: `/anime-like/${animeLikeSlug(demonSlayer)}/`, intent: "Similar guide" },
   jujutsuGuide && { label: "Jujutsu Kaisen watch order", href: `/watch-order/${jujutsuGuide.slug}/`, intent: "Watch order" },
-  onePiece && isQualityNextEpisodeAnime(onePiece) && { label: "One Piece next episode", href: `/next-episode/${nextEpisodeSlug(onePiece)}/`, intent: "Next episode" },
   ...featuredClusters.map((cluster) => ({
     label: cluster.title.toLowerCase(),
     href: `/discover/${cluster.slug}/`,
     intent: "Discovery"
-  })),
-  ...topGenres.slice(0, 3).map((genre) => ({
-    label: `best ${genre.genre.toLowerCase()} anime`,
-    href: `/genres/${genre.slug}/`,
-    intent: "Genre"
   }))
 ].filter((item): item is { label: string; href: string; intent: string } => Boolean(item)).slice(0, 12);
 ---
 
 <BaseLayout
-  title="Airing Atlas: Anime Schedule, Watch Orders & Finder"
-  description="Use free anime tools to find what to watch, check local airing times, build binge plans, and follow clear watch orders without unofficial streams."
+  title="Airing Atlas: Independent Anime Guides & Watch Planner"
+  description="Read original anime decision guides, compare curated recommendations, follow manual watch orders, and build a realistic watch plan without unofficial streams."
   canonical={canonicalPath("/")}
   structuredData={websiteJsonLd()}
-  adsEnabled={true}
+  adsEnabled={false}
 >
   <section class="hero" data-track-section="home_hero">
     <div class="hero-copy">
-      <p class="eyebrow">Global anime schedule</p>
+      <p class="eyebrow">Independent anime decision guides</p>
       <h1>Airing Atlas</h1>
       <p class="lede">
-        Build a shareable anime binge plan, decide what to watch next, track airing schedules,
-        and map watch orders without unauthorized streams.
+        Get a clear answer before you spend hours watching: choose by mood, estimate
+        the commitment, separate required franchise entries, and build a realistic route.
       </p>
       <div class="hero-actions hero-secondary-actions">
-        <a class="button primary" href="/anime-finder/" data-track-event="home_primary_anime_finder" data-track-label="Anime finder">Find anime by mood</a>
+        <a class="button primary" href="/guides/" data-track-event="home_primary_guides" data-track-label="Editorial guides">Read original guides</a>
+        <a class="button" href="/anime-finder/" data-track-event="home_primary_anime_finder" data-track-label="Anime finder">Find anime by mood</a>
         <a class="button" href="/binge-planner/" data-track-event="home_primary_binge_planner" data-track-label="Open blank binge planner">Build a plan</a>
-        <a class="button" href="/calendar/" data-track-event="home_primary_calendar" data-track-label="Open calendar">Track airing times</a>
       </div>
       <div class="hero-preset-grid" aria-label="Start with a binge plan preset">
         {plannerPresets.map((preset) => (
@@ -104,37 +114,49 @@ const keywordPaths = [
         ))}
       </div>
     </div>
-    <div class="ticker-panel">
-      <p class="eyebrow">Next episodes in your local time</p>
-      <p class="freshness-note">Updated <time data-generated-at={animeCatalog.generatedAt}>{new Date(animeCatalog.generatedAt).toUTCString()}</time>.</p>
-      <div class="airing-list">
-        {upcoming.length ? upcoming.map((entry) => <AiringRow entry={entry} />) : <p>No future episodes are listed in the current build.</p>}
+    <div class="ticker-panel editorial-shelf">
+      <p class="eyebrow">Start with an editor's answer</p>
+      <h2>Four decisions that prevent a bad watch</h2>
+      <div class="editorial-shelf-list">
+        {guideShelf.map((guide, index) => (
+          <a href={`/guides/${guide.slug}/`} data-track-event="home_editorial_guide_click" data-track-label={guide.title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{guide.shortTitle}</strong>
+            <small>{guide.thesis}</small>
+          </a>
+        ))}
       </div>
+      <a class="button shelf-button" href="/editorial-policy/">How we research guides</a>
     </div>
   </section>
 
-  <section class="section daily-desk" aria-label="Daily anime dashboard" data-track-section="home_daily_dashboard">
+  <section class="section daily-desk" aria-label="New editorial guides" data-track-section="home_editorial_updates">
     <div>
-      <p class="eyebrow">Daily tool desk</p>
-      <h2>Start with what changed today</h2>
+      <p class="eyebrow">New from the editorial desk</p>
+      <h2>Practical answers, not another title dump</h2>
       <p>
-        Start with a shareable binge route, then jump into fresh schedules, franchise maps,
-        and completed anime when you want something you can finish.
+        These guides address the decisions that catalog scores cannot make for you:
+        when to stop, what to skip, how much time a route takes, and how to keep a usable queue.
       </p>
     </div>
     <div class="mini-list">
-      {publicNextEpisodes.map((anime, index) => (
-        <a href={`/next-episode/${nextEpisodeSlug(anime)}/`} data-track-event="next_episode_detail_click" data-track-label={`${anime.title.english || anime.title.romaji} next episode`} data-anime-id={anime.id} data-result-position={index + 1}>
+      {featuredEditorialGuides.map((guide, index) => (
+        <a href={`/guides/${guide.slug}/`} data-track-event="home_editorial_guide_click" data-track-label={guide.title} data-result-position={index + 1}>
           <span>{index + 1}</span>
-          <strong>{anime.title.english || anime.title.romaji}</strong>
-          <small>Next episode in local time</small>
+          <strong>{guide.shortTitle}</strong>
+          <small>Updated {guide.updated}</small>
         </a>
       ))}
     </div>
   </section>
 
   <section class="section quick-entry-grid" aria-label="Start with a tool" data-track-section="home_tool_grid">
-    <a class="quick-entry primary-entry" href="/anime-finder/" data-track-event="home_tool_anime_finder" data-track-label="Anime finder">
+    <a class="quick-entry primary-entry" href="/guides/" data-track-event="home_tool_guides" data-track-label="Editorial guides">
+      <span class="eyebrow">Understand</span>
+      <strong>Read original guides</strong>
+      <small>Use practical rules for status, watch time, recap movies, and watchlist decisions.</small>
+    </a>
+    <a class="quick-entry" href="/anime-finder/" data-track-event="home_tool_anime_finder" data-track-label="Anime finder">
       <span class="eyebrow">Pick now</span>
       <strong>Find anime by mood</strong>
       <small>Choose mood, length, and status to get instant recommendations.</small>
@@ -154,11 +176,6 @@ const keywordPaths = [
       <strong>Watch order guides</strong>
       <small>Curated paths for long series, sequels, movies, and optional entries.</small>
     </a>
-    <a class="quick-entry" href="/next-episode/" data-track-event="home_tool_next_episode" data-track-label="Next episode hub">
-      <span class="eyebrow">Updated</span>
-      <strong>Next episode hub</strong>
-      <small>Fresh future releases from the latest four-hour build.</small>
-    </a>
   </section>
 
   <section class="section split-feature" data-track-section="home_editorial_value">
@@ -172,22 +189,23 @@ const keywordPaths = [
       </p>
     </div>
     <div class="editor-note">
-      <p class="eyebrow">Ad-safe direction</p>
-      <h2>Guides without playback bait</h2>
+      <p class="eyebrow">Editorial independence</p>
+      <h2>Guides without paid placements</h2>
       <p>
-        The site does not host episodes, downloads, or unofficial streams. Its
-        value is planning, discovery, watch orders, local schedules, and private
-        browser-side tracking.
+        Advertising never determines recommendation order. The site does not host
+        episodes, downloads, or unofficial streams, and each public guide explains
+        its reasoning and limits.
       </p>
+      <a class="button small" href="/editorial-policy/">Read the policy</a>
     </div>
   </section>
 
   <section class="feature-band" aria-label="Catalog stats">
     <div class="section">
-      <div class="stat-tile"><strong>{animeCatalog.season}</strong><span>current season</span></div>
-      <div class="stat-tile"><strong>{animeCatalog.seasonYear}</strong><span>season year</span></div>
-      <div class="stat-tile"><strong>{formatNumber(animeCatalog.anime.length)}</strong><span>indexed titles</span></div>
-      <div class="stat-tile"><strong>{formatNumber(futureAiringEntries(allAiringEntries).length)}</strong><span>future episodes</span></div>
+      <div class="stat-tile"><strong>{guides.length}</strong><span>original decision guides</span></div>
+      <div class="stat-tile"><strong>{allSimilarGuides.length}</strong><span>manual similar-anime guides</span></div>
+      <div class="stat-tile"><strong>{watchGuides.length}</strong><span>manual franchise routes</span></div>
+      <div class="stat-tile"><strong>{featuredClusters.length}</strong><span>focused discovery themes</span></div>
     </div>
   </section>
 
@@ -195,7 +213,7 @@ const keywordPaths = [
     <div class="keyword-panel" data-track-section="home_popular_guides">
       <p class="eyebrow">Search paths</p>
       <h2>Popular anime guides</h2>
-      <p>Fast routes for long-tail searches around similar anime, release schedules, watch orders, and genre discovery.</p>
+      <p>Every linked content page below is part of the small editorial review set. Broader catalog exploration stays inside the live tools.</p>
       <div class="keyword-list">
         {keywordPaths.map((item) => (
           <a href={item.href} data-track-event="related_guide_click" data-track-label={item.label}>
@@ -210,38 +228,48 @@ const keywordPaths = [
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Top airing now</p>
-        <h2>Current season picks</h2>
+        <p class="eyebrow">Human-edited examples</p>
+        <h2>Three ways a similar-anime guide can be specific</h2>
         <p>
-          Built from AniList data and organized for quick decisions: score, format,
-          genres, and upcoming episode timing before you add a title to your list.
+          Each public recommendation page starts with a real reference title, then
+          explains match angles and tradeoffs instead of returning a generic genre list.
         </p>
       </div>
-      <a class="button" href="/calendar/">Full schedule</a>
+      <a class="button" href="/anime-like/">All six guides</a>
     </div>
-    <div class="anime-grid">
-      {topAiring.map((anime, index) => <AnimeCard anime={anime} rank={index + 1} />)}
+    <div class="recommendation-grid">
+      {similarGuides.map((anime) => {
+        const guide = manualSimilarGuideFor(anime.id);
+        return (
+          <article class="recommendation-card">
+            <a class="result-poster" href={`/anime-like/${animeLikeSlug(anime)}/`}>
+              <img src={anime.coverImage?.large || anime.coverImage?.extraLarge || "/og-default.svg"} alt="" width="104" height="146" loading="lazy" referrerpolicy="no-referrer" />
+            </a>
+            <div>
+              <p class="eyebrow">Manual recommendation guide</p>
+              <h3><a href={`/anime-like/${animeLikeSlug(anime)}/`}>Anime like {displayTitle(anime)}</a></h3>
+              <p>{guide?.whySimilar || guide?.intro}</p>
+              <a class="button small" href={`/anime-like/${animeLikeSlug(anime)}/`}>Read the guide</a>
+            </div>
+          </article>
+        );
+      })}
     </div>
-  </section>
-
-  <section class="section">
-    <AdSlot />
   </section>
 
   <section class="section split-feature">
     <div>
       <div class="section-header">
         <div>
-          <p class="eyebrow">Discovery tools</p>
-          <h2>Search by mood, season, and format</h2>
+          <p class="eyebrow">Focused discovery</p>
+          <h2>Four public theme guides</h2>
           <p>
-            The new discovery desk turns the catalog into a filterable tool for fans who
-            know a vibe, genre, or season but not the exact title yet.
+            These routes are kept small on purpose. Each has a defined selection rule;
+            the broader catalog remains in the non-indexed filter tool.
           </p>
         </div>
       </div>
       <div class="chip-grid">
-        {topGenres.map((genre) => <a href={`/genres/${genre.slug}/`}>{genre.genre}<span>{genre.count}</span></a>)}
         {featuredClusters.map((cluster) => <a href={`/discover/${cluster.slug}/`}>{cluster.shortLabel}<span>guide</span></a>)}
       </div>
     </div>
@@ -263,19 +291,20 @@ const keywordPaths = [
     <div class="section-header">
       <div>
         <p class="eyebrow">Focused paths</p>
-        <h2>Use the site as a tool first</h2>
+        <h2>Choose one useful next action</h2>
         <p>
-          These entry points are easier to measure than broad catalog browsing:
-          plan a route, find a similar anime, check an order, or track a future episode.
+          Read the decision rule first, then use a tool or a curated franchise route
+          instead of opening dozens of anonymous catalog pages.
         </p>
       </div>
       <a class="button" href="/watchlist/" data-track-event="home_secondary_watchlist" data-track-label="Watchlist">Open watchlist</a>
     </div>
     <div class="link-stack" data-track-section="home_focused_paths">
+      <a href="/guides/" data-track-event="related_guide_click" data-track-label="Editorial guides">Read original decision guides</a>
       <a href="/binge-planner/" data-track-event="related_guide_click" data-track-label="Binge planner">Build a binge plan</a>
       <a href="/anime-like/" data-track-event="related_guide_click" data-track-label="Anime like hub">Find anime like a favorite</a>
       <a href="/watch-order/" data-track-event="related_guide_click" data-track-label="Watch order hub">Check a watch order</a>
-      <a href="/next-episode/" data-track-event="related_guide_click" data-track-label="Next episode hub">See the next episode schedule</a>
+      <a href="/editorial-policy/" data-track-event="related_guide_click" data-track-label="Editorial policy">Review the editorial method</a>
     </div>
   </section>
 </BaseLayout>

@@ -1,5 +1,6 @@
 import { displayTitle, recommendationsFor, watchOrderFor } from "@/lib/anime";
 import { isQualityWatchOrderGuide, manualEditorialFor, manualFeaturedAnimeIds, manualSimilarGuideFor, manualWatchOrderFor, qualityWatchOrderGuides } from "@/lib/manual-content";
+import { isAdsenseReviewAnimeLike, isAdsenseReviewWatchOrder } from "@/lib/review-mode";
 import type { AnimeSummary, CalendarEntry, WatchOrderGuide } from "@/types/anime";
 
 export const NEXT_EPISODE_POPULARITY_FLOOR = 10000;
@@ -128,6 +129,10 @@ export function qualifiedAnimeLikePages(items: AnimeSummary[], limit = ANIME_LIK
   return publicAnimeLikePages(items, limit);
 }
 
+export function adsenseReviewAnimeLikePages(items: AnimeSummary[]): AnimeSummary[] {
+  return publicAnimeLikePages(items).filter((anime) => isAdsenseReviewAnimeLike(anime.id));
+}
+
 export function publicWatchOrderGuides(guides: WatchOrderGuide[], limit = PUBLIC_WATCH_ORDER_LIMIT): WatchOrderGuide[] {
   const selected: WatchOrderGuide[] = [];
   const coveredAnimeIds = new Set<number>();
@@ -147,6 +152,10 @@ export function publicWatchOrderGuides(guides: WatchOrderGuide[], limit = PUBLIC
   }
 
   return selected;
+}
+
+export function adsenseReviewWatchOrderGuides(guides: WatchOrderGuide[]): WatchOrderGuide[] {
+  return publicWatchOrderGuides(guides).filter((guide) => isAdsenseReviewWatchOrder(guide.rootAnimeId));
 }
 
 function currentUnix(): number {

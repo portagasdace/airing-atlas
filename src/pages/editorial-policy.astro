@@ -1,0 +1,147 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { canonicalPath } from "@/lib/anime";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const title = "Editorial Policy and Recommendation Method";
+const description = "How Airing Atlas researches anime guides, separates data from editorial judgment, reviews recommendations, handles corrections, and avoids repetitive generated content.";
+const canonical = "/editorial-policy/";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalPath(canonical)}
+  structuredData={[
+    breadcrumbJsonLd([
+      { name: "Airing Atlas", path: "/" },
+      { name: "Editorial Policy", path: canonical }
+    ]),
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      name: title,
+      description,
+      url: canonicalPath(canonical),
+      dateModified: "2026-07-14",
+      publisher: { "@type": "Organization", name: "Airing Atlas" }
+    }
+  ]}
+>
+  <article class="article-page">
+    <section class="article-hero">
+      <p class="eyebrow">Editorial standards · Updated July 14, 2026</p>
+      <h1>How Airing Atlas turns catalog data into a recommendation</h1>
+      <p class="lede">
+        AniList data tells us what a title is. Airing Atlas editorial work explains
+        why it may fit a viewer, which franchise entries matter, and where an
+        automated signal is too weak to support a public guide.
+      </p>
+    </section>
+
+    <section class="section article-body">
+      <section class="article-section">
+        <p class="eyebrow">Ownership</p>
+        <h2>Who writes and reviews the guides</h2>
+        <p>
+          Guides are published by the Airing Atlas Editorial Desk. The site is an
+          independent planning and discovery project, not a streaming service,
+          distributor, studio, or rights holder. Editorial copy is written for
+          this site and is not copied from AniList descriptions or other anime databases.
+        </p>
+        <p>
+          Every public long-form guide is checked for a distinct question, a clear
+          recommendation rule, practical examples, internal links, and an updated
+          date. Pages that cannot meet that standard stay out of the review sitemap.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <p class="eyebrow">Source layer</p>
+        <h2>What comes from AniList</h2>
+        <p>
+          Airing Atlas uses AniList as the structured source for title names,
+          formats, episode counts, release status, dates, genres, tags, popularity,
+          scores, studios, relationships, and recommendation signals. Those fields
+          may change when AniList updates a record.
+        </p>
+        <p>
+          A catalog field is not presented as an editorial verdict. Popularity does
+          not mean a show is the best fit, a shared genre does not prove two shows
+          feel alike, and a related entry is not automatically required viewing.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <p class="eyebrow">Editorial layer</p>
+        <h2>What Airing Atlas adds</h2>
+        <p>
+          Similar-anime guides identify the viewing reason behind a match: pressure,
+          pacing, character dynamics, moral conflict, setting, or emotional payoff.
+          Watch-order guides separate the main route from recap films, side stories,
+          OVAs, and optional material. General guides turn catalog terminology into
+          decisions a viewer can use tonight.
+        </p>
+        <p>
+          A manual guide must explain both fit and limits. It should say who the
+          recommendation is for, what may disappoint a reader, and what to check
+          before committing time to the title.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <p class="eyebrow">Review gate</p>
+        <h2>Why the public catalog is deliberately small</h2>
+        <p>
+          Airing Atlas can generate many catalog routes, but generated volume is not
+          the publishing goal. During the current quality review, only six manually
+          explained similar-anime guides, six manual watch-order guides, four focused
+          discovery routes, and the long-form editorial library are included in the sitemap.
+        </p>
+        <p>
+          Live filters and browser-side tools remain available for broader discovery.
+          Their result combinations are not turned into indexable pages merely to
+          capture more keywords.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <p class="eyebrow">Corrections</p>
+        <h2>Updates, conflicts, and feedback</h2>
+        <p>
+          Airing schedules and franchise relationships can change. When structured
+          data conflicts with an official announcement, the site treats the official
+          publisher or broadcaster as the stronger source and updates the affected
+          guide in a later build.
+        </p>
+        <p>
+          Readers can report a factual error, unclear recommendation, broken route,
+          or policy concern through the <a href="/contact/">Contact page</a>. A
+          correction should identify the page, the disputed claim, and a reliable
+          source when one is available.
+        </p>
+      </section>
+    </section>
+
+    <section class="section split-feature">
+      <div class="editor-note">
+        <p class="eyebrow">Commercial boundary</p>
+        <h2>Ads do not decide recommendations</h2>
+        <p>
+          Advertising is kept separate from recommendation order. Airing Atlas does
+          not accept payment to place a title higher in a guide. During review, ads
+          are limited to one position after long-form editorial content.
+        </p>
+      </div>
+      <div class="editor-note">
+        <p class="eyebrow">Copyright boundary</p>
+        <h2>No playback or download claims</h2>
+        <p>
+          Airing Atlas does not host episodes, manga scans, downloads, or unofficial
+          streams. Cover art and catalog data support identification and planning;
+          viewers should use official services available in their region.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

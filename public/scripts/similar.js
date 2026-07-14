@@ -38,7 +38,10 @@
 
     const direct = recommendations.find((item) => String(item.animeId) === String(animeId))?.recommendations || [];
     const fallback = fallbackRecommendations(base, direct.map((item) => item.animeId));
-    const items = [...direct, ...fallback].slice(0, 8);
+    const items = [...direct, ...fallback].slice(0, 8).map((item) => ({
+      ...item,
+      siteUrl: anime.find((candidate) => candidate.id === item.animeId)?.siteUrl || item.siteUrl || ""
+    }));
 
     if (summary) {
       summary.textContent = `Showing ${items.length} matches for ${titleFor(base)}`;
@@ -71,6 +74,7 @@
         signals: signalsFor(base, candidate),
         source: "similarity",
         coverImage: candidate.coverImage?.large || candidate.coverImage?.extraLarge || "",
+        siteUrl: candidate.siteUrl || "",
         score: similarityScore(base, candidate),
         genres: candidate.genres || []
       }))
@@ -79,19 +83,27 @@
       .slice(0, Math.max(0, 8 - seenIds.length));
   };
 
-  const recommendationHtml = (item) => `
-    <article class="recommendation-card">
-      <a class="result-poster" href="/anime/${escapeHtml(item.slug)}/">
-        <img src="${escapeHtml(item.coverImage || "/og-default.svg")}" alt="" loading="lazy" referrerpolicy="no-referrer" />
-      </a>
-      <div>
-        <p class="eyebrow">${escapeHtml(item.source === "anilist" ? "AniList signal" : "Atlas match")}</p>
-        <h3><a href="/anime/${escapeHtml(item.slug)}/">${escapeHtml(item.title)}</a></h3>
-        <p>${escapeHtml(item.reason || "Similar score and audience popularity")}</p>
-        <div class="tag-row">${(item.signals || []).slice(0, 2).map((signal) => `<span>${escapeHtml(signal)}</span>`).join("")}</div>
-      </div>
-    </article>
-  `;
+  const recommendationHtml = (item) => {
+    const siteUrl = safeAniListUrl(item.siteUrl);
+    const cover = escapeHtml(item.coverImage || "/og-default.svg");
+    const poster = siteUrl
+      ? `<a class="result-poster" href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener"><img src="${cover}" alt="" loading="lazy" referrerpolicy="no-referrer" /></a>`
+      : `<div class="result-poster"><img src="${cover}" alt="" loading="lazy" referrerpolicy="no-referrer" /></div>`;
+    const title = siteUrl
+      ? `<a href="${escapeHtml(siteUrl)}" target="_blank" rel="nofollow noopener">${escapeHtml(item.title)}</a>`
+      : escapeHtml(item.title);
+    return `
+      <article class="recommendation-card">
+        ${poster}
+        <div>
+          <p class="eyebrow">${escapeHtml(item.source === "anilist" ? "AniList signal" : "Atlas match")}</p>
+          <h3>${title}</h3>
+          <p>${escapeHtml(item.reason || "Similar score and audience popularity")}</p>
+          <div class="tag-row">${(item.signals || []).slice(0, 2).map((signal) => `<span>${escapeHtml(signal)}</span>`).join("")}</div>
+        </div>
+      </article>
+    `;
+  };
 
   const filterPicker = () => {
     const query = (search.value || "").trim().toLowerCase();
@@ -122,6 +134,7 @@
   };
 
   const reasonFor = (base, candidate) => signalsFor(base, candidate)[0];
+  const safeAniListUrl = (value) => /^https:\/\/anilist\.co\/anime\/\d+\/?$/i.test(String(value || "")) ? String(value) : "";
   const titleFor = (item) => item.title?.english || item.title?.romaji || item.title?.native || "Untitled Anime";
   const escapeHtml = (value = "") =>
     String(value)

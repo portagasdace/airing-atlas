@@ -3,10 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { canonicalPath, watchOrderIndex } from "@/lib/anime";
 import { manualWatchOrderByAnimeId, watchOrderQualityEntries } from "@/lib/manual-content";
-import { publicWatchOrderGuides } from "@/lib/quality";
+import { adsenseReviewWatchOrderGuides } from "@/lib/quality";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-const guides = publicWatchOrderGuides(watchOrderIndex.items);
+const guides = adsenseReviewWatchOrderGuides(watchOrderIndex.items);
 const title = "Anime Watch Order Guides: Demon Slayer, Attack on Titan & More";
 const description = "Browse anime watch order guides for Demon Slayer, Attack on Titan, Jujutsu Kaisen, Naruto, One Piece, movies, OVAs, specials, and sequels.";
 const featuredRootIds = [101922, 16498, 113415, 20, 21];

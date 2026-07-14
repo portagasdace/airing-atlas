@@ -401,6 +401,250 @@ export const guides: EditorialGuide[] = [
       { question: "Can a finished anime get another season?", answer: "Yes. A finished status can describe one completed season. A later sequel is normally recorded as a separate entry or changes the franchise route." },
       { question: "What is the difference between finished and cancelled?", answer: "Finished means the scheduled run reached its end. Cancelled means the planned release stopped and may remain incomplete." }
     ]
+  },
+  {
+    slug: "how-many-episodes-before-dropping-an-anime",
+    title: "How Many Episodes Should You Watch Before Dropping an Anime?",
+    shortTitle: "When to drop an anime",
+    description: "A practical alternative to the three-episode rule, with better stopping points for episodic shows, slow burns, mysteries, and long-running anime.",
+    updated: "2026-07-14",
+    lede: "The three-episode rule is useful only when three episodes reveal the real shape of a show. A better rule is to watch until the anime has demonstrated its normal rhythm, then decide whether that rhythm is worth more of your time.",
+    thesis: "Do not wait for a famous future arc just because other viewers promise a payoff. Give the show enough time to state its usual pace and conflict, then judge the experience you are actually having.",
+    sections: [
+      {
+        eyebrow: "The common rule",
+        heading: "Three episodes is a checkpoint, not a contract",
+        body: [
+          "Three episodes often cover the premise, the first complication, and a small payoff. That makes the checkpoint useful for many 12-episode seasonal shows, but it is not a universal measure of quality or patience.",
+          "A comedy may reveal its voice in one episode. A mystery may need four episodes to establish the question it wants you to solve. A long-running adventure may have a complete introductory mini-arc that is a better stopping point than an arbitrary episode number."
+        ]
+      },
+      {
+        eyebrow: "Decision signal",
+        heading: "Ask whether the normal episode is enjoyable",
+        body: [
+          "Pilots receive extra attention, and climactic episodes receive extra praise. The more useful test is the ordinary episode between those peaks. Do you enjoy the conversations, movement, humor, tension, or atmosphere when the story is not revealing a major twist?",
+          "If the normal rhythm feels like work, a promised payoff may not repair the hours required to reach it. If the rhythm is pleasant but the plot is still forming, one more checkpoint may be reasonable."
+        ]
+      },
+      {
+        eyebrow: "Different formats",
+        heading: "Use a stopping point that matches the show",
+        body: [
+          "For an episodic comedy or slice-of-life title, two representative episodes can be enough. For a 12-episode thriller, three episodes usually reveal the central mechanism. For a slow-burn drama, try the end of the first clear character conflict rather than waiting for the halfway point.",
+          "For a long franchise, finish the introductory arc and then ask whether you want the next problem. Do not use a 50-episode fan milestone as your first decision point unless the early journey already has something you value."
+        ]
+      },
+      {
+        eyebrow: "Permission to stop",
+        heading: "Dropping a show is a watchlist decision, not a verdict",
+        body: [
+          "A dropped status does not mean the anime is objectively bad. It means the current fit between show, viewer, and moment is weak. A dense political story may work better later; a loud comedy may never fit your taste.",
+          "Record a short reason such as pacing, tone, repetition, or current mood. That note is more useful than a score because it helps the next recommendation avoid the same mismatch."
+        ]
+      }
+    ],
+    checklist: [
+      "Identify whether the show is episodic, arc-based, or a continuous mystery.",
+      "Reach the first point that demonstrates the normal rhythm.",
+      "Judge the ordinary episodes, not only the pilot or promised climax.",
+      "Stop when curiosity is being replaced by obligation.",
+      "Save a brief drop reason so the next pick can be better."
+    ],
+    internalLinks: [
+      { label: "Anime Finder", href: "/anime-finder/", note: "Replace the dropped show with a better mood and length fit." },
+      { label: "Build a realistic watchlist", href: "/guides/how-to-build-an-anime-watchlist/", note: "Keep planned titles from becoming a backlog." },
+      { label: "Watch Next", href: "/watch-next/", note: "Choose one immediate replacement instead of adding ten maybes." }
+    ],
+    faq: [
+      { question: "Is the three-episode rule good for every anime?", answer: "No. It is a useful checkpoint for many short seasonal shows, but episodic series, mysteries, and long arc-based anime reveal their normal rhythm at different points." },
+      { question: "Should I continue because fans say it gets better?", answer: "Continue only if the current experience offers something you value. A later payoff does not automatically justify many unenjoyable hours." },
+      { question: "Can I return to a dropped anime later?", answer: "Yes. Dropped can mean not a fit right now. Save the episode and a short reason so you can make a better decision if your mood changes." },
+      { question: "Does dropping anime make my ratings less reliable?", answer: "No. A clear reason for stopping can be more informative than finishing from obligation and assigning a frustrated score." }
+    ]
+  },
+  {
+    slug: "are-anime-recap-movies-worth-watching",
+    title: "Are Anime Recap Movies Worth Watching?",
+    shortTitle: "Anime recap movies",
+    description: "Learn when an anime recap movie is useful, when it is safely skippable, and how to tell a compilation film from a required sequel movie.",
+    updated: "2026-07-14",
+    lede: "A recap movie compresses material you may already know. Its value depends on what changed: editing, animation, sound, framing scenes, or the amount of time since you watched the original season.",
+    thesis: "Skip a recap movie on a first watch unless it is the only official route you can access or the guide identifies meaningful new material. Use it later as a refresher, alternate edit, or production comparison.",
+    sections: [
+      {
+        eyebrow: "First distinction",
+        heading: "Recap, sequel, and remake are different jobs",
+        body: [
+          "A compilation or summary movie retells existing episodes in a shorter theatrical cut. A sequel movie continues the story after a series. A remake may cover familiar events with a new production and can become its own valid route.",
+          "The word movie does not reveal which job the entry performs. Check its relation label and description before placing it in a watch order. A sequel can be essential while a recap of the preceding season is optional."
+        ]
+      },
+      {
+        eyebrow: "Good use",
+        heading: "A recap is strongest when memory is the problem",
+        body: [
+          "If several years passed between seasons, a compact refresher can restore names, factions, and unresolved conflicts without replaying an entire cour. It can also help a group synchronize before starting a sequel together.",
+          "Recap films are also useful for viewers interested in editing. Removing weekly openings, repeated explanations, and episode cliffhangers can change the pace, even when the plot information is familiar."
+        ]
+      },
+      {
+        eyebrow: "Weak use",
+        heading: "Compression usually sacrifices texture",
+        body: [
+          "A two-hour film cannot preserve every quiet scene from a full television season. Character transitions, comedy, side relationships, and gradual atmosphere are often the first material removed.",
+          "That makes most recap movies a poor substitute for a first watch when character development is the main appeal. Faster is not automatically clearer, especially if the edit assumes the audience already understands the world."
+        ]
+      },
+      {
+        eyebrow: "Watch-order rule",
+        heading: "Label optional material instead of hiding it",
+        body: [
+          "A useful watch-order guide should keep recap movies visible but separate from the main route. Hiding them prevents completionists from finding them; treating them as mandatory creates unnecessary friction for everyone else.",
+          "Airing Atlas places summary and alternative entries after the main route unless a manual note explains that new scenes materially affect the continuation."
+        ]
+      }
+    ],
+    checklist: [
+      "Confirm whether the movie is labeled summary, alternative, sequel, or side story.",
+      "Skip summaries during a first watch when the full season is available.",
+      "Use a recap before a sequel when your memory is weak.",
+      "Check for new framing scenes or animation before dismissing the film entirely.",
+      "Keep recap entries optional in a shared watch plan."
+    ],
+    internalLinks: [
+      { label: "Watch order vs release order", href: "/guides/watch-order-vs-release-order/", note: "Choose the right route for a first watch." },
+      { label: "Anime Watch Order", href: "/watch-order/", note: "See manual routes with optional entries separated." },
+      { label: "Demon Slayer watch order", href: "/watch-order/101922-demon-slayer-kimetsu-no-yaiba/", note: "A useful movie-versus-TV-arc example." }
+    ],
+    faq: [
+      { question: "Can I skip anime recap movies?", answer: "Usually yes if you already watched the television material. Check the guide for new scenes or a special edit before skipping." },
+      { question: "Is every anime movie optional?", answer: "No. Some movies are direct sequels or required story arcs. The relation to the series matters more than the format." },
+      { question: "Are recap movies good for first-time viewers?", answer: "Usually the full series is better because it preserves character and pacing detail. A recap can work when access or time makes it the only practical official route." },
+      { question: "Why list a movie if it is skippable?", answer: "Optional does not mean worthless. Completionists, returning viewers, and production-focused fans may still want the alternate edit." }
+    ]
+  },
+  {
+    slug: "how-to-build-an-anime-watchlist",
+    title: "How to Build an Anime Watchlist You Will Actually Finish",
+    shortTitle: "Build a useful watchlist",
+    description: "Turn an oversized anime backlog into a small active queue with clear roles, realistic limits, drop reasons, and a weekly review habit.",
+    updated: "2026-07-14",
+    lede: "A watchlist stops being useful when every interesting title becomes an equal priority. The solution is not a better ranking algorithm; it is a smaller active queue with different jobs for different shows.",
+    thesis: "Keep discovery broad but commitment narrow. Store many possibilities if you enjoy collecting them, but promote only three titles into the queue you expect to watch next.",
+    sections: [
+      {
+        eyebrow: "Queue design",
+        heading: "Give each active title a job",
+        body: [
+          "A balanced queue can contain one easy show, one focused story, and one long project. The easy show works when energy is low. The focused story gets deliberate attention. The long project advances without pretending it must be finished this month.",
+          "Titles compete less when their jobs differ. Three intense mysteries create a decision every night; a comedy, a thriller, and a long adventure each have an obvious moment."
+        ]
+      },
+      {
+        eyebrow: "Hard limit",
+        heading: "Use a three-title active queue",
+        body: [
+          "Three is large enough to offer choice and small enough to remember why each title is there. When one title is completed or dropped, promote a replacement from the broader planned list.",
+          "Airing shows can sit in a separate weekly slot because release timing controls their pace. Do not let six weekly shows quietly become six unfinished binge projects."
+        ]
+      },
+      {
+        eyebrow: "Selection notes",
+        heading: "Save a reason, not only a title",
+        body: [
+          "Write one sentence when adding a show: short emotional drama, tactical fights, comfort comedy, or finish before the next season. That sentence preserves the original motivation after the recommendation page is forgotten.",
+          "If the reason no longer appeals, remove the title without guilt. A watchlist is a decision aid, not a museum of every recommendation you have encountered."
+        ]
+      },
+      {
+        eyebrow: "Maintenance",
+        heading: "Review the queue once a week",
+        body: [
+          "A weekly review should take less than five minutes. Mark progress, close completed titles, record one reason for anything dropped, and confirm that the next three still match your available time.",
+          "Do not reorganize the entire catalog. The purpose of the review is to remove friction from the next viewing decision, not to perfect a database."
+        ]
+      }
+    ],
+    checklist: [
+      "Keep no more than three non-airing titles in the active queue.",
+      "Assign each title a different viewing job.",
+      "Write one sentence explaining why you added it.",
+      "Promote a replacement only after completing or dropping a title.",
+      "Review progress and drop reasons once a week."
+    ],
+    internalLinks: [
+      { label: "Anime Finder", href: "/anime-finder/", note: "Find a title for a specific queue role." },
+      { label: "Binge Planner", href: "/binge-planner/", note: "Turn selected titles into a bounded route." },
+      { label: "When to drop an anime", href: "/guides/how-many-episodes-before-dropping-an-anime/", note: "Remove obligation from the active queue." }
+    ],
+    faq: [
+      { question: "How many anime should be on my active watchlist?", answer: "Three non-airing titles is a practical default: one easy show, one focused story, and one long project. Keep broader possibilities in a separate planned list." },
+      { question: "Should airing anime count toward the limit?", answer: "Track them separately because weekly release timing controls their pace. Still limit the number if keeping up begins to feel like an obligation." },
+      { question: "Should I delete anime I may watch someday?", answer: "Not necessarily. Keep a broad discovery list if you enjoy it, but separate it from the small queue that drives your next decision." },
+      { question: "What should I write when adding a title?", answer: "Save the viewing reason and expected commitment, such as a short finished mystery for a weekend or a long adventure for one episode a night." }
+    ]
+  },
+  {
+    slug: "how-long-does-it-take-to-watch-an-anime",
+    title: "How Long Does It Take to Watch an Anime?",
+    shortTitle: "Estimate anime watch time",
+    description: "Estimate anime watch time for 12, 24, 50, and 100 episodes, then adjust for openings, endings, recaps, breaks, and realistic viewing pace.",
+    updated: "2026-07-14",
+    lede: "A standard television episode is often scheduled for about 24 minutes, but practical watch time depends on whether you skip openings, take breaks, or watch recap-heavy episodes. A useful estimate should show both screen time and calendar time.",
+    thesis: "Use 24 minutes per episode for a safe first estimate, then plan by sessions rather than pretending every available hour will become uninterrupted viewing time.",
+    sections: [
+      {
+        eyebrow: "Quick estimate",
+        heading: "Multiply episodes by 24 minutes",
+        body: [
+          "A 12-episode season is roughly 4 hours 48 minutes before breaks. Twenty-four episodes are about 9 hours 36 minutes. Fifty episodes are about 20 hours, and one hundred episodes are about 40 hours.",
+          "These are planning numbers, not exact runtimes. Double-length premieres, shorts, recap episodes, and movies can change the total. Check the actual format when a route mixes television episodes with films or OVAs."
+        ]
+      },
+      {
+        eyebrow: "Skipping credits",
+        heading: "Openings and endings save less time than people expect",
+        body: [
+          "Skipping a 90-second opening and 90-second ending can remove about three minutes per episode. Across 12 episodes, that saves roughly 36 minutes; across 24 episodes, roughly 72 minutes.",
+          "The estimate is imperfect because some episodes place story material before or after the credits. Use the skip button deliberately rather than assuming every ending contains nothing new."
+        ]
+      },
+      {
+        eyebrow: "Calendar time",
+        heading: "Convert hours into a viewing rhythm",
+        body: [
+          "A 12-episode season can fit into one long day, two comfortable evenings, or six days at two episodes per night. The same screen time feels very different depending on attention and sleep.",
+          "For a 50-episode show, two episodes a night creates a 25-day route. Five episodes each weekend creates a ten-week route. Calendar estimates make long anime feel concrete without turning every free hour into a target."
+        ]
+      },
+      {
+        eyebrow: "Mixed franchises",
+        heading: "Count required movies separately",
+        body: [
+          "A franchise route can include films, OVAs, and specials that do not fit the 24-minute rule. Add required movies using their listed runtimes and leave recap or side material out of the main estimate unless you intend to watch it.",
+          "This is why a manual watch order is useful before estimating a franchise. The largest error is often not episode length; it is counting optional material as mandatory."
+        ]
+      }
+    ],
+    checklist: [
+      "Start with episode count multiplied by 24 minutes.",
+      "Subtract about three minutes per episode only if you skip both credits sequences.",
+      "Add movies and long specials separately.",
+      "Plan comfortable sessions with breaks instead of one theoretical marathon.",
+      "Use a watch-order guide to remove optional recap material from the estimate."
+    ],
+    internalLinks: [
+      { label: "Binge Planner", href: "/binge-planner/", note: "Build a route around a night, weekend, or month." },
+      { label: "Finished Anime Finder", href: "/finished-anime/", note: "Choose a completed title by commitment." },
+      { label: "Are recap movies worth watching?", href: "/guides/are-anime-recap-movies-worth-watching/", note: "Decide which movie time belongs in the route." }
+    ],
+    faq: [
+      { question: "How long does a 12-episode anime take to watch?", answer: "At 24 minutes per episode, about 4 hours 48 minutes before breaks. Skipping both opening and ending sequences can reduce the total by roughly 36 minutes." },
+      { question: "How long does a 24-episode anime take?", answer: "About 9 hours 36 minutes at the 24-minute estimate, or around 8 hours 24 minutes if three minutes of credits are skipped in every episode." },
+      { question: "Can I finish 12 episodes in one day?", answer: "Yes, but two comfortable sessions are usually more realistic than five uninterrupted hours. Add meal and attention breaks to the calendar plan." },
+      { question: "Do anime movies count as episodes?", answer: "No. Add each required movie by its own runtime. Recap and optional films should be counted only if you choose to include them." }
+    ]
   }
 ];
 
