@@ -17,12 +17,19 @@ const PUBLIC_WATCH_ORDER_LIMIT = 10;
 const REVIEW_ANIME_LIKE_LIMIT = 6;
 const REVIEW_WATCH_ORDER_LIMIT = 6;
 const REVIEW_DISCOVER_LIMIT = 4;
-const REVIEW_GUIDE_ARTICLE_LIMIT = 11;
-const REVIEW_SITEMAP_TARGET = 36;
+const REVIEW_GUIDE_ARTICLE_LIMIT = 6;
+const REVIEW_SITEMAP_TARGET = 30;
+const candidateGuideSlugs = new Set([
+  "how-to-choose-anime-by-mood",
+  "watch-order-vs-release-order",
+  "best-anime-for-beginners",
+  "finished-anime-vs-airing-anime",
+  "how-airing-atlas-recommends-similar-anime"
+]);
 const excludedPublicWatchOrderRootIds = new Set([100166, 161645]);
-const SITEMAP_WARNING_CEILING = 40;
+const SITEMAP_WARNING_CEILING = 30;
 const blockedAnimeLikeFormats = new Set(["MANGA", "NOVEL", "ONE_SHOT", "LIGHT_NOVEL", "MUSIC"]);
-const removedStaticPaths = new Set(["/calendar/", "/contact/", "/discover/", "/finished-anime/", "/next-episode/", "/privacy/", "/similar/", "/terms/", "/affiliate-disclosure/", "/watchlist/", "/rankings/"]);
+const removedStaticPaths = new Set(["/about/", "/calendar/", "/contact/", "/discover/", "/finished-anime/", "/next-episode/", "/privacy/", "/similar/", "/terms/", "/affiliate-disclosure/", "/watchlist/", "/rankings/"]);
 const warnings = [];
 const criticalWarnings = [];
 const info = [];
@@ -45,6 +52,7 @@ auditHostingConfig();
 auditRecommendationDepth();
 auditWatchOrders();
 auditSlugCollisions();
+await auditEditorialGuideCandidates();
 await auditBuiltHtml();
 await auditSitemap();
 
@@ -117,6 +125,27 @@ function auditSlugCollisions() {
   if (nextEpisodeCollisions.length) warnings.push(`${nextEpisodeCollisions.length} public next-episode slug collisions found: ${collisionPreview(nextEpisodeCollisions)}.`);
 }
 
+async function auditEditorialGuideCandidates() {
+  const source = await readFile(resolve(root, "src/lib/guides.ts"), "utf8");
+  let audited = 0;
+  for (const slug of candidateGuideSlugs) {
+    const start = source.indexOf(`slug: "${slug}"`);
+    const next = source.indexOf("\n  {\n    slug:", start + 1);
+    const block = start >= 0 ? source.slice(start, next >= 0 ? next : source.length) : "";
+    const words = block.match(/[A-Za-z]+(?:['-][A-Za-z]+)*/g)?.length || 0;
+    if (!block) {
+      warnings.push(`Candidate editorial guide ${slug} is missing from src/lib/guides.ts.`);
+      continue;
+    }
+    if (!block.includes('indexStatus: "candidate"') || !block.includes("adsEligible: false")) {
+      warnings.push(`Candidate editorial guide ${slug} must remain candidate and ad-free during the 30-URL sprint.`);
+    }
+    if (words < 900) warnings.push(`Candidate editorial guide ${slug} has ${words} source words; target is at least 900 before readmission.`);
+    audited += 1;
+  }
+  info.push(`${audited} candidate editorial guides pass the staged readmission audit.`);
+}
+
 async function auditBuiltHtml() {
   const dist = resolve(root, "dist");
   if (!existsSync(dist)) {
@@ -135,6 +164,7 @@ async function auditBuiltHtml() {
   const adRoutes = [];
   const retiredDataRoutes = [];
   let missingGuideDisclosure = 0;
+  let candidateGuideAds = 0;
 
   for (const file of files) {
     const html = await readFile(file, "utf8");
@@ -155,8 +185,10 @@ async function auditBuiltHtml() {
     const isWatchOrder = file.includes("/watch-order/") && !file.endsWith("/watch-order/index.html");
     const isAnimeLike = file.includes("/anime-like/") && !file.endsWith("/anime-like/index.html");
     const isEditorialGuide = /^\/guides\/[^/]+\//.test(route);
+    const editorialGuideSlug = route.match(/^\/guides\/([^/]+)\//)?.[1];
     if ((isWatchOrder || isAnimeLike) && !html.includes("ItemList")) missingStructuredData += 1;
     if (isEditorialGuide && (!html.includes("Written and reviewed by") || !html.includes("editorial-policy"))) missingGuideDisclosure += 1;
+    if (editorialGuideSlug && candidateGuideSlugs.has(editorialGuideSlug) && hasManualAd) candidateGuideAds += 1;
 
     const animeLikeSlug = route.match(/^\/anime-like\/([^/]+)\//)?.[1];
     const animeSlug = route.match(/^\/anime\/([^/]+)\//)?.[1];
@@ -192,6 +224,7 @@ async function auditBuiltHtml() {
   if (noindexWithAds) warnings.push(`${noindexWithAds} noindex pages still render manual AdSense slots.`);
   if (missingEditorialValue) warnings.push(`${missingEditorialValue} public anime detail pages are missing Airing Atlas editorial value sections.`);
   if (missingGuideDisclosure) warnings.push(`${missingGuideDisclosure} editorial guides are missing author, source, or correction disclosures.`);
+  if (candidateGuideAds) warnings.push(`${candidateGuideAds} candidate editorial guides still render manual AdSense slots.`);
   const invalidAdRoutes = adRoutes.filter((route) => !/^\/guides\/[^/]+\//.test(route));
   if (invalidAdRoutes.length) warnings.push(`${invalidAdRoutes.length} non-editorial routes still render manual AdSense slots: ${invalidAdRoutes.slice(0, 5).join(", ")}.`);
   if (adRoutes.length !== REVIEW_GUIDE_ARTICLE_LIMIT) warnings.push(`${adRoutes.length} editorial pages render ads; expected exactly ${REVIEW_GUIDE_ARTICLE_LIMIT} during AdSense review.`);
@@ -233,11 +266,54 @@ async function auditSitemap() {
   });
   const discoverClusterUrls = urls.filter((url) => url.includes("/discover/") && url !== "https://airingatlas.com/discover/");
   const guideArticleUrls = urls.filter((url) => /\/guides\/[^/]+\/$/.test(new URL(url).pathname));
+  const candidateGuideUrls = guideArticleUrls.filter((url) => candidateGuideSlugs.has(new URL(url).pathname.split("/")[2]));
   const removedStaticUrls = urls.filter((url) => removedStaticPaths.has(new URL(url).pathname));
   const sitemapNoindexUrls = [];
   for (const url of urls) {
     if (await urlHasNoindex(url)) sitemapNoindexUrls.push(url);
   }
+  const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((item) => ({
+    url: match(item[1], /<loc>(.*?)<\/loc>/),
+    lastModified: match(item[1], /<lastmod>(.*?)<\/lastmod>/)
+  }));
+  const futureLastmod = sitemapEntries.filter((entry) => entry.lastModified && entry.lastModified > new Date().toISOString().slice(0, 10));
+  const missingEditorialLastmod = sitemapEntries.filter((entry) => {
+    const path = new URL(entry.url).pathname;
+    return /^\/(?:guides|discover|anime-like|watch-order)\/[^/]+\/$/.test(path) && !entry.lastModified;
+  });
+  const redirectSources = new Set((firebaseConfig.hosting?.redirects || []).map((redirect) => redirect.source));
+  const sitemapRedirects = urls.filter((url) => redirectSources.has(new URL(url).pathname));
+  const sitemapPaths = urls.map((url) => new URL(url).pathname);
+  const sitemapPathSet = new Set(sitemapPaths);
+  const inboundSources = new Map(sitemapPaths.map((path) => [path, new Set()]));
+  const missingBuiltPages = [];
+  const canonicalMismatches = [];
+  const invalidH1Pages = [];
+
+  for (const path of sitemapPaths) {
+    const htmlPath = htmlPathForRoute(path);
+    if (!existsSync(htmlPath)) {
+      missingBuiltPages.push(path);
+      continue;
+    }
+    const html = await readFile(htmlPath, "utf8");
+    const canonical = html.match(/<link\s+rel=["']canonical["']\s+href=(["'])(.*?)\1/i)?.[2] || "";
+    const expectedCanonical = `https://airingatlas.com${path}`;
+    if (canonical !== expectedCanonical) canonicalMismatches.push(`${path} -> ${canonical || "missing"}`);
+    const h1Count = [...html.matchAll(/<h1(?:\s|>)/gi)].length;
+    if (h1Count !== 1) invalidH1Pages.push(`${path} (${h1Count})`);
+
+    const main = html.match(/<main(?:\s[^>]*)?>([\s\S]*?)<\/main>/i)?.[1] || "";
+    for (const link of main.matchAll(/<a\s+[^>]*href=(["'])(.*?)\1/gi)) {
+      const targetPath = normalizeInternalHref(link[2]);
+      if (!targetPath || !sitemapPathSet.has(targetPath) || targetPath === path) continue;
+      inboundSources.get(targetPath)?.add(path);
+    }
+  }
+
+  const underlinkedPaths = [...inboundSources.entries()]
+    .filter(([, sources]) => sources.size < 3)
+    .map(([path, sources]) => `${path} (${sources.size})`);
 
   if (urls.length > SITEMAP_WARNING_CEILING) warnings.push(`${urls.length} sitemap URLs found; target is ${SITEMAP_WARNING_CEILING} or fewer during quality cleanup.`);
   if (urls.length !== REVIEW_SITEMAP_TARGET) warnings.push(`${urls.length} sitemap URLs found; expected the ${REVIEW_SITEMAP_TARGET}-URL review set.`);
@@ -256,10 +332,19 @@ async function auditSitemap() {
   if (discoverClusterUrls.length !== REVIEW_DISCOVER_LIMIT) warnings.push(`${discoverClusterUrls.length} Discover cluster URLs found in sitemap; expected ${REVIEW_DISCOVER_LIMIT}.`);
   if (discoverClusterUrls.some((url) => !adsenseReviewDiscoverSlugs.has(new URL(url).pathname.split("/")[2]))) warnings.push("A non-review Discover cluster remains in the sitemap.");
   if (guideArticleUrls.length !== REVIEW_GUIDE_ARTICLE_LIMIT) warnings.push(`${guideArticleUrls.length} long-form guide URLs found in sitemap; expected ${REVIEW_GUIDE_ARTICLE_LIMIT}.`);
+  if (candidateGuideUrls.length) warnings.push(`${candidateGuideUrls.length} candidate guide URLs remain in sitemap: ${candidateGuideUrls.join(", ")}.`);
+  if (futureLastmod.length) warnings.push(`${futureLastmod.length} sitemap URLs have future lastmod values.`);
+  if (missingEditorialLastmod.length) warnings.push(`${missingEditorialLastmod.length} editorial sitemap URLs are missing verified lastmod values.`);
+  if (sitemapRedirects.length) warnings.push(`${sitemapRedirects.length} redirect source URLs remain in sitemap.`);
+  if (missingBuiltPages.length) warnings.push(`${missingBuiltPages.length} sitemap URLs have no built HTML page: ${missingBuiltPages.join(", ")}.`);
+  if (canonicalMismatches.length) warnings.push(`${canonicalMismatches.length} sitemap URLs do not have a self canonical: ${canonicalMismatches.slice(0, 5).join(", ")}.`);
+  if (invalidH1Pages.length) warnings.push(`${invalidH1Pages.length} sitemap URLs do not have exactly one H1: ${invalidH1Pages.slice(0, 5).join(", ")}.`);
+  if (underlinkedPaths.length) warnings.push(`${underlinkedPaths.length} sitemap URLs have fewer than 3 contextual inbound sources: ${underlinkedPaths.slice(0, 10).join(", ")}.`);
   if (!urls.includes("https://airingatlas.com/editorial-policy/")) warnings.push("Editorial policy page is missing from sitemap.");
   info.push(`${animeDetailUrls.length} anime detail URLs pass sitemap quality gates.`);
   info.push(`${animeLikeUrls.length} anime-like URLs pass sitemap quality gates.`);
   info.push(`${watchOrderUrls.length} watch-order URLs pass sitemap quality gates.`);
+  info.push(`${urls.length - underlinkedPaths.length} sitemap URLs have at least 3 contextual inbound sources.`);
   info.push(`${urls.length} sitemap URLs scanned.`);
 }
 
@@ -380,10 +465,25 @@ function collisionPreview(collisions) {
 
 async function urlHasNoindex(url) {
   const path = new URL(url).pathname;
-  const htmlPath = resolve(root, "dist", path === "/" ? "index.html" : `${path.replace(/^\/|\/$/g, "")}/index.html`);
+  const htmlPath = htmlPathForRoute(path);
   if (!existsSync(htmlPath)) return false;
   const html = await readFile(htmlPath, "utf8");
   return /<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(html);
+}
+
+function htmlPathForRoute(path) {
+  return resolve(root, "dist", path === "/" ? "index.html" : `${path.replace(/^\/|\/$/g, "")}/index.html`);
+}
+
+function normalizeInternalHref(href) {
+  try {
+    const url = new URL(href, "https://airingatlas.com/");
+    if (url.origin !== "https://airingatlas.com") return "";
+    if (url.pathname === "/") return "/";
+    return url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
+  } catch {
+    return "";
+  }
 }
 
 async function readJson(path) {

@@ -2,11 +2,13 @@
 
 An English anime calendar and tracking MVP built with Astro, TypeScript, and Firebase Hosting.
 
+[Visit Airing Atlas](https://airingatlas.com/)
+
 ## What is included
 
 - Seasonal anime calendar with local-time display
 - Shareable binge planner with stable URL plans
-- Static anime detail pages generated at build time
+- Original anime decision guides and a strict indexable-page quality gate
 - Rankings for trending, popular, top rated, and current season anime
 - Browser-only watchlist stored in `localStorage`
 - AdSense-safe ad placeholders and affiliate disclosure surfaces

@@ -32,6 +32,7 @@ export interface ManualWatchOrderEntry {
 
 export interface ManualSimilarGuide {
   animeId: number;
+  updated?: string;
   seoTitle?: string;
   seoDescription?: string;
   whoShouldWatch?: string;
@@ -140,7 +141,7 @@ export const manualEditorialByAnimeId: Record<number, ManualEditorialEntry> = {
 export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = {
   16498: {
     animeId: 16498,
-    updated: "2026-07-14",
+    updated: "2026-07-29",
     intro: "For story flow, watch the TV seasons in sequence and treat OVAs as optional background material after the season they sit closest to.",
     recommendedOrder: [16498, 20811, 18397, 20958, 99634, 99147, 104578, 110277, 131681],
     releaseOrder: [16498, 18397, 20811, 20691, 20692, 21281, 20958, 99634, 99147, 104578, 110277, 131681],
@@ -164,7 +165,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   101922: {
     animeId: 101922,
-    updated: "2026-07-14",
+    updated: "2026-07-29",
     intro: "Demon Slayer is easiest if you watch Season 1, then either the Mugen Train movie or the TV version of that arc before later seasons.",
     recommendedOrder: [101922, 112151, 129874],
     releaseOrder: [101922, 112151, 129874],
@@ -188,7 +189,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   113415: {
     animeId: 113415,
-    updated: "2026-07-14",
+    updated: "2026-07-29",
     seoTitle: "Jujutsu Kaisen Watch Order: JJK 0 & Seasons",
     seoDescription: "Watch Jujutsu Kaisen in order: Season 1, JJK 0, Season 2, then the Season 3 continuation. See which movies and recap entries are optional.",
     quickAnswer: "Start with Season 1, watch Jujutsu Kaisen 0 before Season 2, then continue through Season 2 and the Season 3 Culling Game route. Compilation material is optional and does not replace the main seasons.",
@@ -210,12 +211,16 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
       {
         question: "What comes after Jujutsu Kaisen Season 2?",
         answer: "The Culling Game continuation follows the Season 2 story path."
+      },
+      {
+        question: "Is the Jujutsu Kaisen compilation movie required?",
+        answer: "No. Compilation material recaps episodes you already watched and is not a replacement for Season 1, Jujutsu Kaisen 0, Season 2, or the Season 3 continuation."
       }
     ]
   },
   21: {
     animeId: 21,
-    updated: "2026-07-14",
+    updated: "2026-07-29",
     intro: "For One Piece, the main TV series is the required path. Movies, recap specials, and event specials are best treated as optional side trips.",
     recommendedOrder: [21],
     releaseOrder: [466, 21, 459, 460, 461, 462, 1237, 1238, 4155, 12859, 21335, 105143, 141902],
@@ -239,7 +244,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   20: {
     animeId: 20,
-    updated: "2026-07-14",
+    updated: "2026-07-29",
     intro: "The clean Naruto path is Naruto, Naruto: Shippuden, then later sequel material. Movies and specials are optional unless you are doing a completionist run.",
     recommendedOrder: [20, 1735, 16870, 97938],
     releaseOrder: [20, 442, 936, 2144, 1735, 2472, 4437, 6325, 8246, 10589, 16870, 97938],
@@ -307,8 +312,8 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
   },
   127230: {
     animeId: 127230,
-    updated: "2026-07-14",
-    seoTitle: "Chainsaw Man Watch Order (2026): Season 1, Reze Arc",
+    updated: "2026-07-29",
+    seoTitle: "Chainsaw Man Watch Order: Season 1, Reze Arc & What's Next",
     seoDescription: "Start Chainsaw Man with Season 1, continue to the Reze Arc movie, then follow direct sequel material. Music videos and promotional shorts are optional.",
     quickAnswer: "Watch Chainsaw Man Season 1 first, continue with The Movie: Reze Arc, then follow the direct sequel entry listed in the current catalog. Ending videos, music clips, and promotional shorts are not required.",
     intro: "Chainsaw Man currently has a short main path: Season 1, then Reze Arc movie-era material as it becomes available.",
@@ -381,6 +386,7 @@ export const manualWatchOrderByAnimeId: Record<number, ManualWatchOrderEntry> = 
 export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = {
   16498: {
     animeId: 16498,
+    updated: "2026-07-29",
     intro: "Use this guide if you want anime with the same pressure as Attack on Titan: survival horror, military stakes, mystery, political reveals, and characters trapped in a collapsing world.",
     whySimilar: "Fans usually look past the titan fights and search for shows with danger, moral compromise, and a world that keeps expanding in uncomfortable ways.",
     bestOverallPick: 116589,
@@ -405,6 +411,7 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
   },
   101922: {
     animeId: 101922,
+    updated: "2026-07-29",
     intro: "This guide is for viewers who want Demon Slayer's clean emotional hook: demons, sword fights, sibling loyalty, tragic villains, and polished action arcs.",
     whySimilar: "The strongest matches keep the story easy to enter while still offering supernatural enemies, training arcs, and visually memorable battles.",
     bestOverallPick: 113415,
@@ -429,6 +436,7 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
   },
   113415: {
     animeId: 113415,
+    updated: "2026-07-29",
     intro: "Jujutsu Kaisen recommendations should emphasize urban fantasy, curses, team combat, stylish animation, and characters who treat horror with a sharp sense of humor.",
     whySimilar: "Fans often want another show that feels fast, modern, and supernatural without losing strong fights or mentor-student dynamics.",
     bestOverallPick: 127230,
@@ -501,6 +509,7 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
   },
   1535: {
     animeId: 1535,
+    updated: "2026-07-29",
     intro: "Death Note fans are usually searching for psychological anime with mind games, moral pressure, crime tension, and characters trying to outthink each other.",
     whySimilar: "The best matches keep the suspense intellectual: plans, counterplans, secrets, identity games, and ethical collapse.",
     bestOverallPick: 1575,
@@ -621,6 +630,7 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
   },
   20954: {
     animeId: 20954,
+    updated: "2026-07-29",
     seoTitle: "Anime Like A Silent Voice: Emotional Stories",
     seoDescription: "Find anime like A Silent Voice about healing, disability, guilt, communication, school trauma, and learning how to reconnect with other people.",
     intro: "The best anime like A Silent Voice are not simply sad romances. They are stories about damaged communication, guilt that lingers after school, disability or isolation, and the difficult work of becoming reachable again.",
@@ -652,6 +662,7 @@ export const manualSimilarGuidesByAnimeId: Record<number, ManualSimilarGuide> = 
   },
   13601: {
     animeId: 13601,
+    updated: "2026-07-29",
     seoTitle: "Anime Like Psycho-Pass: Dystopian Crime Thrillers",
     seoDescription: "Find anime like Psycho-Pass with dystopian policing, crime investigations, psychological pressure, surveillance, and moral conflict about who controls justice.",
     intro: "Anime like Psycho-Pass should make justice feel unstable. The strongest matches combine investigation, institutional power, surveillance or advanced technology, and characters forced to decide whether a safe system can still be morally wrong.",

@@ -14,6 +14,11 @@ export function getStaticPaths() {
 
 const { guide } = Astro.props as { guide: EditorialGuide };
 const canonical = `/guides/${guide.slug}/`;
+const activeGuides = guides.filter((item) => item.indexStatus === "active");
+const activeGuideIndex = activeGuides.findIndex((item) => item.slug === guide.slug);
+const relatedActiveGuides = activeGuideIndex >= 0
+  ? [1, 2, 3].map((offset) => activeGuides[(activeGuideIndex + offset) % activeGuides.length])
+  : activeGuides.slice(0, 3);
 const structuredData = [
   breadcrumbJsonLd([
     { name: "Airing Atlas", path: "/" },
@@ -61,7 +66,7 @@ const structuredData = [
   description={guide.description}
   canonical={canonicalPath(canonical)}
   structuredData={structuredData}
-  adsEnabled={true}
+  adsEnabled={guide.adsEligible}
 >
   <article class="article-page">
     <section class="article-hero">
@@ -152,6 +157,21 @@ const structuredData = [
       </div>
     </section>
 
+    <section class="section">
+      <div class="keyword-panel">
+        <p class="eyebrow">Continue reading</p>
+        <h2>Related original guides</h2>
+        <div class="keyword-list">
+          {relatedActiveGuides.map((item) => (
+            <a href={`/guides/${item.slug}/`} data-track-event="editorial_guide_internal_click" data-track-label={item.title}>
+              <span>{item.description}</span>
+              {item.title}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <section class="section editorial-disclosure">
       <div>
         <p class="eyebrow">How this guide was made</p>
@@ -164,13 +184,17 @@ const structuredData = [
         </p>
       </div>
       <div class="button-row">
+        <a class="button small" href="/">Airing Atlas home</a>
+        <a class="button small" href="/guides/">All guides</a>
         <a class="button small" href="/editorial-policy/">Editorial policy</a>
         <a class="button small" href="/contact/">Report a correction</a>
       </div>
     </section>
 
-    <section class="section">
-      <AdSlot />
-    </section>
+    {guide.adsEligible && (
+      <section class="section">
+        <AdSlot />
+      </section>
+    )}
   </article>
 </BaseLayout>

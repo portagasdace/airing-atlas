@@ -5,9 +5,13 @@ export interface DiscoveryCluster {
   slug: string;
   title: string;
   shortLabel: string;
+  updated?: string;
   description: string;
   intro: string;
   fitNote: string;
+  bestFor?: string;
+  avoidIf?: string;
+  editorialReasons?: Record<number, string>;
   criteria: string[];
   genres?: string[];
   tagKeywords?: string[];
@@ -21,9 +25,19 @@ export const discoveryClusters: DiscoveryCluster[] = [
     slug: "dark-fantasy-anime",
     title: "Dark Fantasy Anime",
     shortLabel: "Dark fantasy",
+    updated: "2026-07-29",
     description: "A curated guide to dark fantasy anime with monsters, survival pressure, violent worlds, and high-stakes character choices.",
     intro: "Use this page when you want fantasy anime that feels dangerous rather than cozy: monsters, cursed powers, survival horror, war, and stories where the world keeps asking for a cost.",
     fitNote: "Picks are favored when the fantasy element creates pressure instead of comfort: cursed power, body horror, war, survival stakes, or choices that leave lasting damage.",
+    bestFor: "Choose this route when you want danger, moral cost, and worldbuilding that keeps tightening around the cast. It is strongest for viewers who enjoy horror pressure or political consequences alongside fantasy action.",
+    avoidIf: "Skip this route when you mainly want cozy fantasy, low-conflict escapism, or light adventure. Several picks use graphic violence, grief, body horror, or prolonged threat as part of their appeal.",
+    editorialReasons: {
+      16498: "Attack on Titan is the political-survival anchor: its monsters open the story, but military secrecy and the cost of choosing a side make it a lasting dark-fantasy match.",
+      101922: "Demon Slayer is the most accessible entry, pairing demon horror and family loss with a clear emotional objective and readable arc structure.",
+      113415: "Jujutsu Kaisen moves the route into urban curses, where dangerous power systems and institutional failures matter as much as the fights.",
+      127230: "Chainsaw Man is the messiest horror-comedy option, built around devils, exploitation, damaged wants, and sudden violence rather than heroic certainty.",
+      5114: "Fullmetal Alchemist: Brotherhood is the complete long-form option, using alchemy, war crimes, sacrifice, and political conspiracy without abandoning adventure."
+    },
     criteria: ["fantasy or supernatural setting", "dangerous worldbuilding", "serious character stakes", "strong audience signal"],
     genres: ["Action", "Fantasy", "Supernatural", "Horror", "Drama"],
     tagKeywords: ["Dark Fantasy", "Survival", "Tragedy", "Demons", "War", "Gore", "Monster"],
@@ -47,9 +61,18 @@ export const discoveryClusters: DiscoveryCluster[] = [
     slug: "mind-game-anime",
     title: "Mind Game Anime",
     shortLabel: "Mind games",
+    updated: "2026-07-29",
     description: "Anime built around strategy, psychological pressure, crime, manipulation, and clever character decisions.",
     intro: "These picks are for viewers who like watching characters think under pressure: plans, traps, betrayals, moral puzzles, and tense conversations where a single mistake matters.",
     fitNote: "A title fits when the main pleasure is watching decisions, traps, deductions, and consequences unfold, not just waiting for the next fight.",
+    bestFor: "Use this guide when plans, deductions, manipulation, and changing information are the main source of tension. It suits viewers who enjoy pausing to test a character's logic or predict the next counter-move.",
+    avoidIf: "Choose another route if you want immediate action, simple heroes and villains, or a story that explains every rule quickly. Several picks reward patience and attention to motives.",
+    editorialReasons: {
+      1535: "Death Note is the clearest starting point because every major turn comes from rules, hidden information, pride, and two opponents trying to predict each other.",
+      16498: "Attack on Titan becomes a strategic match once survival expands into military deception, political factions, and decisions with no clean outcome.",
+      5114: "Fullmetal Alchemist: Brotherhood balances investigation and action, with conspiracies that reward viewers for tracking institutions, motives, and the cost of each shortcut.",
+      11061: "Hunter x Hunter is the tactical-combat choice: its best confrontations are decided by conditions, psychology, preparation, and reading an opponent rather than raw power."
+    },
     criteria: ["strategy or psychological tension", "characters solving problems under pressure", "strong suspense hook", "minimal reliance on filler material"],
     genres: ["Drama", "Psychological", "Mystery", "Thriller", "Supernatural"],
     tagKeywords: ["Psychological", "Crime", "Detective", "Strategy Game", "Anti-Hero", "Genius", "Memory Manipulation"],
@@ -99,9 +122,18 @@ export const discoveryClusters: DiscoveryCluster[] = [
     slug: "romance-drama-anime",
     title: "Romance Drama Anime",
     shortLabel: "Romance drama",
+    updated: "2026-07-29",
     description: "Romance drama anime with relationship tension, school life, emotional growth, comedy, and bittersweet character arcs.",
     intro: "This page is for viewers who want the relationship side of anime discovery: romantic tension, school-life pressure, personal growth, comedy, and stories that can be warm without being empty.",
     fitNote: "Picks are chosen for relationship tension and emotional movement first, then filtered for accessibility, completed paths, and enough audience signal to be useful.",
+    bestFor: "Choose this route when the relationship must change the characters rather than simply decorate the plot. The strongest picks combine attraction with grief, timing, family pressure, or the difficulty of saying what someone needs.",
+    avoidIf: "This is not the best route for viewers seeking romance-free comedy or constant action. Several picks are patient, bittersweet, and more interested in emotional consequences than a fast confession.",
+    editorialReasons: {
+      4224: "Toradora! is the accessible school-romance anchor, using comedy and mistaken expectations before allowing its leads to confront what they actually need.",
+      13759: "The Pet Girl of Sakurasou adds creative ambition and uneven talent to the relationship pressure, making personal growth as important as pairing the cast.",
+      4081: "Natsume's Book of Friends offers the gentlest adjacent route, favoring loneliness, trust, and quiet connection over conventional romantic momentum.",
+      23273: "Your Lie in April is the heavier emotional choice, combining performance, grief, admiration, and the way a relationship can change someone's willingness to live openly."
+    },
     criteria: ["romance or relationship focus", "emotional character growth", "clear seasonal or completed path", "accessible starting point"],
     genres: ["Romance", "Drama", "Comedy", "Slice of Life"],
     tagKeywords: ["School", "Love Triangle", "Coming of Age", "Female Protagonist", "Male Protagonist", "Family Life"],
@@ -112,9 +144,18 @@ export const discoveryClusters: DiscoveryCluster[] = [
     slug: "anime-with-smart-main-character",
     title: "Anime With Smart Main Characters",
     shortLabel: "Smart leads",
+    updated: "2026-07-29",
     description: "Anime where smart main characters solve problems through strategy, deduction, planning, manipulation, or tactical combat.",
     intro: "This guide is for users searching less by genre and more by protagonist type: clever leads, tacticians, detectives, planners, and characters who win because they understand the board.",
     fitNote: "A title fits when the lead's intelligence changes the outcome: deduction, planning, politics, combat rules, manipulation, or careful reading of the opponent.",
+    bestFor: "Use this list when you want the protagonist's reasoning to create the payoff. The selected leads win information, negotiations, investigations, or tactical exchanges before they win through force.",
+    avoidIf: "Avoid this route if a powerful lead is enough on its own. These picks require visible decisions and consequences; effortless strength without planning is not treated as intelligence.",
+    editorialReasons: {
+      1535: "Light Yagami is the manipulation benchmark: his intelligence drives both the attraction and the moral collapse of Death Note's central contest.",
+      5114: "Edward and Alphonse solve problems through research, trade-offs, and institutional investigation, making intelligence part of a complete adventure rather than a single gimmick.",
+      16498: "Armin anchors Attack on Titan here because observation, negotiation, and high-risk planning repeatedly alter outcomes that strength alone cannot solve.",
+      11061: "Hunter x Hunter earns its place through tactical adaptation: characters explain conditions, test assumptions, and change plans while a fight is still moving."
+    },
     criteria: ["strategic or analytical lead", "problem-solving scenes", "clear stakes for decisions", "good overlap with mind-game searches"],
     genres: ["Drama", "Mystery", "Psychological", "Action", "Sci-Fi"],
     tagKeywords: ["Genius", "Anti-Hero", "Detective", "Strategy Game", "Crime", "Politics", "Military"],
@@ -148,7 +189,7 @@ export function clusterReason(cluster: DiscoveryCluster, anime: AnimeSummary): s
     .slice(0, 2);
 
   if (cluster.highlightAnimeIds.includes(anime.id)) {
-    return `${title} is a strong reference point for this guide, with enough audience signal to anchor the cluster.`;
+    return cluster.editorialReasons?.[anime.id] || `${title} is a strong reference point for this guide, with enough audience signal to anchor the cluster.`;
   }
   if (sharedGenres.length && matchedTags.length) {
     return `Fits through ${sharedGenres.join(", ")} plus themes like ${matchedTags.join(", ")}.`;

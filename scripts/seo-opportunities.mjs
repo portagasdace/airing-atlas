@@ -131,10 +131,16 @@ function pageOpportunities(items) {
 function indexingOpportunities(items, sitemapUrls) {
   return items.flatMap((row) => {
     const url = valueFor(row, ["url", "page", "网页", "页面"]);
-    const reason = valueFor(row, ["reason", "status", "状态", "原因"]);
+    const status = valueFor(row, ["status", "状态"]);
+    const detail = valueFor(row, ["reason", "原因"]);
+    const reason = [status, detail].filter(Boolean).join(": ");
     if (!url || !reason) return [];
     const normalized = reason.toLowerCase();
-    const notIndexed = normalized.includes("not indexed") || normalized.includes("尚未编入索引") || normalized.includes("未编入索引");
+    const notIndexed = normalized.includes("not indexed") ||
+      normalized.includes("unknown to google") ||
+      normalized.includes("尚未编入索引") ||
+      normalized.includes("未编入索引") ||
+      normalized.includes("google 不知道");
     if (!notIndexed) return [];
     const inSitemap = sitemapUrls.has(url) || sitemapUrls.has(`${url.replace(/\/$/, "")}/`);
     return [{

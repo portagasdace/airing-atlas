@@ -4,6 +4,8 @@ export interface EditorialGuide {
   shortTitle: string;
   description: string;
   updated: string;
+  indexStatus: "active" | "candidate";
+  adsEligible: boolean;
   lede: string;
   thesis: string;
   sections: Array<{
@@ -34,7 +36,9 @@ export const guides: EditorialGuide[] = [
     title: "How to Choose Anime by Mood",
     shortTitle: "Choose by mood",
     description: "A practical Airing Atlas guide to choosing anime by mood, time, status, and emotional weight instead of only genre labels.",
-    updated: "2026-06-25",
+    updated: "2026-07-29",
+    indexStatus: "candidate",
+    adsEligible: false,
     lede: "Genre is a useful starting point, but it is rarely how people actually decide what to watch tonight. Mood, time, energy, and tolerance for unfinished stories usually matter more.",
     thesis: "The best anime recommendation is not simply the highest rated title. It is the title that matches the viewer's current attention span, emotional appetite, and willingness to follow a longer route.",
     sections: [
@@ -60,6 +64,38 @@ export const guides: EditorialGuide[] = [
         body: [
           "Airing anime can be exciting if you enjoy weekly conversation, but it is a poor fit when you want closure tonight. Finished anime is safer for binge plans because every recommendation can be judged as a complete route.",
           "If you are new to a genre, start finished. If you already know the franchise and want to follow the crowd, airing titles can be worth the uncertainty."
+        ]
+      },
+      {
+        eyebrow: "Energy check",
+        heading: "Match the show to the attention you actually have",
+        body: [
+          "Mood is not only an emotion. It also describes how much concentration you can give. A dense political thriller may fit a dark mood but fail after a tiring day because names, factions, and quiet clues require active attention. A straightforward supernatural action show can deliver danger with a lower tracking cost.",
+          "Ask whether you want to study the episode, follow it comfortably, or let it play as recovery. That answer changes the recommendation even when the genre stays the same. Save complicated routes for sessions where pausing, reading subtitles, and remembering earlier details will not feel like work."
+        ]
+      },
+      {
+        eyebrow: "Intensity",
+        heading: "Separate dark themes from a punishing experience",
+        body: [
+          "Two anime can both be labeled dark while asking very different things from the viewer. One may use horror imagery inside a hopeful adventure; another may spend long stretches on grief, cruelty, or moral helplessness. Genre and tags rarely explain that difference by themselves.",
+          "Use the viewing reason to set a boundary. If you want suspense without emotional exhaustion, choose a title with a clear heroic objective and regular relief. If you want tragedy or difficult moral choices, choose that deliberately and check content notes instead of treating every dark recommendation as interchangeable."
+        ]
+      },
+      {
+        eyebrow: "Reference titles",
+        heading: "Use a known anime when mood words are too broad",
+        body: [
+          "A reference title turns an abstract mood into observable traits. Saying you want something like Attack on Titan may mean military pressure, unfolding mystery, political conflict, or brutal reversals. Saying you want something like A Silent Voice may mean guilt, damaged communication, recovery, or a complete emotional film.",
+          "Choose the one or two traits you want repeated and name the trait you do not need. This prevents a similar-anime list from becoming a row of visual lookalikes. The best next show can use a different setting while preserving the tension, pacing, or emotional task that made the reference title work."
+        ]
+      },
+      {
+        eyebrow: "Feedback loop",
+        heading: "Let one episode improve the next recommendation",
+        body: [
+          "Treat the first pick as a test instead of a permanent commitment. After an episode or a film, record one positive signal and one source of friction. You may discover that the premise was right but the pace was slow, or that the comedy worked while the franchise length did not.",
+          "Use that result to change one filter at a time. Keep the mood and shorten the commitment, or keep the structure and reduce the intensity. A small adjustment is more informative than abandoning every filter and returning to a generic popularity chart."
         ]
       }
     ],
@@ -95,7 +131,9 @@ export const guides: EditorialGuide[] = [
     title: "Watch Order vs Release Order",
     shortTitle: "Watch order basics",
     description: "Learn when to use story watch order, release order, and optional OVA or movie notes before starting a long anime franchise.",
-    updated: "2026-06-25",
+    updated: "2026-07-29",
+    indexStatus: "candidate",
+    adsEligible: false,
     lede: "Anime franchises often have seasons, movies, OVAs, specials, recap films, and spin-offs. The right order depends on whether you want story clarity or historical release context.",
     thesis: "Use story order for a clean first watch, release order for franchise history, and optional notes to keep recap movies or side stories from interrupting the main path.",
     sections: [
@@ -121,6 +159,39 @@ export const guides: EditorialGuide[] = [
         body: [
           "A movie can be essential, optional, or mostly a recap. An OVA can be a useful side story or a bonus episode that changes nothing. The label matters more than the format.",
           "Airing Atlas separates main route, release path, and optional material so viewers can choose how complete they want the run to be."
+        ]
+      },
+      {
+        eyebrow: "Reveal order",
+        heading: "Chronology can create spoilers instead of preventing them",
+        body: [
+          "A prequel may happen earlier inside the story while being written after the original season. Watching it first can explain a mystery that the original release intentionally kept hidden. Chronological order is therefore not automatically the most spoiler-safe order.",
+          "For a first watch, use the route that protects the intended introduction of characters and information. Move a prequel earlier only when the guide explains that it improves clarity without flattening a reveal. On a rewatch, chronology becomes more useful because discovery is no longer the main goal."
+        ]
+      },
+      {
+        eyebrow: "Alternate versions",
+        heading: "Do not combine every adaptation into one timeline",
+        body: [
+          "Some franchises have an older television adaptation, a newer remake, compilation films, or an alternate ending. These entries may cover the same source material with different pacing or creative choices. Listing them together does not make them consecutive chapters.",
+          "Pick one primary adaptation first. Treat the alternate version as a comparison route after finishing, unless the franchise explicitly requires material from both. Fullmetal Alchemist and Fullmetal Alchemist: Brotherhood are a useful example: Brotherhood is a complete independent route, not a sequel that requires the 2003 series."
+        ]
+      },
+      {
+        eyebrow: "Completion budget",
+        heading: "Decide how complete you want the route to be",
+        body: [
+          "Main-story viewers need direct seasons and essential movies. Context seekers may add canon side stories or character-focused OVAs. Completionists may also want recap edits, comedy specials, promotional shorts, and alternate versions. Those are three different projects with very different time costs.",
+          "Set the completion level before starting so optional entries do not interrupt momentum. A guide should make it possible to finish the main route first and return for extras later. Optional material is easier to enjoy when it feels like a deliberate bonus rather than an unexpected requirement."
+        ]
+      },
+      {
+        eyebrow: "Verification",
+        heading: "Use relations as evidence, not availability as proof",
+        body: [
+          "A streaming service may omit an entry because regional rights differ, and a database may list every related animation without explaining whether it matters. Neither availability nor a relation graph alone determines the best viewing route.",
+          "Airing Atlas combines catalog relations with manual notes for the selected franchises, then separates required, release, and optional paths. Before watching, verify titles on official regional services because naming and availability can change. The guide maps the story decision; it does not promise that every entry is licensed in every country.",
+          "When a guide and a platform playlist differ, compare the relation labels instead of assuming either source is careless. Services often group titles around regional availability, while a viewing guide organizes them for story flow. The difference should be explained rather than hidden."
         ]
       }
     ],
@@ -156,7 +227,9 @@ export const guides: EditorialGuide[] = [
     title: "Best Anime for Beginners: How to Pick a First Route",
     shortTitle: "Beginner anime",
     description: "A beginner-friendly guide to picking anime by clarity, commitment, tone, and completion status instead of chasing only famous titles.",
-    updated: "2026-06-25",
+    updated: "2026-07-29",
+    indexStatus: "candidate",
+    adsEligible: false,
     lede: "The best first anime is not always the most famous anime. A good beginner route should be easy to enter, clear about its promise, and honest about the time commitment.",
     thesis: "For new viewers, clarity beats scale. Start with a title that shows what anime can do without demanding a massive franchise commitment on day one.",
     sections: [
@@ -182,6 +255,39 @@ export const guides: EditorialGuide[] = [
         body: [
           "If someone likes crime thrillers, start near deduction or psychological pressure. If they like superhero stories, start with training, powers, and mentor dynamics. If they like fantasy adventure, start with a complete journey.",
           "The bridge from an existing taste is more reliable than a universal top-ten list."
+        ]
+      },
+      {
+        eyebrow: "Tone",
+        heading: "Beginner-friendly does not mean emotionally light",
+        body: [
+          "A clear premise can still contain violence, grief, bullying, sexual humor, or frightening imagery. Before recommending a famous gateway title, ask what the new viewer avoids as well as what they enjoy. A technically accessible show is a poor introduction if its normal tone crosses a personal boundary.",
+          "Offer two options with different intensity instead of defending one universal starter. A Silent Voice provides a complete emotional film but includes bullying and self-harm themes. Demon Slayer has a readable objective but repeated family loss and violence. The warning helps the viewer choose; it does not disqualify either work."
+        ]
+      },
+      {
+        eyebrow: "Format and access",
+        heading: "Choose a version the viewer can comfortably follow",
+        body: [
+          "Subtitles, dubbing, episode length, and legal availability affect a first experience. Someone curious about anime may not want their first session to involve an unavailable OVA, a confusing alternate cut, or subtitles that demand more attention than they can give that night.",
+          "Use an official version available in the viewer's region and let them choose subtitle or dub preference without turning the choice into a test of legitimacy. A strong dub can remove friction; subtitles can preserve a preferred performance. Comfort matters more than winning a format argument."
+        ]
+      },
+      {
+        eyebrow: "Starter routes",
+        heading: "Use different gateways for different tastes",
+        body: [
+          "For supernatural action, Demon Slayer offers a direct emotional goal and clear arc progression. For compact psychological suspense, Death Note states its central rule quickly and makes the conflict easy to discuss. For a single-film commitment, A Silent Voice demonstrates character-focused animation without asking for a season.",
+          "A viewer who wants a complete adventure can try Fullmetal Alchemist: Brotherhood, but its length should be stated honestly. Someone seeking a huge social project may prefer One Piece, provided they actively want a long route. The correct gateway is the smallest honest match, not the title with the largest reputation."
+        ]
+      },
+      {
+        eyebrow: "Second choice",
+        heading: "Use the reaction to choose the next anime",
+        body: [
+          "After the first title, ask what specifically worked: visual action, a complete ending, the rules of the world, a relationship, or the weekly ritual. Also ask what created friction. These answers are more useful than whether the viewer says anime as a whole is good.",
+          "Move one step sideways. From Demon Slayer, try Jujutsu Kaisen for faster urban supernatural action or Dororo for a darker historical journey. From Death Note, move toward Code Geass for strategy or Monster for grounded moral pursuit. A clear second recommendation turns one successful watch into a usable taste profile.",
+          "Do not rush to a giant backlog after one success. Two deliberate follow-ups teach more than twenty famous titles saved without a reason. Keep the explanation beside each choice so the viewer remembers why it belongs."
         ]
       }
     ],
@@ -217,7 +323,9 @@ export const guides: EditorialGuide[] = [
     title: "Finished Anime vs Airing Anime",
     shortTitle: "Finished vs airing",
     description: "A practical guide to choosing between completed anime and currently airing shows based on closure, conversation, spoilers, and schedule pressure.",
-    updated: "2026-06-25",
+    updated: "2026-07-29",
+    indexStatus: "candidate",
+    adsEligible: false,
     lede: "Finished anime and airing anime solve different problems. One gives control and closure; the other gives freshness, weekly conversation, and the fun of not knowing what comes next.",
     thesis: "Choose finished anime when you want certainty. Choose airing anime when the schedule itself is part of the experience.",
     sections: [
@@ -243,6 +351,39 @@ export const guides: EditorialGuide[] = [
         body: [
           "A good viewing week can have both: one airing title for freshness and one finished show for control. This keeps the schedule lively without making every decision depend on release timing.",
           "Airing Atlas is built around this split: calendar and next episode pages for fresh shows, planner and finished-anime pages for complete routes."
+        ]
+      },
+      {
+        eyebrow: "Spoilers and conversation",
+        heading: "Airing trades control for shared timing",
+        body: [
+          "Watching weekly makes discussion easier because other viewers are reacting to the same episode. It also increases exposure to clips, thumbnails, leaked information, and source-reader hints. The social value and spoiler risk arrive together.",
+          "Finished viewers can control pace and avoid week-long speculation, but they may enter after the largest conversation has moved on. Decide which loss matters less: waiting for the next episode or missing the live moment. Neither choice changes the quality of the anime itself."
+        ]
+      },
+      {
+        eyebrow: "Schedule risk",
+        heading: "A release calendar is an estimate, not a contract",
+        body: [
+          "Airing schedules can change because of production delays, broadcaster decisions, holidays, regional licensing, or split-cour planning. A catalog status may remain releasing even when the next confirmed date is uncertain.",
+          "Do not build a rigid binge plan around an unaired finale. Keep one finished title available as a fallback, and verify official announcements when timing matters. Airing Atlas can organize known schedule data, but the broadcaster or rights holder remains the final source for a changed release."
+        ]
+      },
+      {
+        eyebrow: "Franchise status",
+        heading: "A finished season can belong to an unfinished story",
+        body: [
+          "Finished airing describes a specific release run. It does not promise that the adaptation covered the source or that every sequel already exists. A twelve-episode season can be completely available and still end at the beginning of a larger franchise.",
+          "Check sequels and watch-order notes when narrative closure matters. The separate Finished Airing guide explains the catalog label in detail. For planning, distinguish a finished entry, a complete adaptation, and a franchise with a final ending; those are three different levels of certainty."
+        ]
+      },
+      {
+        eyebrow: "Practical patterns",
+        heading: "Choose a pattern that survives a normal week",
+        body: [
+          "A low-pressure plan is one or two airing episodes plus a finished series watched at your own pace. A social plan can follow several current shows, but it needs a fixed weekly time and tolerance for recap. A travel or weekend plan should favor finished titles because connectivity and release timing are less predictable.",
+          "Review the mix after two weeks. If weekly shows feel like obligations, pause new additions until a season ends. If finished binges feel isolated, add one widely discussed airing title. The best status mix is the one that keeps watching intentional instead of turning a hobby into schedule maintenance.",
+          "Season changes are a natural reset point. Archive titles you stopped following, keep only the shows you would notice missing, and replace vague catch-up plans with one realistic next session. A smaller schedule leaves room for an unexpected favorite without creating another weekly obligation. It also makes every return easier to understand."
         ]
       }
     ],
@@ -278,7 +419,9 @@ export const guides: EditorialGuide[] = [
     title: "How Airing Atlas Recommends Similar Anime",
     shortTitle: "Recommendation method",
     description: "A transparent explanation of how Airing Atlas combines AniList signals, shared genres, tags, popularity, and editorial judgment for similar anime pages.",
-    updated: "2026-06-25",
+    updated: "2026-07-29",
+    indexStatus: "candidate",
+    adsEligible: false,
     lede: "Similar anime recommendations are easy to make badly. Two shows can share a genre and still feel nothing alike, while two different genres can create the same viewing pressure.",
     thesis: "Airing Atlas treats similar anime as a decision path, not a keyword list. The best match must explain why it belongs next to the reference title.",
     sections: [
@@ -304,6 +447,39 @@ export const guides: EditorialGuide[] = [
         body: [
           "A good similar recommendation may share only one important trait. 86 is not Attack on Titan with different monsters; it is a match because of military tragedy, class oppression, and battlefield pressure.",
           "That distinction matters because viewers usually want the feeling or decision shape, not a clone."
+        ]
+      },
+      {
+        eyebrow: "Candidate generation",
+        heading: "Multiple signals create a pool, not a verdict",
+        body: [
+          "AniList recommendations show what users have connected, while genres, tags, format, status, score, and popularity describe other kinds of overlap. Airing Atlas uses these signals to assemble candidates, then removes non-anime formats and weak matches before a manual guide is written.",
+          "No single signal is trusted as the answer. Shared genres can be too broad, popularity can repeat the same hits, and user recommendations can reflect a surface resemblance. A candidate becomes useful only when the page can state a specific viewing reason in plain language."
+        ]
+      },
+      {
+        eyebrow: "Ranking choices",
+        heading: "Popularity is evidence of usability, not similarity",
+        body: [
+          "A popular title is easier to recognize and may have more stable catalog data, but popularity does not make it the closest match. The best overall pick is selected for the strongest combination of tone, structure, character pressure, and practical availability of a clear route.",
+          "Lower-ranked recommendations can still be better for a particular viewer. That is why manual guides use match angles such as military tragedy, healing drama, tactical combat, or dystopian investigation. The angle exposes the trade-off instead of hiding it behind one score."
+        ]
+      },
+      {
+        eyebrow: "Negative matches",
+        heading: "A useful guide explains where the comparison stops",
+        body: [
+          "Recommendations become misleading when they mention only similarities. A viewer moving from Psycho-Pass to Monster should know that the crime and moral pressure remain while the futuristic policing disappears. A viewer moving from Attack on Titan to Kabaneri should expect stronger surface resemblance and less political depth.",
+          "The guide therefore treats difference as decision information. A recommendation can be excellent and still fail the trait one person cares about. Before choosing, identify the match angle and read the note for what changes in pacing, intensity, length, or story structure."
+        ]
+      },
+      {
+        eyebrow: "Freshness and corrections",
+        heading: "Editorial recommendations need maintenance",
+        body: [
+          "Catalog facts change as sequels are announced, status updates arrive, and recommendation data grows. Editorial judgments can also improve when a page attracts a clearer search question or a correction identifies a weak explanation.",
+          "Airing Atlas records update dates for indexable guides and separates structured data from the written conclusion. Daily catalog refreshes do not pretend that every article was rewritten. Readers can report corrections through the contact page, and advertising does not determine the selected titles or ranking.",
+          "When a recommendation changes, the useful question is why: a new sequel may improve the route, a status change may make a binge practical, or a better comparison may replace a popular but shallow match. Update notes should follow those meaningful changes and preserve the reasoning readers originally came to evaluate clearly."
         ]
       }
     ],
@@ -339,7 +515,9 @@ export const guides: EditorialGuide[] = [
     title: "What Does Finished Airing Mean in Anime?",
     shortTitle: "Finished airing meaning",
     description: "Learn what finished airing means in anime, how it differs from a completed story, and what releasing, hiatus, cancelled, and not yet released statuses mean.",
-    updated: "2026-07-10",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "Finished airing means the listed broadcast run has released its final scheduled episode. It does not automatically mean the adaptation covered the entire source story or that another season will never happen.",
     thesis: "Treat finished airing as a release-status fact, not a promise of total story completion. It tells you the current episode run is available to finish; the franchise may still continue later.",
     sections: [
@@ -407,7 +585,9 @@ export const guides: EditorialGuide[] = [
     title: "How Many Episodes Should You Watch Before Dropping an Anime?",
     shortTitle: "When to drop an anime",
     description: "A practical alternative to the three-episode rule, with better stopping points for episodic shows, slow burns, mysteries, and long-running anime.",
-    updated: "2026-07-14",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "The three-episode rule is useful only when three episodes reveal the real shape of a show. A better rule is to watch until the anime has demonstrated its normal rhythm, then decide whether that rhythm is worth more of your time.",
     thesis: "Do not wait for a famous future arc just because other viewers promise a payoff. Give the show enough time to state its usual pace and conflict, then judge the experience you are actually having.",
     sections: [
@@ -468,7 +648,9 @@ export const guides: EditorialGuide[] = [
     title: "Are Anime Recap Movies Worth Watching?",
     shortTitle: "Anime recap movies",
     description: "Learn when an anime recap movie is useful, when it is safely skippable, and how to tell a compilation film from a required sequel movie.",
-    updated: "2026-07-14",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "A recap movie compresses material you may already know. Its value depends on what changed: editing, animation, sound, framing scenes, or the amount of time since you watched the original season.",
     thesis: "Skip a recap movie on a first watch unless it is the only official route you can access or the guide identifies meaningful new material. Use it later as a refresher, alternate edit, or production comparison.",
     sections: [
@@ -529,7 +711,9 @@ export const guides: EditorialGuide[] = [
     title: "How to Build an Anime Watchlist You Will Actually Finish",
     shortTitle: "Build a useful watchlist",
     description: "Turn an oversized anime backlog into a small active queue with clear roles, realistic limits, drop reasons, and a weekly review habit.",
-    updated: "2026-07-14",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "A watchlist stops being useful when every interesting title becomes an equal priority. The solution is not a better ranking algorithm; it is a smaller active queue with different jobs for different shows.",
     thesis: "Keep discovery broad but commitment narrow. Store many possibilities if you enjoy collecting them, but promote only three titles into the queue you expect to watch next.",
     sections: [
@@ -590,7 +774,9 @@ export const guides: EditorialGuide[] = [
     title: "How Long Does It Take to Watch an Anime?",
     shortTitle: "Estimate anime watch time",
     description: "Estimate anime watch time for 12, 24, 50, and 100 episodes, then adjust for openings, endings, recaps, breaks, and realistic viewing pace.",
-    updated: "2026-07-14",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "A standard television episode is often scheduled for about 24 minutes, but practical watch time depends on whether you skip openings, take breaks, or watch recap-heavy episodes. A useful estimate should show both screen time and calendar time.",
     thesis: "Use 24 minutes per episode for a safe first estimate, then plan by sessions rather than pretending every available hour will become uninterrupted viewing time.",
     sections: [
@@ -651,7 +837,9 @@ export const guides: EditorialGuide[] = [
     title: "A Silent Voice Watch Order: Movie, Episodes & Extras",
     shortTitle: "A Silent Voice watch order",
     description: "Get the simple A Silent Voice watch order, learn whether it has episodes or an anime sequel, and separate the movie from manga and optional extras.",
-    updated: "2026-07-14",
+    updated: "2026-07-29",
+    indexStatus: "active",
+    adsEligible: true,
     lede: "A Silent Voice is a standalone anime feature film, not a television season. You can watch the movie directly without a prequel, recap, OVA, or required sequel, so the practical watch order contains one main entry.",
     thesis: "Watch A Silent Voice as one complete film. Treat the original manga as a deeper version of the same core story rather than a prerequisite, and do not turn trailers, music videos, fan-made episode lists, or similarly named works into required steps.",
     sections: [

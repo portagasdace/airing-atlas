@@ -109,6 +109,11 @@ const relatedEditorialGuides = anime.id === 20954
       intent: "Standalone movie guide"
     }]
   : [];
+const publicSimilarGuides = adsenseReviewAnimeLikePages(allAnime);
+const publicSimilarGuideIndex = publicSimilarGuides.findIndex((item) => item.id === anime.id);
+const otherPublicSimilarGuides = publicSimilarGuideIndex >= 0
+  ? [1, 2, 3].map((offset) => publicSimilarGuides[(publicSimilarGuideIndex + offset) % publicSimilarGuides.length])
+  : publicSimilarGuides.slice(0, 3);
 const primaryGenres = (anime.genres || []).slice(0, 3).join(", ");
 const canonical = `/anime-like/${animeLikeSlug(anime)}/`;
 const pageTitle = manualGuide?.seoTitle || `Best Anime Like ${title}: Similar Shows to Watch Next`;
@@ -356,5 +361,28 @@ if (manualGuide?.faq.length) {
       </div>
     </section>
   )}
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">More comparisons</p>
+      <h2>Continue with another reference title</h2>
+      <div class="keyword-list">
+        <a href="/anime-like/" data-track-event="related_guide_click" data-track-label="Anime Like hub">
+          <span>Browse every manual comparison currently admitted to the indexing set.</span>
+          All Anime Like guides
+        </a>
+        {otherPublicSimilarGuides.map((item) => (
+          <a href={animeLikeGuideHref(item)} data-track-event="related_guide_click" data-track-label={`Anime like ${displayTitle(item)}`}>
+            <span>Read the manual match angles, best overall pick, and viewing trade-offs.</span>
+            Anime like {displayTitle(item)}
+          </a>
+        ))}
+        <a href="/guides/how-airing-atlas-recommends-similar-anime/" data-track-event="editorial_guide_internal_click" data-track-label="Recommendation method">
+          <span>See how candidate signals become an explained editorial comparison.</span>
+          How Airing Atlas recommends similar anime
+        </a>
+      </div>
+    </div>
+  </section>
 
 </BaseLayout>

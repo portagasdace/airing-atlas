@@ -18,7 +18,12 @@ const franchiseTitle = titleCase(guide.title.replace(/\s+watch order$/i, "").tri
 const manual = manualWatchOrderFor(guide.rootAnimeId);
 const pageTitle = manual?.seoTitle || `${franchiseTitle} Watch Order: Story, Release, Movies & OVAs`;
 const pageDescription = manual?.seoDescription || `Follow the ${franchiseTitle} watch order by story path, release order, movies, OVAs, specials, and optional entries.`;
-const publicGuideSlugs = new Set(adsenseReviewWatchOrderGuides(watchOrderIndex.items).map((item) => item.slug));
+const publicWatchOrders = adsenseReviewWatchOrderGuides(watchOrderIndex.items);
+const publicGuideSlugs = new Set(publicWatchOrders.map((item) => item.slug));
+const publicWatchOrderIndex = publicWatchOrders.findIndex((item) => item.slug === guide.slug);
+const otherPublicWatchOrders = publicWatchOrderIndex >= 0
+  ? [1, 2, 3].map((offset) => publicWatchOrders[(publicWatchOrderIndex + offset) % publicWatchOrders.length])
+  : publicWatchOrders.slice(0, 3);
 const isIndexable = publicGuideSlugs.has(guide.slug);
 const qualityEntries = watchOrderQualityEntries(guide);
 const mainRelations = new Set(["MAIN", "PREQUEL", "SEQUEL"]);
@@ -74,6 +79,15 @@ const editorialFaqItems = manual?.faq || [
   }
 ];
 const faqItems = uniqueFaq([...automaticFaqItems, ...editorialFaqItems]);
+const franchiseSequenceRows = guide.rootAnimeId === 113415
+  ? [
+      { entry: "Jujutsu Kaisen Season 1", place: "1", role: "Start here. It introduces Yuji, the school, curses, and the main team." },
+      { entry: "Jujutsu Kaisen 0", place: "2", role: "Core movie. Watch before Season 2 for Yuta, Geto, and later character context." },
+      { entry: "Jujutsu Kaisen Season 2", place: "3", role: "Continue with Hidden Inventory and the Shibuya Incident after the movie." },
+      { entry: "Jujutsu Kaisen Season 3", place: "4", role: "Continue into the Culling Game route after Season 2." },
+      { entry: "Compilation movie", place: "Optional", role: "A recap format, not a required replacement for the seasons or JJK 0." }
+    ]
+  : [];
 
 function dateRank(date: WatchOrderGuide["entries"][number]["startDate"]) {
   if (!date?.year) return Number.MAX_SAFE_INTEGER;
@@ -153,6 +167,28 @@ function uniqueFaq(items: Array<{ question: string; answer: string }>) {
       </div>
     </div>
   </section>
+
+  {franchiseSequenceRows.length > 0 && (
+    <section class="section">
+      <div class="keyword-panel">
+        <p class="eyebrow">JJK route explained</p>
+        <h2>Where the movie and each season fit</h2>
+        <div class="guide-comparison-wrap">
+          <table class="guide-comparison">
+            <caption class="sr-only">Jujutsu Kaisen seasons and movies in recommended watch order</caption>
+            <thead>
+              <tr><th>Entry</th><th>Order</th><th>Why it is here</th></tr>
+            </thead>
+            <tbody>
+              {franchiseSequenceRows.map((row) => (
+                <tr><th scope="row">{row.entry}</th><td>{row.place}</td><td>{row.role}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="section guide-grid">
     <article class="guide-card">
@@ -248,6 +284,21 @@ function uniqueFaq(items: Array<{ question: string; answer: string }>) {
             <h3>{item.question}</h3>
             <p>{item.answer}</p>
           </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="keyword-panel">
+      <p class="eyebrow">More franchise routes</p>
+      <h2>Compare another manual watch order</h2>
+      <div class="keyword-list">
+        {otherPublicWatchOrders.map((item) => (
+          <a href={`/watch-order/${item.slug}/`} data-track-event="related_guide_click" data-track-label={item.title}>
+            <span>Separate the main story, required movies, release path, and optional entries.</span>
+            {item.title}
+          </a>
         ))}
       </div>
     </div>
